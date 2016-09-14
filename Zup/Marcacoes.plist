@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>nome</key>
+		<string>Solicitação de limpeza de boca de lobo</string>
+		<key>nomeTipo</key>
+		<string>Boca de lobo</string>
+		<key>protocolo</key>
+		<string>1746352803</string>
+		<key>data</key>
+		<string>ENVIADO HÁ 2 DIAS ATRAS</string>
+		<key>status</key>
+		<integer>0</integer>
+		<key>endereco</key>
+		<string>Av. 9 de julho, 1522, Bela Vista, São Paulo</string>
+		<key>texto</key>
+		<string>Hoje choveu e com a boca de lobo entupida, a água não pode escoar, causando alagamento e transtornos para pedestres como eu.</string>
+		<key>tipo</key>
+		<integer>1</integer>
+		<key>latitude</key>
+		<real>-23.549353</real>
+		<key>longitude</key>
+		<real>-46.633658</real>
+		<key>imagem</key>
+		<array>
+			<string>bocalobo2.jpg</string>
+		</array>
+	</dict>
+	<dict>
+		<key>nome</key>
+		<string>Solicitação de limpeza de boca de lobo</string>
+		<key>nomeTipo</key>
+		<string>Boca de lobo</string>
+		<key>protocolo</key>
+		<string>1746352824</string>
+		<key>data</key>
+		<string>ENVIADO HÁ 8 DIAS ATRAS</string>
+		<key>status</key>
+		<integer>1</integer>
+		<key>endereco</key>
+		<string>Rua Paim, 133, Bela Vista, São Paulo</string>
+		<key>texto</key>
+		<string>Manutenção urgente nessa boca de lobo!</string>
+		<key>tipo</key>
+		<integer>1</integer>
+		<key>latitude</key>
+		<real>-23.550219</real>
+		<key>imagem</key>
+		<array>
+			<string>bocalobo1.jpg</string>
+		</array>
+	</dict>
+	<dict>
+		<key>nome</key>
+		<string>Solicitação de limpeza de boca de lobo</string>
+		<key>nomeTipo</key>
+		<string>Boca de lobo</string>
+		<key>protocolo</key>
+		<string>1444352824</string>
+		<key>data</key>
+		<string>ENVIADO HÁ 15 DIAS ATRAS</string>
+		<key>status</key>
+		<integer>3</integer>
+		<key>endereco</key>
+		<string>Rua dos Estudantes, 31, Liberdade, São Paulo</string>
+		<key>texto</key>
+		<string>Há varios dias passo por aqui e a situação não muda. Mandem alguém limpar essa boca de lobo por favor.</string>
+		<key>tipo</key>
+		<integer>1</integer>
+		<key>latitude</key>
+		<real>-23.548724</real>
+		<key>longitude</key>
+		<real>-46.638851</real>
+		<key>imagem</key>
+		<array>
+			<string>bocalobo5.jpg</string>
+		</array>
+	</dict>
+	<dict>
+		<key>nome</key>
+		<string>Solicitação de coleta de entulho</string>
+		<key>nomeTipo</key>
+		<string>Coleta de entulho</string>
+		<key>protocolo</key>
+		<string>1844356633</string>
+		<key>data</key>
+		<string>ENVIADO HÁ 4 DIAS ATRAS</string>
+		<key>status</key>
+		<integer>0</integer>
+		<key>endereco</key>
+		<string>Rua Hermílio Lemos, 498, Cambuci, São Paulo</string>
+		<key>texto</key>
+		<string>Apesar da placa, o pessoal vive enchendo a calçada de entulho, cansei de ter que desviar pela rua. Pior quando chove e esse entulho começa a se espalhar.</string>
+		<key>tipo</key>
+		<integer>2</integer>
+		<key>latitude</key>
+		<real>-23.556238</real>
+		<key>longitude</key>
+		<real>-46.630139</real>
+		<key>imagem</key>
+		<array>
+			<string>entulho1.jpg</string>
+			<string>entulho2.jpg</string>
+		</array>
+	</dict>
+	<dict>
+		<key>nome</key>
+		<string>Solicitação de coleta de entulho</string>
+		<key>nomeTipo</key>
+		<string>Coleta de entulho</string>
+		<key>protocolo</key>
+		<string>1544356612</string>
+		<key>data</key>
+		<string>ENVIADO HÁ 13 DIAS ATRAS</string>
+		<key>status</key>
+		<integer>1</integer>
+		<key>endereco</key>
+		<string>Rua Sebastião Pereira, 274, Santa Cecília, São Paulo</string>
+		<key>texto</key>
+		<string></string>
+		<key>tipo</key>
+		<integer>2</integer>
+		<key>latitude</key>
+		<real>-23.536291</real>
+		<key>longitude</key>
+		<real>-46.633444</real>
+		<key>imagem</key>
+		<array>
+			<string>entulho3.jpg</string>
+		</array>
+	</dict>
+	<dict>
+		<key>nome</key>
+		<string>Solicitação de coleta de entulho</string>
+		<key>nomeTipo</key>
+		<string>Coleta de entulho</string>
+		<key>protocolo</key>
+		<string>1759353456</string>
+		<key>data</key>
+		<string>ENVIADO HÁ 22 DIAS ATRAS</string>
+		<key>status</key>
+		<integer>3</integer>
+		<key>endereco</key>
+		<string>Rua José Paulino, 741, Bom Retiro, São Paulo</string>
+		<key>texto</key>
+		<string>Numa rua tão movimentada não sei como tem coragem de deixar esse entulho ai</string>
+		<key>tipo</key>
+		<integer>2</integer>
+		<key>latitude</key>
+		<real>-23.545104</real>
+		<key>longitude</key>
+		<real>-46.638122</real>
+		<key>imagem</key>
+		<array>
+			<string>entulho4.jpg</string>
+		</array>
+	</dict>
+	<dict>
+		<key>nome</key>
+		<string>Boca de lobo</string>
+		<key>nomeTipo</key>
+		<string>Boca de lobo 4758268</string>
+		<key>protocolo</key>
+		<string></string>
+		<key>data</key>
+		<string></string>
+		<key>status</key>
+		<integer>0</integer>
+		<key>endereco</key>
+		<string></string>
+		<key>texto</key>
+		<string></string>
+		<key>tipo</key>
+		<integer>5</integer>
+		<key>latitude</key>
+		<real>-23.548173</real>
+		<key>longitude</key>
+		<real>-46.650181</real>
+		<key>values</key>
+		<array>
+			<dict>
+				<key>title</key>
+				<string>Data de cadastro </string>
+				<key>desc</key>
+				<string>10/02/2014</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Número ID da boca de lobo</string>
+				<key>desc</key>
+				<string>4758268</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Endereço</string>
+				<key>desc</key>
+				<string>Avenida Higienópolis, 748
+</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Bairro</string>
+				<key>desc</key>
+				<string>Higienópolis</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Condição do entorno
+Condição do entorno</string>
+				<key>desc</key>
+				<string>Comercial</string>
+			</dict>
+		</array>
+		<key>imagem</key>
+		<array>
+			<string>bocalobo5.jpg</string>
+		</array>
+	</dict>
+	<dict>
+		<key>nome</key>
+		<string>Árvore</string>
+		<key>nomeTipo</key>
+		<string>Árvore 07828</string>
+		<key>protocolo</key>
+		<string></string>
+		<key>data</key>
+		<string></string>
+		<key>status</key>
+		<integer>0</integer>
+		<key>endereco</key>
+		<string></string>
+		<key>texto</key>
+		<string></string>
+		<key>tipo</key>
+		<integer>4</integer>
+		<key>latitude</key>
+		<real>-23.557536</real>
+		<key>longitude</key>
+		<real>-46.637993</real>
+		<key>values</key>
+		<array>
+			<dict>
+				<key>title</key>
+				<string>Data de cadastro </string>
+				<key>desc</key>
+				<string>10/02/2014</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Número da árvore</string>
+				<key>desc</key>
+				<string>07828-00034-r-1-01</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Endereço</string>
+				<key>desc</key>
+				<string>Rua Una, 45</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Bairro</string>
+				<key>desc</key>
+				<string>Bela Vista</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Condição do entorno
+Condição do entorno</string>
+				<key>desc</key>
+				<string>Residencial</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Localização do passeio</string>
+				<key>desc</key>
+				<string>Centralizada</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Interferência na copa</string>
+				<key>desc</key>
+				<string>Muro</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Localização do passeio</string>
+				<key>desc</key>
+				<string>Centralizada</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Inclinação do tronco</string>
+				<key>desc</key>
+				<string>Menor que 10°</string>
+			</dict>
+		</array>
+		<key>imagem</key>
+		<array>
+			<string>arvore1.jpg</string>
+		</array>
+	</dict>
+	<dict>
+		<key>nome</key>
+		<string>Praça Dom José Gaspar</string>
+		<key>nomeTipo</key>
+		<string>Praça Dom José Gaspar</string>
+		<key>protocolo</key>
+		<string></string>
+		<key>data</key>
+		<string></string>
+		<key>status</key>
+		<integer>0</integer>
+		<key>endereco</key>
+		<string></string>
+		<key>texto</key>
+		<string></string>
+		<key>tipo</key>
+		<integer>3</integer>
+		<key>latitude</key>
+		<real>-23.552107</real>
+		<key>longitude</key>
+		<real>-46.612244</real>
+		<key>values</key>
+		<array>
+			<dict>
+				<key>title</key>
+				<string>Velocidade fornecida</string>
+				<key>desc</key>
+				<string>Minimo de 512 kbps por usuário</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Frequência</string>
+				<key>desc</key>
+				<string>2,4 GHz e 5,0 GHz</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Participa do Projeto Praças Digitais desde </string>
+				<key>desc</key>
+				<string>01/08/2013</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Bairro</string>
+				<key>desc</key>
+				<string>República</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>Referência</string>
+				<key>desc</key>
+				<string>Próximo a Biblioteca Mário de Andrade e do Edifício Copan</string>
+			</dict>
+		</array>
+		<key>imagem</key>
+		<array>
+			<string>praca-wifi1.jpg</string>
+		</array>
+	</dict>
+</array>
+</plist>
