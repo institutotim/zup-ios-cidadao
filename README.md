@@ -28,7 +28,9 @@ Veja o site do [Cocoapods](https://cocoapods.org/)
 
 ## Configuração do projeto no xcode
 
-1. Clique na opção "Open another project", [conforme imagem](http://d.pr/i/gzOSl/2imzOG0p+)
+1. Clique na opção "Open another project":
+<img width="1672" alt="screen shot 2017-06-03 at 20 26 31" src="https://cloud.githubusercontent.com/assets/641411/26788651/502782f8-49e4-11e7-8b25-ab51c94ccb20.png">
+
 2. Selecione a pasta `zup-ios-cidadao`
 
 ## Instalar dependências com o Cocoapods
