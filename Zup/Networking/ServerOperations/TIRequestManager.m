@@ -16,35 +16,35 @@ static NSString * const keyOperation = @"OPERATION";
 
 @interface TIRequestManager()
 
-@property(atomic, retain) NSMutableArray* RequestWaiting;
-@property(atomic, retain) NSMutableArray* RequestPerforming;
+@property(atomic, retain) NSMutableArray *RequestWaiting;
+@property(atomic, retain) NSMutableArray *RequestPerforming;
 
 @end
 
 @implementation TIRequestManager
 
-static TIRequestManager* _defaultManager;
+static TIRequestManager * _defaultManager;
 
-+(TIRequestManager*)defaultManager{
++ (TIRequestManager *)defaultManager {
     if (_defaultManager) {
         return _defaultManager;
-    }else{
+    } else {
         _defaultManager = [[TIRequestManager alloc]init];
         return [TIRequestManager defaultManager];
     }
 }
 
--(id)init{
+- (id)init {
     self = [super init];
     if (self) {
-        self->_RequestWaiting = [[NSMutableArray alloc]init];
-        self->_RequestPerforming = [[NSMutableArray alloc]init];
+        self->_RequestWaiting = [[NSMutableArray alloc] init];
+        self->_RequestPerforming = [[NSMutableArray alloc] init];
     }
     
     return self;
 }
 
--(BOOL)startRequest:(NSURLRequest*)urlRequest forOperation:(TIRequestOperation*)requestOperation{
+- (BOOL)startRequest:(NSURLRequest*)urlRequest forOperation:(TIRequestOperation *)requestOperation {
     TIRequest* request = [[TIRequest alloc]init];
     request.isLogin = requestOperation.isLogin;
     request.delegate = self;
@@ -63,33 +63,30 @@ static TIRequestManager* _defaultManager;
     return NO;
 }
 
--(void)cancelRequestForOperation:(TIRequestOperation*)operation{
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.%@ = %@", keyOperation, operation];
-    NSArray* arrayRequest = [self.RequestPerforming filteredArrayUsingPredicate:predicate];
+- (void)cancelRequestForOperation:(TIRequestOperation *)operation {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.%@ = %@", keyOperation, operation];
+    NSArray *arrayRequest = [self.RequestPerforming filteredArrayUsingPredicate:predicate];
     
     if (arrayRequest.count > 0) {
-        NSDictionary* dictionary = [arrayRequest objectAtIndex:0];
+        NSDictionary *dictionary = [arrayRequest objectAtIndex:0];
         
-        TIRequest* request = [dictionary objectForKey:keyRequest];
+        TIRequest *request = [dictionary objectForKey:keyRequest];
         [request cancel];
         
         [self.RequestPerforming removeObject:dictionary];
         [self checkStatus];
-        
-
     }
 }
 
-- (void)request:(TIRequest*)request DidFinishWithError:(NSError*)erro data:(NSData *)data {
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.%@ = %@", keyRequest, request];
-    NSArray* arrayRequest = [self.RequestPerforming filteredArrayUsingPredicate:predicate];
+- (void)request:(TIRequest *)request DidFinishWithError:(NSError *)erro data:(NSData *)data {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.%@ = %@", keyRequest, request];
+    NSArray *arrayRequest = [self.RequestPerforming filteredArrayUsingPredicate:predicate];
     
-    NSDictionary* dictionary = [arrayRequest objectAtIndex:0];
-    TIRequestOperation* operation = [dictionary objectForKey:keyOperation];
+    NSDictionary *dictionary = [arrayRequest objectAtIndex:0];
+    TIRequestOperation *operation = [dictionary objectForKey:keyOperation];
     if (operation.target && operation.actionErro) {
-        
         @try {
-            NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:[operation.target methodSignatureForSelector:operation.actionErro]];
+            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[operation.target methodSignatureForSelector:operation.actionErro]];
 
             invocation.target = operation.target;
             invocation.selector = operation.actionErro;
@@ -105,7 +102,7 @@ static TIRequestManager* _defaultManager;
         }        
     }
     
-    NSString *sentryMessage = [NSString stringWithFormat:@"HTTP Request failed:\r\nURL: %@\r\nMethod: %@\r\nResponse Status: %li\r\n%@", request.currentConnection.originalRequest.URL, request.currentConnection.originalRequest.HTTPMethod, (long)request.statusCode, erro.description];
+    NSString *sentryMessage = [NSString stringWithFormat:@"HTTP Request failed:\r\nURL: %@\r\nMethod: %@\r\nResponse Status: %li\r\n%@", request.currentTask.originalRequest.URL, request.currentTask.originalRequest.HTTPMethod, (long)request.statusCode, erro.description];
     [[RavenClient sharedClient] captureMessage:sentryMessage];
     
     [self.RequestPerforming removeObject:dictionary];

@@ -13,7 +13,8 @@
 
 @interface TIRequestManager : NSObject <TIRequestDelegate>
 
-+(TIRequestManager*)defaultManager;
--(BOOL)startRequest:(NSURLRequest*)urlRequest forOperation:(TIRequestOperation*)requestOperation;
--(void)cancelRequestForOperation:(TIRequestOperation*)operation;
++ (TIRequestManager *)defaultManager;
+- (BOOL)startRequest:(NSURLRequest *)urlRequest forOperation:(TIRequestOperation *)requestOperation;
+- (void)cancelRequestForOperation:(TIRequestOperation *)operation;
+
 @end
