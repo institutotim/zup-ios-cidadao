@@ -5,15 +5,17 @@
 #import "ApiNetworkingManager.h"
 #import "AFNetworkActivityLogger.h"
 #import "NSString+Utils.h"
-#import <AFNetworking/AFNetworkActivityIndicatorManager.h>
-#import <Crashlytics/Crashlytics.h>
 #import "InstanceConfiguration.h"
 
+#import <AFNetworkActivityLogger/AFNetworkActivityLogger.h>
+#import <AFNetworking/AFNetworkActivityIndicatorManager.h>
+#import <Crashlytics/Crashlytics.h>
 
-@interface ApiNetworkingManager (){
-    NSURL *baseUrl;
-    AFHTTPRequestOperationManager *manager;
-}
+@interface ApiNetworkingManager()
+
+@property(nonatomic, strong) NSURL *baseUrl;
+@property(nonatomic, strong) AFHTTPSessionManager *manager;
+
 @end
 
 static ApiNetworkingManager *instance;
@@ -26,23 +28,25 @@ static ApiNetworkingManager *instance;
     [self setupCustomHeaders];
     
 #ifdef DEBUG
-    [AFNetworkActivityLogger sharedLogger].level = AFLoggerLevelInfo;
+//    [[AFNetworkActivityLogger sharedLogger] addLogger:];
     [[AFNetworkActivityLogger sharedLogger] startLogging];
 #endif
 }
 
 - (void)addHeader:(NSString *)value forKey:(NSString *)key {
-    [manager.requestSerializer setValue:value  forHTTPHeaderField:key];
+    [self.manager.requestSerializer setValue:value  forHTTPHeaderField:key];
 }
 
 - (void)GET:(NSString*)url params:(NSDictionary*)params success:(SuccessBlock)success
     failure:(FailureBlock)failure {
     CLS_LOG(@"Request URL: %@",[url asEscapedURL]);
     CLS_LOG(@"Request PARAMS: %@",params);
-    [manager GET:[url asEscapedURL] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        success(operation, operation.responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self handleFailure:operation error:error failure:failure];
+    [self.manager GET:[url asEscapedURL] parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        success(task, responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self handleFailure:task error:error failure:failure];
     }];
 }
 
@@ -50,10 +54,12 @@ static ApiNetworkingManager *instance;
      failure:(FailureBlock)failure {
     CLS_LOG(@"Request URL: %@",[url asEscapedURL]);
     CLS_LOG(@"Request PARAMS: %@",params);
-    [manager POST:[url asEscapedURL] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        success(operation, operation.responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self handleFailure:operation error:error failure:failure];
+    [self.manager POST:[url asEscapedURL] parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionTask *task, id responseObject) {
+        success(task, responseObject);
+    } failure:^(NSURLSessionTask *task, NSError *error) {
+        [self handleFailure:task error:error failure:failure];
     }];
 }
 
@@ -61,10 +67,10 @@ static ApiNetworkingManager *instance;
     failure:(FailureBlock)failure {
     CLS_LOG(@"Request URL: %@",[url asEscapedURL]);
     CLS_LOG(@"Request PARAMS: %@",params);
-    [manager PUT:[url asEscapedURL] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        success(operation, operation.responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self handleFailure:operation error:error failure:failure];
+    [self.manager PUT:[url asEscapedURL] parameters:params success:^(NSURLSessionTask *task, id responseObject) {
+        success(task, responseObject);
+    } failure:^(NSURLSessionTask *task, NSError *error) {
+        [self handleFailure:task error:error failure:failure];
     }];
 }
 
@@ -72,35 +78,36 @@ static ApiNetworkingManager *instance;
        failure:(FailureBlock)failure {
     CLS_LOG(@"Request URL: %@",[url asEscapedURL]);
     CLS_LOG(@"Request PARAMS: %@",params);
-    [manager DELETE:[url asEscapedURL] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        success(operation, operation.responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self handleFailure:operation error:error failure:failure];
+    [self.manager DELETE:[url asEscapedURL] parameters:params success:^(NSURLSessionTask *task, id responseObject) {
+        success(task, responseObject);
+    } failure:^(NSURLSessionTask *task, NSError *error) {
+        [self handleFailure:task error:error failure:failure];
     }];
 }
 
 #pragma mark - Private Methods
 
-- (void)handleFailure:(AFHTTPRequestOperation *)operation error:(NSError*)error failure:(FailureBlock)failure{
-    NSInteger statusCode = operation.response.statusCode;
-    CLS_LOG(@"HTTP %ld - response %@ - ERROR: %@", statusCode ,operation.response.URL, error );
+- (void)handleFailure:(NSURLSessionTask *)task error:(NSError *)error failure:(FailureBlock)failure {
+    NSHTTPURLResponse *resp = (NSHTTPURLResponse *)task.response;
+    NSInteger statusCode = resp.statusCode;
+    CLS_LOG(@"HTTP %ld - response %@ - ERROR: %@", statusCode, task.response.URL, error);
     
-    failure(operation,error,operation.responseString);
+    failure(task, error, @"");
 }
 
-- (void)setupRequestOperationManager{
-    AFNetworkActivityIndicatorManager.sharedManager.enabled = YES;
+- (void)setupRequestOperationManager {
+    [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
     NSURL *baseURL = [NSURL URLWithString: BASE_API_URL];
-    manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
+    self.manager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL];
     AFSecurityPolicy *policy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
     [policy setAllowInvalidCertificates:YES];
     [policy setValidatesDomainName:NO];
-    manager.securityPolicy = policy;
+    self.manager.securityPolicy = policy;
 }
 
 - (void)configureReachability {
-    NSOperationQueue *operationQueue = manager.operationQueue;
-    [manager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+    NSOperationQueue *operationQueue = self.manager.operationQueue;
+    [self.manager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
         [operationQueue setSuspended:NO];
         
         switch (status) {
@@ -117,22 +124,21 @@ static ApiNetworkingManager *instance;
 }
 
 - (void)setupRequestSerializers {
-    manager.requestSerializer  = [AFHTTPRequestSerializer serializer];
-    manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [manager.responseSerializer.acceptableContentTypes setByAddingObject:@"text/html"];
+    self.manager.requestSerializer  = [AFHTTPRequestSerializer serializer];
+    self.manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    self.manager.responseSerializer.acceptableContentTypes = [self.manager.responseSerializer.acceptableContentTypes setByAddingObject:@"text/html"];
 }
 
 - (void)setupCustomHeaders {
-    [manager.requestSerializer setValue:@"application/json;charset = UTF-8" forHTTPHeaderField:@"Accept"];
+    [self.manager.requestSerializer setValue:@"application/json;charset = UTF-8" forHTTPHeaderField:@"Accept"];
 }
 
--(NSString*) baseAPIUrl{
+-(NSString*) baseAPIUrl {
     return BASE_API_URL;
 }
 
 + (NSString *)baseWebUrl {
     return BASE_WEB_URL;
 }
-
 
 @end

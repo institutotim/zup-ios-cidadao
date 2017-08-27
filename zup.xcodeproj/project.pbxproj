@@ -121,8 +121,6 @@
 		55EDF0B51F53706100FA73D3 /* Marcacoes.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFB01F536C1D00FA73D3 /* Marcacoes.plist */; };
 		55EDF0B61F53706900FA73D3 /* termo-de-uso.html in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFB11F536C1D00FA73D3 /* termo-de-uso.html */; };
 		55EDF0B71F53706B00FA73D3 /* Termos.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFB21F536C1D00FA73D3 /* Termos.rtf */; };
-		55EDF0B81F53706F00FA73D3 /* zup_sbc-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFB31F536C1D00FA73D3 /* zup_sbc-Info.plist */; };
-		55EDF0B91F53707200FA73D3 /* zup-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFB41F536C1D00FA73D3 /* zup-Info.plist */; };
 		55EDF0BA1F53707C00FA73D3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEFAF1F536C1D00FA73D3 /* main.m */; };
 		55EDF0BB1F53709600FA73D3 /* CellFiltrarCategoria.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF7B1F536B7900FA73D3 /* CellFiltrarCategoria.m */; };
 		55EDF0BC1F53709D00FA73D3 /* GraphicCell_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEF721F536B6500FA73D3 /* GraphicCell_iPad.xib */; };
@@ -231,6 +229,7 @@
 		55EDF1231F53723B00FA73D3 /* CreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0AA1F536FF700FA73D3 /* CreateViewController.m */; };
 		55EDF1241F53723F00FA73D3 /* ComentarioViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0B11F53700400FA73D3 /* ComentarioViewController.xib */; };
 		55EDF1251F53724100FA73D3 /* ComentarioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0B01F53700400FA73D3 /* ComentarioViewController.m */; };
+		55EDF1281F53778000FA73D3 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF1271F53778000FA73D3 /* Utilities.m */; };
 		607F2EC7F805A2650121C6E5 /* libPods-zupTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CC846C41EDC814A3C99377E /* libPods-zupTests.a */; };
 		8518F33386E12DA0925FF7C3 /* libPods-zup.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 279675B70D6A9D171197294C /* libPods-zup.a */; };
 		88387C8A184045DC0059C826 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C89184045DC0059C826 /* Foundation.framework */; };
@@ -487,6 +486,8 @@
 		55EDF0AF1F53700400FA73D3 /* ComentarioViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComentarioViewController.h; sourceTree = "<group>"; };
 		55EDF0B01F53700400FA73D3 /* ComentarioViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComentarioViewController.m; sourceTree = "<group>"; };
 		55EDF0B11F53700400FA73D3 /* ComentarioViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ComentarioViewController.xib; sourceTree = "<group>"; };
+		55EDF1261F53778000FA73D3 /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
+		55EDF1271F53778000FA73D3 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
 		88387C86184045DC0059C826 /* zup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = zup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88387C89184045DC0059C826 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		88387C8B184045DC0059C826 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -669,6 +670,8 @@
 				55EDEF8A1F536BA700FA73D3 /* SSDrawingUtilities */,
 				55EDEF861F536B9900FA73D3 /* UserDefaults */,
 				55EDEF7F1F536B8B00FA73D3 /* XL */,
+				55EDF1261F53778000FA73D3 /* Utilities.h */,
+				55EDF1271F53778000FA73D3 /* Utilities.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1508,11 +1511,12 @@
 		88387C7E184045DC0059C826 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = ntxdev;
 				TargetAttributes = {
 					88387C85184045DC0059C826 = {
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = K2Q453W5U7;
+						ProvisioningStyle = Automatic;
 					};
 					88387CAC184045DC0059C826 = {
 						TestTargetID = 88387C85184045DC0059C826;
@@ -1561,7 +1565,6 @@
 				55EDEFDE1F536C8C00FA73D3 /* entulho3.jpg in Resources */,
 				55EDF08D1F536F8B00FA73D3 /* FilterEstatisticasViewController.xib in Resources */,
 				55EDEFE81F536C9700FA73D3 /* OpenSans-Bold.ttf in Resources */,
-				55EDF0B91F53707200FA73D3 /* zup-Info.plist in Resources */,
 				55EDEFDC1F536C8C00FA73D3 /* entulho1.jpg in Resources */,
 				55EDEFD81F536C8C00FA73D3 /* bocalobo2.jpg in Resources */,
 				55EDF0B51F53706100FA73D3 /* Marcacoes.plist in Resources */,
@@ -1652,7 +1655,6 @@
 				55EDF0E41F53714600FA73D3 /* entulho2.jpg in Resources */,
 				55EDF0D91F53712B00FA73D3 /* OpenSans-Bold.ttf in Resources */,
 				55EDF1051F5371D100FA73D3 /* SocialViewController.xib in Resources */,
-				55EDF0B81F53706F00FA73D3 /* zup_sbc-Info.plist in Resources */,
 				55EDF1171F53720D00FA73D3 /* FiltrarViewControllerNovo.xib in Resources */,
 				55EDF1071F5371D600FA73D3 /* SearchTableViewController.xib in Resources */,
 				55EDF0C01F5370AB00FA73D3 /* HeaderProfileCell.xib in Resources */,
@@ -1809,6 +1811,7 @@
 				55EDEF661F536B3700FA73D3 /* CellGaleriaInventario.m in Sources */,
 				55EDF0141F536CEF00FA73D3 /* RavenClient.m in Sources */,
 				55EDF0AC1F536FF700FA73D3 /* CreateViewController.m in Sources */,
+				55EDF1281F53778000FA73D3 /* Utilities.m in Sources */,
 				55EDEFA71F536BF200FA73D3 /* OAuth+Additions.m in Sources */,
 				55EDF0521F536ED200FA73D3 /* SearchTableViewController.m in Sources */,
 				55EDF0041F536CD300FA73D3 /* ServerOperations.m in Sources */,
@@ -1994,14 +1997,20 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -2037,14 +2046,19 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -2069,26 +2083,22 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = K2Q453W5U7;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/Renato/Desktop/GitHub/zup-ios-cidadao",
-					"/Users/lynxnathan/code/zup-ios-cidadao",
-					"./**",
 					"$(PROJECT_DIR)",
-					"/Users/igorlira/Downloads/GoogleMaps-iOS-1.8.1",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Zup/zup-Prefix.pch";
+				GCC_PREFIX_HEADER = "Zup/Supporting Files/zup-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Zup/Supporting Files/zup-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Release-iphoneos",
-					"$(PROJECT_DIR)/Analytics",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "br.com.lfdb.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = zup;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2106,26 +2116,22 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = K2Q453W5U7;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/Renato/Desktop/GitHub/zup-ios-cidadao",
-					"/Users/lynxnathan/code/zup-ios-cidadao",
-					"./**",
 					"$(PROJECT_DIR)",
-					"/Users/igorlira/Downloads/GoogleMaps-iOS-1.8.1",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Zup/zup-Prefix.pch";
+				GCC_PREFIX_HEADER = "Zup/Supporting Files/zup-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Zup/Supporting Files/zup-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Release-iphoneos",
-					"$(PROJECT_DIR)/Analytics",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "br.com.lfdb.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = zup;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2152,6 +2158,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "ZupTests/zupTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ntxdev.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = zupTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -2171,6 +2178,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Zup/Zup-Prefix.pch";
 				INFOPLIST_FILE = "ZupTests/zupTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ntxdev.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = zupTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;

@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <AFNetworking/AFNetworking.h>
 
-typedef void (^SuccessBlock)(AFHTTPRequestOperation *operation, id responseObject);
-typedef void (^FailureBlock)(AFHTTPRequestOperation *operation, NSError *error, NSString *customErrorMessage);
+typedef void (^SuccessBlock)(NSURLSessionTask *task, id responseObject);
+typedef void (^FailureBlock)(NSURLSessionTask *task, NSError *error, NSString *customErrorMessage);
 
 @interface ApiNetworkingManager : NSObject
 

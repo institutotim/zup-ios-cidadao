@@ -56,12 +56,11 @@
     return result;
 }
 
-+ (NSString *)ab_GUID
-{
++ (NSString *)ab_GUID {
     CFUUIDRef u = CFUUIDCreate(kCFAllocatorDefault);
     CFStringRef s = CFUUIDCreateString(kCFAllocatorDefault, u);
     CFRelease(u);
-    return [(NSString *)s autorelease];
+    return (__bridge NSString *)s;
 }
 
 @end
