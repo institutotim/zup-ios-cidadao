@@ -52,14 +52,14 @@ static TIRequestManager* _defaultManager;
         NSDictionary* OperationRequest = @{ keyOperation : requestOperation, keyRequest : request };
         [self.RequestPerforming addObject:OperationRequest];
         [self checkStatus];
-        [request release];
         return YES;
-    }else{
+    } else {
         if (requestOperation.target && requestOperation.actionErro) {
-            [requestOperation.target performSelector:requestOperation.actionErro withObject:[NSError errorWithDomain:@"HTTP" code:1 userInfo:nil] withObject:requestOperation];
+            [requestOperation.target performSelector:requestOperation.actionErro
+                                          withObject:[NSError errorWithDomain:@"HTTP" code:1 userInfo:nil]
+                                          withObject:requestOperation];
         }
     }
-    [request release];
     return NO;
 }
 
@@ -80,7 +80,7 @@ static TIRequestManager* _defaultManager;
     }
 }
 
--(void)request:(TIRequest*)request DidFinishWithError:(NSError*)erro data:(NSData *)data{
+- (void)request:(TIRequest*)request DidFinishWithError:(NSError*)erro data:(NSData *)data {
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.%@ = %@", keyRequest, request];
     NSArray* arrayRequest = [self.RequestPerforming filteredArrayUsingPredicate:predicate];
     
@@ -105,20 +105,19 @@ static TIRequestManager* _defaultManager;
         }        
     }
     
-    NSString* sentryMessage = [NSString stringWithFormat:@"HTTP Request failed:\r\nURL: %@\r\nMethod: %@\r\nResponse Status: %i\r\n%@", request.currentConnection.originalRequest.URL, request.currentConnection.originalRequest.HTTPMethod, request.statusCode, erro.description];
+    NSString *sentryMessage = [NSString stringWithFormat:@"HTTP Request failed:\r\nURL: %@\r\nMethod: %@\r\nResponse Status: %li\r\n%@", request.currentConnection.originalRequest.URL, request.currentConnection.originalRequest.HTTPMethod, (long)request.statusCode, erro.description];
     [[RavenClient sharedClient] captureMessage:sentryMessage];
     
     [self.RequestPerforming removeObject:dictionary];
     [self checkStatus];
 }
 
--(void)request:(TIRequest*)request DidFinishLoadingWithResult:(NSData*)result{
+- (void)request:(TIRequest *)request DidFinishLoadingWithResult:(NSData *)result {
     
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.%@ = %@", keyRequest, request];
     NSArray* arrayRequest = [self.RequestPerforming filteredArrayUsingPredicate:predicate];
     
     NSString *stringData = [[NSString alloc]initWithData:result encoding:NSUTF8StringEncoding];
-    [stringData release];
     
     NSDictionary* dictionary = [arrayRequest objectAtIndex:0];
     TIRequestOperation* operation = [dictionary objectForKey:keyOperation];
@@ -128,14 +127,13 @@ static TIRequestManager* _defaultManager;
     
     [self.RequestPerforming removeObject:dictionary];
     [self checkStatus];
-    
 }
 
 
--(void)checkStatus{
+- (void)checkStatus {
     if (self.RequestPerforming.count > 0) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    }else{
+    } else {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     }
 }
