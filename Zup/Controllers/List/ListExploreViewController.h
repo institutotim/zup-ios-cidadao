@@ -4,8 +4,9 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "PerfilDetailViewController.h"
-#import "XL/XLMediaZoom.h"
+#import "XLMediaZoom.h"
 #import "GAITrackedViewController.h"
 
 @interface ListExploreViewController : GAITrackedViewController {

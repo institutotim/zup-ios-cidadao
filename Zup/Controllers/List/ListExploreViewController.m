@@ -8,8 +8,9 @@
 #import "CustomMap.h"
 #import "CellGaleriaInventario.h"
 #import "ImageCache.h"
+#import "XLMediaZoom.h"
+
 #import <SDWebImage/UIImageView+WebCache.h>
-#import "XL/XLMediaZoom.h"
 
 @interface ListExploreViewController ()
 
