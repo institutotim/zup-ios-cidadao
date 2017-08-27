@@ -11,29 +11,23 @@
 
 @implementation TIRequestOperation
 
--(void)CancelRequest{
+- (void)CancelRequest {
     [[TIRequestManager defaultManager] cancelRequestForOperation:self];
 }
 
--(BOOL)StartRequest:(NSURLRequest*)request{
+- (BOOL)StartRequest:(NSURLRequest *)request {
     NSMutableURLRequest* newreq = [request mutableCopy];
     
     newreq.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
     request = newreq;
     
-    if ([UserDefaults getToken] != nil)
-    {
+    if ([UserDefaults getToken] != nil) {
         NSMutableURLRequest* newreq = [request mutableCopy];
         [newreq setValue:[UserDefaults getToken] forHTTPHeaderField:@"X-App-Token"];
         
         request = newreq;
     }
     return [[TIRequestManager defaultManager]startRequest:request forOperation:self];
-}
-
--(void)dealloc{
-    [_target release];
-    [super dealloc];
 }
 
 @end
