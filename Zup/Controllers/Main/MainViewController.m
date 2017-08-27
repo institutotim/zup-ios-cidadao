@@ -7,11 +7,12 @@
 #import "CreateViewController.h"
 #import "LoginViewController.h"
 #import "TabBarController.h"
-#import <SDWebImage/UIImageView+WebCache.h>
-#import <CoreLocation/CoreLocation.h>
 #import "ExploreViewController.h"
 #import "RavenClient.h"
 #import "AppDelegate.h"
+
+#import <SDWebImage/UIImageView+WebCache.h>
+#import <CoreLocation/CoreLocation.h>
 
 //Temp Patty
 #import "MainApiManager.h"
@@ -22,8 +23,7 @@
 
 @implementation MainViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -31,8 +31,7 @@
     return self;
 }
 
-- (void) startLoadingData
-{
+- (void)startLoadingData {
     self->onlyReload = NO;
     
     [self getReportCategories];
@@ -41,8 +40,7 @@
     [self requestLocation];
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self->onlyReload = NO;
@@ -62,8 +60,8 @@
     
     
     [[UINavigationBar appearance] setTitleTextAttributes: @{
-                                                            UITextAttributeTextColor: [UIColor blackColor],
-                                                            UITextAttributeFont: [Utilities fontOpensSansLightWithSize:18]
+                                                            NSForegroundColorAttributeName: [UIColor blackColor],
+                                                            NSFontAttributeName: [Utilities fontOpensSansLightWithSize:18]
                                                             }];
     
     self.pageControl.pageIndicatorTintColor = [Utilities colorGray];
@@ -87,13 +85,15 @@
         self.logoView.hidden = YES;
 }
 
-- (void) sessionExpired
-{
-    if([Utilities didShowTabBarView])
+- (void)sessionExpired {
+    if ([Utilities didShowTabBarView])
         return;
     
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Sessão expirada" message:@"Sua sessão expirou. É necessário fazer login novamente." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sessão expirada"
+                                                                   message:@"Sua sessão expirou. É necessário fazer login novamente."
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
     
     [UserDefaults setToken:@""];
     [UserDefaults setUserId:@""];
@@ -112,8 +112,6 @@
 }
 
 - (void)buildLoadPage {
-    NSString *imgName;
-    
     float posY = 0.0;
     BOOL large = NO;
     
@@ -133,21 +131,20 @@
         }
     }
     
-    UIImage* img = [Utilities getTenantLaunchImage];
+    UIImage *img = [Utilities getTenantLaunchImage];
     
-    imgViewLoad = [[UIImageView alloc]initWithFrame:self.view.frame];
+    imgViewLoad = [[UIImageView alloc] initWithFrame:self.view.frame];
     //[imgViewLoad setImage:[UIImage imageNamed:imgName]];
     [imgViewLoad setImage:img];
     [self.view addSubview:imgViewLoad];
     
     spin = [[UIActivityIndicatorView alloc]init];
-    if(large)
-    {
+    if (large) {
         [spin setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [spin setColor:[UIColor grayColor]];
-    }
-    else
+    } else {
         [spin setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+    }
     [spin setFrame:CGRectMake(self.view.center.x - (spin.frame.size.width/2), posY, spin.frame.size.width, spin.frame.size.height)];
     [self.view addSubview:spin];
     [spin startAnimating];
@@ -157,8 +154,6 @@
 - (void)getReportCategories {
     NSLog(@"Reloading report categories");
     
-    
-    
     ServerOperations *server = [[ServerOperations alloc]init];
     [server setTarget:self];
     [server setAction:@selector(didReceiveData:)];
@@ -166,27 +161,24 @@
     [server getReportCategories];
 }
 
-- (int)totalCategoryCount:(NSArray*)arr
-{
+- (int)totalCategoryCount:(NSArray *)arr {
     int count = 0;
-    for(NSDictionary* dict in arr)
-    {
+    for (NSDictionary* dict in arr) {
         count++;
         
-        NSArray* subcategories = [dict valueForKey:@"subcategories"];
-        if(subcategories != nil)
+        NSArray *subcategories = [dict valueForKey:@"subcategories"];
+        if (subcategories != nil)
             count += [self totalCategoryCount:subcategories];
     }
     
     return count;
 }
 
-- (void)parseCategory:(NSDictionary*)dict mutArr:(NSMutableArray*)mutArr arr:(NSArray*)arr
-{
+- (void)parseCategory:(NSDictionary *)dict mutArr:(NSMutableArray *)mutArr arr:(NSArray *)arr {
     NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.default.mobile.active"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
     
     UIImageView *imgV = [[UIImageView alloc]init];
-    [imgV setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+    [imgV sd_setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         if (image == nil) {
             image = [UIImage imageNamed:@"mapMarker"];
@@ -196,7 +188,7 @@
         
         NSURL *urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
         UIImageView *imgV = [[UIImageView alloc]init];
-        [imgV setImageWithURL:urlMarker completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+        [imgV sd_setImageWithURL:urlMarker completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             
             if (image == nil) {
                 image = [UIImage imageNamed:@"mapMarker"];
@@ -209,7 +201,7 @@
             
             UIImageView *imgV = [[UIImageView alloc]init];
             
-            [imgV setImageWithURL:urlIconDisabled completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+            [imgV sd_setImageWithURL:urlIconDisabled completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 
                 if (image == nil) {
                     image = [UIImage imageNamed:@"mapMarker"];
@@ -227,7 +219,6 @@
                     NSMutableDictionary *dictStatus = [[NSMutableDictionary alloc]init];
                     int i = 0;
                     for (NSString *key in keys) {
-                        
                         NSString *newValue = [Utilities checkIfNull:[values objectAtIndex:i]];
                         [dictStatus setValue:newValue forKey:[keys objectAtIndex:i]];
                         i ++;
@@ -235,9 +226,8 @@
                     [arrStatus addObject:dictStatus];
                 }
                 
-                NSMutableArray* arrCategories = [[NSMutableArray alloc] init];
-                if([dict valueForKey:@"inventory_categories"])
-                {
+                NSMutableArray *arrCategories = [[NSMutableArray alloc] init];
+                if ([dict valueForKey:@"inventory_categories"]) {
                     for (NSDictionary *dictTemp in [dict valueForKey:@"inventory_categories"]) {
                         NSNumber* cid = [dictTemp valueForKey:@"id"];
                         [arrCategories addObject:cid];
@@ -295,7 +285,7 @@
                 if (mutArr.count == [self totalCategoryCount:arr]) {
                     [UserDefaults setReportCategories:mutArr];
                     
-                    NSLog(@"Loaded %i report categories", mutArr.count);
+                    NSLog(@"Loaded %lu report categories", (unsigned long)mutArr.count);
                     //if(!self->onlyReload)
                         [self getInventoryCategories];
                 }
@@ -350,7 +340,7 @@
         NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.active"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
         
         UIImageView *imgV = [[UIImageView alloc]init];
-        [imgV setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+        [imgV sd_setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             
             if (image == nil) {
                 image = [UIImage imageNamed:@"mapMarker"];
@@ -361,7 +351,7 @@
             
             NSURL *urlIconDisabled = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.disabled"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
             
-            [imgV setImageWithURL:urlIconDisabled completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+            [imgV sd_setImageWithURL:urlIconDisabled completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 
                 if (image == nil) {
                     image = [UIImage imageNamed:@"mapMarker"];
@@ -371,7 +361,7 @@
                 
                 NSURL *urlPin = [NSURL URLWithString:[dict valueForKeyPath:@"pin.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
                 UIImageView *imgV = [[UIImageView alloc]init];
-                [imgV setImageWithURL:urlPin completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                [imgV sd_setImageWithURL:urlPin completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     
                     if (image == nil) {
                         image = [UIImage imageNamed:@"mapMarker"];
@@ -381,9 +371,9 @@
                     
                     NSURL* urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
                     UIImageView* imgV = [[UIImageView alloc] init];
-                    [imgV setImageWithURL:urlMarker completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                    [imgV sd_setImageWithURL:urlMarker completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                         
-                        if(image == nil) {
+                        if (image == nil) {
                             image = [UIImage imageNamed:@"mapMarker"];
                         }
                         
@@ -425,20 +415,17 @@
         
     }
     
-    if(arr.count == 0)
-    {
+    if (arr.count == 0) {
         [UserDefaults setInventoryCategories:mutArr];
         
-        if(!self->onlyReload)
+        if (!self->onlyReload)
             [self getFeatureFlags];
         else
             [self goToMap];
     }
-    
 }
 
-- (void)goToMap
-{
+- (void)goToMap {
     if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit && !self.isFromReport) {
         
         [self dismissViewControllerAnimated:YES completion:nil];
