@@ -32,9 +32,9 @@
     
     NSString *finalUrl = [NSString stringWithFormat:@"%@%@", [self baseAPIUrl], URLgetInventoryCategories];
     
-    [super GET:finalUrl params:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [super GET:finalUrl params:nil success:^(NSURLSessionTask *task, id responseObject) {
            success(responseObject);
-       } failure:^(AFHTTPRequestOperation *operation, NSError *error, NSString *customErrorMessage) {
+       } failure:^(NSURLSessionTask *task, NSError *error, NSString *customErrorMessage) {
            fail(customErrorMessage);
        }];
 }
