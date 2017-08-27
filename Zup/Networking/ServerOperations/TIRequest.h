@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import "TIRequestOperation.h"
 #import "TIRequestDelegate.h"
 
@@ -14,14 +15,15 @@
 
 @property(nonatomic) NSInteger statusCode;
 
-@property(nonatomic, retain) NSMutableData* serverResponse;
-@property(nonatomic, retain) NSURLRequest* request;
-@property(nonatomic, retain) NSURLConnection* currentConnection;
+@property(nonatomic, retain) NSMutableData *serverResponse;
+@property(nonatomic, retain) NSURLRequest *request;
+//@property(nonatomic, retain) NSURLConnection *currentConnection;
+@property(nonatomic, strong) NSURLSessionTask *currentTask;
 @property(nonatomic, assign) id<TIRequestDelegate> delegate;
 @property(nonatomic) BOOL isLogin;
 
--(BOOL)startConnection:(NSURLRequest*)request;
--(void)cancel;
-+(NSString*)createUrlFrom:(NSString*)url;
+- (BOOL)startConnection:(NSURLRequest *)request;
+- (void)cancel;
++ (NSString *)createUrlFrom:(NSString *)url;
 
 @end
