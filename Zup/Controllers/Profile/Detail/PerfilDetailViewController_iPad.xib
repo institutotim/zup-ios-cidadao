@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PerfilDetailViewController">
+            <connections>
+                <outlet property="btAberto" destination="5PQ-d4-l5f" id="2IE-5K-y2p"/>
+                <outlet property="btAndamento" destination="NdH-h3-d4J" id="QL4-BY-O2q"/>
+                <outlet property="btNaoResolvido" destination="y6w-uv-6Ps" id="c4Z-hO-mc4"/>
+                <outlet property="btResolvido" destination="ckf-Ch-7BZ" id="Wd0-rw-3aI"/>
+                <outlet property="containerComentarios" destination="fza-ly-V9e" id="nz4-Uz-teI"/>
+                <outlet property="indicatorComentarios" destination="KxT-TN-c2l" id="QGk-uc-jTT"/>
+                <outlet property="lblAddress" destination="oI9-sd-PPb" id="xnX-PZ-u3t"/>
+                <outlet property="lblCategoria" destination="sli-h4-Hle" id="noo-Ga-x8C"/>
+                <outlet property="lblDesc" destination="Ra0-bM-oR5" id="Lgd-eH-Bnb"/>
+                <outlet property="lblName" destination="8FF-eY-Ioa" id="LOi-Rq-9H9"/>
+                <outlet property="lblStatus" destination="hMV-y1-UBI" id="Hxl-2u-ei0"/>
+                <outlet property="lblSubtitle" destination="9Cy-q5-7nw" id="qBE-qK-abd"/>
+                <outlet property="lblTitle" destination="twM-aW-F3r" id="gvx-zD-e4O"/>
+                <outlet property="pageControl" destination="mH3-cb-xZE" id="Bq2-n7-gIi"/>
+                <outlet property="scroll" destination="pK4-YU-Dz5" id="s8o-6h-O5M"/>
+                <outlet property="scrollImages" destination="vh3-VI-9PR" id="wKZ-2E-it4"/>
+                <outlet property="spin" destination="oLg-BM-Cj3" id="6J9-Vx-Ef7"/>
+                <outlet property="tvDesc" destination="wcq-e6-aCV" id="lhD-TN-pU6"/>
+                <outlet property="view" destination="1" id="3"/>
+                <outletCollection property="arrButton" destination="ckf-Ch-7BZ" id="Sk3-rt-FsJ"/>
+                <outletCollection property="arrButton" destination="5PQ-d4-l5f" id="pEI-B2-eLL"/>
+                <outletCollection property="arrButton" destination="y6w-uv-6Ps" id="s8e-rV-dEV"/>
+                <outletCollection property="arrButton" destination="NdH-h3-d4J" id="ONx-LR-BeS"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="1">
+            <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="ftz-Ol-6Bk">
+                    <rect key="frame" x="0.0" y="0.0" width="768" height="30"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.90196084980000002" green="0.90196084980000002" blue="0.90196084980000002" alpha="1" colorSpace="deviceRGB"/>
+                </imageView>
+                <view contentMode="scaleToFill" id="vdZ-wR-bcG">
+                    <rect key="frame" x="54" y="60" width="318" height="320"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Limpeza de boca de lobo" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8FF-eY-Ioa">
+                            <rect key="frame" x="17" y="17" width="279" height="26"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enviada há 3 dias atrás" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oI9-sd-PPb">
+                            <rect key="frame" x="17" y="36" width="290" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enviada há 3 dias atrás" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9Cy-q5-7nw">
+                            <rect key="frame" x="33" y="68" width="274" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" id="wcq-e6-aCV">
+                            <rect key="frame" x="12" y="87" width="295" height="232"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enviada há 3 dias atrás" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ra0-bM-oR5">
+                            <rect key="frame" x="17" y="51" width="290" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Limpeza de boca de lobo" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="sli-h4-Hle">
+                            <rect key="frame" x="17" y="0.0" width="279" height="26"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
+                <button hidden="YES" opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ckf-Ch-7BZ" customClass="CustomButton">
+                    <rect key="frame" x="644" y="5" width="73" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                    <state key="normal" title="RESOLVIDO" backgroundImage="label_status_resolvido-1">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5PQ-d4-l5f" customClass="CustomButton">
+                    <rect key="frame" x="644" y="5" width="74" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                    <state key="normal" title="EM ABERTO" backgroundImage="label_status_em-aberto-1">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button hidden="YES" opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="NdH-h3-d4J" customClass="CustomButton">
+                    <rect key="frame" x="616" y="5" width="102" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                    <state key="normal" title="EM ANDAMENTO" backgroundImage="label_status_em-andamento-1">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button hidden="YES" opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="y6w-uv-6Ps" customClass="CustomButton">
+                    <rect key="frame" x="620" y="5" width="98" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                    <state key="normal" title="NÃO RESOLVIDO" backgroundImage="label_status_nao-resolvido-1">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="vh3-VI-9PR">
+                    <rect key="frame" x="397" y="60" width="320" height="320"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="wxm-dn-TaB"/>
+                    </connections>
+                </scrollView>
+                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" hidesForSinglePage="YES" numberOfPages="3" id="mH3-cb-xZE">
+                    <rect key="frame" x="528" y="335" width="39" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="pageIndicatorTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="currentPageIndicatorTintColor" red="0.019607843829999999" green="0.70980393890000004" blue="0.84705889229999998" alpha="1" colorSpace="deviceRGB"/>
+                </pageControl>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PROTOCOLO 00000" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="twM-aW-F3r">
+                    <rect key="frame" x="54" y="4" width="487" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.57254904510000004" green="0.57254904510000004" blue="0.57254904510000004" alpha="1" colorSpace="deviceRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="oLg-BM-Cj3">
+                    <rect key="frame" x="547" y="210" width="20" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </activityIndicatorView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hMV-y1-UBI">
+                    <rect key="frame" x="616" y="4" width="101" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <inset key="insetFor6xAndEarlier" minX="-10" minY="0.0" maxX="10" maxY="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="pK4-YU-Dz5">
+                    <rect key="frame" x="0.0" y="404" width="768" height="620"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" id="fza-ly-V9e">
+                            <rect key="frame" x="0.0" y="8" width="768" height="40"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" id="KxT-TN-c2l">
+                                    <rect key="frame" x="374" y="10" width="20" height="20"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                </activityIndicatorView>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </view>
+                    </subviews>
+                </scrollView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="label_status_em-aberto-1" width="145" height="40"/>
+        <image name="label_status_em-andamento-1" width="195" height="40"/>
+        <image name="label_status_nao-resolvido-1" width="98" height="20"/>
+        <image name="label_status_resolvido-1" width="73" height="20"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>
