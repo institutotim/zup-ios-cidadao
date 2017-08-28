@@ -16,8 +16,7 @@
 
 @implementation LoginViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -25,8 +24,9 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+#pragma mark - View Lifecycle
+
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [self.spin setHidesWhenStopped:YES];
@@ -73,7 +73,6 @@
         [self setTitle:titleStr];
         
     } else {
-        
         UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 40)];
         [lblTitle setFont:[Utilities fontOpensSansLightWithSize:18]];
         [lblTitle setTextColor:[UIColor blackColor]];
@@ -97,7 +96,7 @@
     
     self.navigationItem.leftBarButtonItem = self.buttonCancel;
     
-    self.spin = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//    self.spin = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.spin.frame = CGRectMake(self.navigationController.navigationBar.bounds.size.width - 30, 12, 20, 20);
     self.spin.hidesWhenStopped = YES;
 
@@ -109,11 +108,38 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     [self.tfEmail becomeFirstResponder];
 }
 
-- (void)didLoginButton {
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+//- (void)viewDidDisappear:(BOOL)animated {
+//    [self.navigationController setNavigationBarHidden:YES];
+//}
+//
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.screenName = @"Login";
     
+    if (![Utilities isIpad]) {
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    //[self.btLogin removeFromSuperview];
+    //[self.spin removeFromSuperview];
+}
+
+#pragma mark - Actions
+
+- (void)didLoginButton {
     if (self.tfPass.text.length == 0 || self.tfEmail.text.length == 0) {
         if (![Utilities isValidEmail:self.tfEmail.text]) {
             //[Utilities alertWithError:@"Insira um e-mail válido!"];
@@ -122,7 +148,6 @@
         [Utilities alertWithError:@"Preencha todos os campos!"];
         return;
     }
-    
     
     if ([Utilities isInternetActive]) {
         self.tfEmail.enabled = NO;
@@ -141,7 +166,46 @@
     }
 }
 
-- (void)didReceiveData:(NSData*)data {
+- (void)didCancelButton {
+    if ([Utilities isIpad]) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        if (self.isFromInside || self.isFromPerfil || self.isFromSolicit || self.isFromReport)
+            [self dismissViewControllerAnimated:YES completion:nil];
+        else
+            [self.navigationController popViewControllerAnimated:YES];
+    }
+    if (self.isFromPerfil || self.isFromSolicit) {
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"backToMapFromPerfil" object:nil];
+    }
+}
+
+- (IBAction)btForogt:(id)sender {
+    
+    ForgotViewController *forgotVC = [[ForgotViewController alloc]initWithNibName:@"ForgotViewController" bundle:nil];
+    
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:forgotVC];
+    
+    [nav.navigationBar setTitleTextAttributes:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+      [UIColor blackColor], NSForegroundColorAttributeName,
+      [Utilities fontOpensSansLightWithSize:14], NSFontAttributeName, nil]];
+    
+    if ([Utilities isIpad]) {
+        [nav setModalPresentationStyle:UIModalPresentationFormSheet];
+    }
+    
+    [self presentViewController:nav animated:YES completion:nil];
+    
+    if ([Utilities isIpad]) {
+        nav.view.superview.bounds = CGRectMake(-25, 0, 470, 620);
+        [nav.view.superview setBackgroundColor:[UIColor clearColor]];
+    }
+}
+
+#pragma mark - Login Selectors
+
+- (void)didReceiveData:(NSData *)data {
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
    
     if (![Utilities checkIfError:dict]) {
@@ -169,11 +233,7 @@
                 }
             }
         }*/
-        
-        
-    }
-    else
-    {
+    } else {
         self.tfEmail.enabled = YES;
         self.tfPass.enabled = YES;
         self.btForgot.enabled = YES;
@@ -196,8 +256,7 @@
     NSString* errorString = [NSString stringWithFormat:@"%@", error];
     [[RavenClient sharedClient] captureMessage:errorString];
     
-    if(data != nil)
-    {
+    if (data != nil) {
         NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         
         NSString* err = [dict valueForKey:@"error"];
@@ -207,48 +266,7 @@
         [Utilities alertWithServerError];
 }
 
-- (void)didCancelButton {
-    
-    if ([Utilities isIpad]) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    } else {
-        
-        if (self.isFromInside || self.isFromPerfil || self.isFromSolicit || self.isFromReport)
-            [self dismissViewControllerAnimated:YES completion:nil];
-        else
-            [self.navigationController popViewControllerAnimated:YES];
-        
-    }
-    
-    if (self.isFromPerfil || self.isFromSolicit) {
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"backToMapFromPerfil" object:nil];
-    }
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-//- (void)viewDidDisappear:(BOOL)animated {
-//    [self.navigationController setNavigationBarHidden:YES];
-//}
-//
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.screenName = @"Login";
-    
-    if (![Utilities isIpad]) {
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-    }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    //[self.btLogin removeFromSuperview];
-    //[self.spin removeFromSuperview];
-}
+#pragma mark - TextField Delegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     
@@ -275,27 +293,4 @@
     return YES;
 }
 
-- (IBAction)btForogt:(id)sender {
-    
-    ForgotViewController *forgotVC = [[ForgotViewController alloc]initWithNibName:@"ForgotViewController" bundle:nil];
-    
-    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:forgotVC];
-    
-    [nav.navigationBar setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-      [UIColor blackColor], NSForegroundColorAttributeName,
-      [Utilities fontOpensSansLightWithSize:14], NSFontAttributeName, nil]];
-
-    if ([Utilities isIpad]) {
-        [nav setModalPresentationStyle:UIModalPresentationFormSheet];
-    }
-    
-    [self presentViewController:nav animated:YES completion:nil];
-    
-    if ([Utilities isIpad]) {
-        nav.view.superview.bounds = CGRectMake(-25, 0, 470, 620);
-        [nav.view.superview setBackgroundColor:[UIColor clearColor]];
-    }
-
-}
 @end

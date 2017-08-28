@@ -4,20 +4,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <GoogleOpenSource/GoogleOpenSource.h>
-#import <FacebookSDK/FacebookSDK.h>
-#import <Accounts/Accounts.h>
-#import <GooglePlus/GooglePlus.h>
+
 #import "TWAPIManager.h"
 #import "SolicitacaoPublicarViewController.h"
 #import "PerfilViewController.h"
 #import "GAITrackedViewController.h"
 
-@interface EditViewController : GAITrackedViewController <UITextFieldDelegate, UIActionSheetDelegate, UIAlertViewDelegate, GPPSignInDelegate> {
+@interface EditViewController : GAITrackedViewController <UITextFieldDelegate> {
     CustomButton *btSalvar;
     CustomButton *btCancel;
     SocialNetworkType socialType;
-    GPPSignIn *signIn;
 }
 
 @property (nonatomic) BOOL isFromReportView;
@@ -27,7 +23,6 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *btFacebook;
 @property (weak, nonatomic) IBOutlet UIButton *btTwitter;
-@property (weak, nonatomic) IBOutlet UIButton *btPlus;
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spin;
 
@@ -39,7 +34,6 @@
 @property (strong, nonatomic) IBOutletCollection (UILabel) NSArray *arrLbl;
 @property (strong, nonatomic) IBOutletCollection (UIButton) NSArray *arrBt;
 
-@property (retain, nonatomic) IBOutlet GPPSignInButton *signInButton;
 @property (nonatomic, strong) TWAPIManager *apiManager;
 
 @property (weak, nonatomic) IBOutlet UILabel *lblSocialSentence;
@@ -59,7 +53,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *tfCurrentPassword;
 @property (weak, nonatomic) IBOutlet UIView *viewOverlay;
 
-
 @property (weak, nonatomic) IBOutlet UIView* viewShareNotAvailable;
 
 @property (weak, nonatomic) SolicitacaoPublicarViewController *solicitView;
@@ -67,6 +60,5 @@
 
 - (IBAction)btFacebook:(id)sender;
 - (IBAction)btTwitter:(id)sender;
-- (IBAction)btPlus:(id)sender;
 
 @end

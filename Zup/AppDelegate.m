@@ -5,12 +5,13 @@
 //
 
 #import "AppDelegate.h"
+
 #import "RavenClient.h"
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
-#import <GooglePlus/GooglePlus.h>
 #import "GAI.h"
 #import "Constants.h"
+
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 @implementation AppDelegate
 
@@ -186,9 +187,10 @@
             openURL: (NSURL *)url
   sourceApplication: (NSString *)sourceApplication
          annotation: (id)annotation {
-    return [GPPURLHandler handleURL:url
-                  sourceApplication:sourceApplication
-                         annotation:annotation];
+//    return [GPPURLHandler handleURL:url
+//                  sourceApplication:sourceApplication
+//                         annotation:annotation];
+    return YES;
 }
 
 @end

@@ -25,6 +25,10 @@ target 'zup' do
     config_pods
 end
 
+target 'zup_sbc' do
+    config_pods
+end
+
 target 'zupTests' do
     config_pods
 end

@@ -206,7 +206,6 @@
 		55EDF10C1F5371E700FA73D3 /* PerfilDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF05F1F536F0900FA73D3 /* PerfilDetailViewController.m */; };
 		55EDF10D1F5371EA00FA73D3 /* PerfilDetailViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF05D1F536F0900FA73D3 /* PerfilDetailViewController_iPad.xib */; };
 		55EDF10E1F5371F000FA73D3 /* NavigationControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0661F536F1900FA73D3 /* NavigationControllerViewController.m */; };
-		55EDF10F1F5371F300FA73D3 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF06A1F536F2D00FA73D3 /* MainViewController.m */; };
 		55EDF1101F5371F700FA73D3 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF06E1F536F3B00FA73D3 /* LoginViewController.m */; };
 		55EDF1111F5371FB00FA73D3 /* ListExploreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0731F536F4C00FA73D3 /* ListExploreViewController.xib */; };
 		55EDF1121F5371FD00FA73D3 /* ListExploreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0721F536F4C00FA73D3 /* ListExploreViewController.m */; };
@@ -287,6 +286,7 @@
 		9C5ECE6C1AA7DAA000BD1791 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C89184045DC0059C826 /* Foundation.framework */; };
 		9C93052C1B0E210A006E4087 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052B1B0E210A006E4087 /* libsqlite3.dylib */; };
 		9C93052F1B0E2151006E4087 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052B1B0E210A006E4087 /* libsqlite3.dylib */; };
+		B30798B48D377ED6E6F854E3 /* libPods-zup_sbc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85AE934326127EF68D6BD79F /* libPods-zup_sbc.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -301,6 +301,7 @@
 
 /* Begin PBXFileReference section */
 		279675B70D6A9D171197294C /* libPods-zup.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-zup.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A6C7074D451BF513C6161CE /* Pods-zup_sbc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zup_sbc.debug.xcconfig"; path = "Pods/Target Support Files/Pods-zup_sbc/Pods-zup_sbc.debug.xcconfig"; sourceTree = "<group>"; };
 		3B293BB434CDDE4776C3705A /* Pods-zupTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zupTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-zupTests/Pods-zupTests.release.xcconfig"; sourceTree = "<group>"; };
 		55EDEF4B1F536ACA00FA73D3 /* SSPieProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSPieProgressView.h; sourceTree = "<group>"; };
 		55EDEF4C1F536ACA00FA73D3 /* SSPieProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSPieProgressView.m; sourceTree = "<group>"; };
@@ -488,6 +489,8 @@
 		55EDF0B11F53700400FA73D3 /* ComentarioViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ComentarioViewController.xib; sourceTree = "<group>"; };
 		55EDF1261F53778000FA73D3 /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
 		55EDF1271F53778000FA73D3 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
+		7D0A6E5CAE5EDCC698EB6B7B /* Pods-zup_sbc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zup_sbc.release.xcconfig"; path = "Pods/Target Support Files/Pods-zup_sbc/Pods-zup_sbc.release.xcconfig"; sourceTree = "<group>"; };
+		85AE934326127EF68D6BD79F /* libPods-zup_sbc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-zup_sbc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88387C86184045DC0059C826 /* zup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = zup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88387C89184045DC0059C826 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		88387C8B184045DC0059C826 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -605,6 +608,7 @@
 				9C5ECE6A1AA7DAA000BD1791 /* CoreGraphics.framework in Frameworks */,
 				9C5ECE6B1AA7DAA000BD1791 /* UIKit.framework in Frameworks */,
 				9C5ECE6C1AA7DAA000BD1791 /* Foundation.framework in Frameworks */,
+				B30798B48D377ED6E6F854E3 /* libPods-zup_sbc.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -618,6 +622,8 @@
 				B977F38A8A4B809DDE7E3551 /* Pods-zup.release.xcconfig */,
 				EB3DA270AA6593443A9A385B /* Pods-zupTests.debug.xcconfig */,
 				3B293BB434CDDE4776C3705A /* Pods-zupTests.release.xcconfig */,
+				3A6C7074D451BF513C6161CE /* Pods-zup_sbc.debug.xcconfig */,
+				7D0A6E5CAE5EDCC698EB6B7B /* Pods-zup_sbc.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1404,6 +1410,7 @@
 				88387CAE184045DC0059C826 /* XCTest.framework */,
 				279675B70D6A9D171197294C /* libPods-zup.a */,
 				8CC846C41EDC814A3C99377E /* libPods-zupTests.a */,
+				85AE934326127EF68D6BD79F /* libPods-zup_sbc.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1491,10 +1498,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9C5ECE921AA7DAA000BD1791 /* Build configuration list for PBXNativeTarget "zup_sbc" */;
 			buildPhases = (
+				6A97FCEE2B65F515D20C0431 /* [CP] Check Pods Manifest.lock */,
 				9C5ECE111AA7DAA000BD1791 /* Sources */,
 				9C5ECE4F1AA7DAA000BD1791 /* Frameworks */,
 				9C5ECE6D1AA7DAA000BD1791 /* Resources */,
 				9C5ECE911AA7DAA000BD1791 /* ShellScript */,
+				69D6BFBE5BFD8B202C065C34 /* [CP] Embed Pods Frameworks */,
+				2C5ECFDD88D55DE547CD2FBB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1666,6 +1676,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2C5ECFDD88D55DE547CD2FBB /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-zup_sbc/Pods-zup_sbc-resources.sh",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-zup_sbc/Pods-zup_sbc-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2DC31542FD5DA4DC5850A77D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1684,6 +1714,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-zupTests/Pods-zupTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		69D6BFBE5BFD8B202C065C34 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-zup_sbc/Pods-zup_sbc-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6A97FCEE2B65F515D20C0431 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-zup_sbc-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6F98DE5097357DF4238EAC95 /* [CP] Copy Pods Resources */ = {
@@ -1895,7 +1958,6 @@
 				55EDF0D21F5370F500FA73D3 /* OAuth+Additions.m in Sources */,
 				55EDF1081F5371DA00FA73D3 /* SearchTableViewController.m in Sources */,
 				55EDF0D41F5370FB00FA73D3 /* NSString+MD5.m in Sources */,
-				55EDF10F1F5371F300FA73D3 /* MainViewController.m in Sources */,
 				55EDF0D61F53710200FA73D3 /* NSData+Base64.m in Sources */,
 				55EDF0FE1F5371B700FA73D3 /* EstatisticasViewController.m in Sources */,
 				55EDF0F71F53719400FA73D3 /* PostController.m in Sources */,
@@ -2187,6 +2249,7 @@
 		};
 		9C5ECE931AA7DAA000BD1791 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A6C7074D451BF513C6161CE /* Pods-zup_sbc.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_sbc;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_SBC;
@@ -2229,6 +2292,7 @@
 		};
 		9C5ECE941AA7DAA000BD1791 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D0A6E5CAE5EDCC698EB6B7B /* Pods-zup_sbc.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_sbc;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_SBC;

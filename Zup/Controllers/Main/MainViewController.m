@@ -31,14 +31,7 @@
     return self;
 }
 
-- (void)startLoadingData {
-    self->onlyReload = NO;
-    
-    [self getReportCategories];
-    [self buildScroll];
-    [self buildLoadPage];
-    [self requestLocation];
-}
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -81,8 +74,32 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionExpired) name:@"APISessionExpired" object:nil];
     
     self.logoView.image = [Utilities getTenantLoginImage];
-    if(![Utilities isIphone4inch])
+    if (![Utilities isIphone4inch])
         self.logoView.hidden = YES;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+    self.screenName = @"Tela de slides (abertura)";
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Auxiliar Methods
+
+- (void)startLoadingData {
+    self->onlyReload = NO;
+    
+    [self getReportCategories];
+    [self buildScroll];
+    [self buildLoadPage];
+    [self requestLocation];
 }
 
 - (void)sessionExpired {
@@ -177,8 +194,9 @@
 - (void)parseCategory:(NSDictionary *)dict mutArr:(NSMutableArray *)mutArr arr:(NSArray *)arr {
     NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.default.mobile.active"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
     
-    UIImageView *imgV = [[UIImageView alloc]init];
-    [imgV sd_setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    UIImageView *imgV = [[UIImageView alloc] init];
+    
+    /*[imgV sd_setImageWithURL:urlIcon placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         if (image == nil) {
             image = [UIImage imageNamed:@"mapMarker"];
@@ -187,8 +205,8 @@
         NSData *dataImgIcon = UIImagePNGRepresentation(image);
         
         NSURL *urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
-        UIImageView *imgV = [[UIImageView alloc]init];
-        [imgV sd_setImageWithURL:urlMarker completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        UIImageView *imgV = [[UIImageView alloc] init];
+        [imgV sd_setImageWithURL:urlMarker completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
             
             if (image == nil) {
                 image = [UIImage imageNamed:@"mapMarker"];
@@ -201,7 +219,7 @@
             
             UIImageView *imgV = [[UIImageView alloc]init];
             
-            [imgV sd_setImageWithURL:urlIconDisabled completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            [imgV sd_setImageWithURL:urlIconDisabled completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                 
                 if (image == nil) {
                     image = [UIImage imageNamed:@"mapMarker"];
@@ -234,8 +252,8 @@
                     }
                 }
                 
-                NSNumber* resolution_time_enabled = [dict valueForKey:@"resolution_time_enabled"];
-                NSNumber* private_resolution_time = [dict valueForKey:@"private_resolution_time"];
+                NSNumber *resolution_time_enabled = [dict valueForKey:@"resolution_time_enabled"];
+                NSNumber *private_resolution_time = [dict valueForKey:@"private_resolution_time"];
                 
                 NSMutableDictionary *tempDict = [NSMutableDictionary dictionaryWithDictionary:@{@"arbitrary" : [dict valueForKey:@"allows_arbitrary_position"],
                     @"iconData": dataImgIcon,
@@ -252,35 +270,27 @@
                     @"private_resolution_time": private_resolution_time
                 }];
                 
-                if(![[dict valueForKey:@"parent_id"] isKindOfClass:[NSNull class]])
-                {
+                if (![[dict valueForKey:@"parent_id"] isKindOfClass:[NSNull class]]) {
                     [tempDict setValue:[dict valueForKey:@"parent_id"] forKeyPath:@"parent_id"];
                 }
-                if(![[dict valueForKey:@"private"] isKindOfClass:[NSNull class]])
-                {
+                if (![[dict valueForKey:@"private"] isKindOfClass:[NSNull class]]) {
                     [tempDict setValue:[dict valueForKey:@"private"] forKeyPath:@"private"];
                 }
-                if(![[dict valueForKey:@"confidential"] isKindOfClass:[NSNull class]])
-                {
+                if (![[dict valueForKey:@"confidential"] isKindOfClass:[NSNull class]]) {
                     [tempDict setValue:[dict valueForKey:@"confidential"] forKeyPath:@"confidential"];
-                }
-                else
-                {
-                    NSNumber* val = [NSNumber numberWithBool:NO];
+                } else {
+                    NSNumber *val = [NSNumber numberWithBool:NO];
                     [tempDict setValue:val forKeyPath:@"confidential"];
                 }
                 
-                NSArray* subCategories = [dict valueForKey:@"subcategories"];
-                if(subCategories != nil)
-                {
-                    for(NSDictionary* subdict in subCategories)
-                    {
+                NSArray *subCategories = [dict valueForKey:@"subcategories"];
+                if (subCategories != nil){
+                    for(NSDictionary *subdict in subCategories) {
                         [self parseCategory:subdict mutArr:mutArr arr:arr];
                     }
                 }
                 
                 [mutArr addObject:tempDict];
-                
                 
                 if (mutArr.count == [self totalCategoryCount:arr]) {
                     [UserDefaults setReportCategories:mutArr];
@@ -289,13 +299,12 @@
                     //if(!self->onlyReload)
                         [self getInventoryCategories];
                 }
-                
             }];
         }];
-    }];
+    }];*/
 }
 
-- (void)didReceiveData:(NSData*)data {
+- (void)didReceiveData:(NSData *)data {
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     
     NSMutableArray *mutArr = [[NSMutableArray alloc]init];
@@ -318,7 +327,6 @@
     [Utilities alertWithServerError];
 }
 
-
 - (void)getInventoryCategories {
     
     [[MainApiManager sharedManager] getInventoryCategories:^(id response) {
@@ -340,7 +348,7 @@
         NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.active"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
         
         UIImageView *imgV = [[UIImageView alloc]init];
-        [imgV sd_setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        /*[imgV sd_setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             
             if (image == nil) {
                 image = [UIImage imageNamed:@"mapMarker"];
@@ -411,7 +419,7 @@
                 
             }];
             
-        }];
+        }];*/
         
     }
     
@@ -425,31 +433,7 @@
     }
 }
 
-- (void)goToMap {
-    if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit && !self.isFromReport) {
-        
-        [self dismissViewControllerAnimated:YES completion:nil];
-        [self btJump:nil];
-        
-    } else {
-        if (!self.isFromPerfil && !self.isFromSolicit && !self.isFromReport) {
-            TabBarController *tabBar = [self.storyboard instantiateViewControllerWithIdentifier:@"tabBar"];
-            [self.navigationController setNavigationBarHidden:YES];
-            [self.navigationController pushViewController:tabBar animated:YES];
-        } else {
-            [self dismissViewControllerAnimated:YES completion:nil];
-            [self.perfilVC getData];
-            //if ([Utilities isIpad]) {
-                [self.relateVC setToken];
-            //}
-        }
-        
-        
-    }
-}
-
-- (void)getFeatureFlags
-{
+- (void)getFeatureFlags {
     ServerOperations *server = [[ServerOperations alloc]init];
     [server setTarget:self];
     [server setAction:@selector(didReceiveFeatureFlags:)];
@@ -497,9 +481,7 @@
     [Utilities alertWithServerError];
 }
 
-
 - (void)buildScroll {
-    
     float sideSize = self.scroll.frame.size.width; //self.view.frame.size.width;
     
     int count = 0;
@@ -525,11 +507,9 @@
     
     [self.scroll setContentSize:CGSizeMake(sideSize * count, 10)];
     [self.pageControl setNumberOfPages:count];
-    
 }
 
 - (void)setLabel {
-    
     CGRect frame;
     if (![Utilities isIpad]) {
         frame = self.scroll.frame;
@@ -550,11 +530,7 @@
     [self.view addSubview:lbl];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-    
-    self.screenName = @"Tela de slides (abertura)";
-}
+#pragma mark - UIScrollView Delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
     CGFloat pageWidth = self.scroll.frame.size.width;
@@ -562,11 +538,7 @@
     self.pageControl.currentPage = page;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+#pragma mark - Actions
 
 - (IBAction)btRegister:(id)sender {
     
@@ -598,7 +570,6 @@
 }
 
 - (IBAction)btLogin:(id)sender {
-    
     LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"loginVC"];
     loginVC.isFromPerfil = self.isFromPerfil;
     loginVC.perfilVC = self.perfilVC;
@@ -627,15 +598,7 @@
     }
 }
 
-
-- (void)didCancelButton:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"backToMapFromPerfil" object:nil];
-    
-}
-
 - (IBAction)btJump:(id)sender {
-    
     if (self.isFromPerfil) {
         
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -667,6 +630,34 @@
     TabBarController *tabBar = [self.storyboard instantiateViewControllerWithIdentifier:@"tabBar"];
     [self.navigationController pushViewController:tabBar animated:YES];
     
+}
+
+- (void)didCancelButton:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"backToMapFromPerfil" object:nil];
+}
+
+#pragma mark - Navigation
+
+- (void)goToMap {
+    if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit && !self.isFromReport) {
+        
+        [self dismissViewControllerAnimated:YES completion:nil];
+        [self btJump:nil];
+        
+    } else {
+        if (!self.isFromPerfil && !self.isFromSolicit && !self.isFromReport) {
+            TabBarController *tabBar = [self.storyboard instantiateViewControllerWithIdentifier:@"tabBar"];
+            [self.navigationController setNavigationBarHidden:YES];
+            [self.navigationController pushViewController:tabBar animated:YES];
+        } else {
+            [self dismissViewControllerAnimated:YES completion:nil];
+            [self.perfilVC getData];
+            //if ([Utilities isIpad]) {
+            [self.relateVC setToken];
+            //}
+        }
+    }
 }
 
 @end

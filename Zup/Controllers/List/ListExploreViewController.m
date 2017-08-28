@@ -407,7 +407,7 @@
                 imageView.tag = [_id integerValue];
                 [cell.scrollView addSubview:imageView];
                 imageView.userInteractionEnabled = YES;
-                [imageView setImageWithURL:[NSURL URLWithString:url]];
+                [imageView sd_setImageWithURL:[NSURL URLWithString:url]];
                 imageView.contentMode = UIViewContentModeScaleAspectFill;
                 imageView.clipsToBounds = YES;
                  
@@ -518,7 +518,7 @@
     NSString* url = [self.imageZooms objectForKey:_id];
     
     view.layer.opacity = .5f;
-    [view setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+    [view sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         view.layer.opacity = 1.0f;
         XLMediaZoom* zoom = [[XLMediaZoom alloc] initWithAnimationTime:@(0.35) image:view blurEffect:YES];
