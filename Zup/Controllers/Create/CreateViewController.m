@@ -8,10 +8,9 @@
 #import "TermosViewController.h"
 #import "TabBarController.h"
 
-UITextField *activeField;
-
-
 @interface CreateViewController ()
+
+@property(nonatomic, strong) UITextField *activeField;
 
 @end
 
@@ -510,10 +509,10 @@ UITextField *activeField;
     
     CGRect aRect = self.view.frame;
     aRect.size.height -= kbSize.height;
-    if (!CGRectContainsPoint(aRect, activeField.frame.origin)) {
-        CGPoint scrollPoint = CGPointMake(0.0, activeField.frame.origin.y-kbSize.height - 10);
+    if (!CGRectContainsPoint(aRect, self.activeField.frame.origin)) {
+        CGPoint scrollPoint = CGPointMake(0.0, self.self.activeField.frame.origin.y-kbSize.height - 10);
         
-        if (activeField != self.tfName) {
+        if (self.activeField != self.tfName) {
             [self.scroll setContentOffset:scrollPoint animated:YES];
         }
     }
@@ -553,7 +552,7 @@ UITextField *activeField;
         return;
     }
     
-    activeField = textField;
+    self.activeField = textField;
     
     
     [textField setBackground:[UIImage imageNamed:@"textbox_1linha-larga_normal"]];
@@ -588,7 +587,7 @@ UITextField *activeField;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    activeField = nil;
+    self.activeField = nil;
     
     for (UITextField *tf in self.arrTf) {
         if (textField == tf) {

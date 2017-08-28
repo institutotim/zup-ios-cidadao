@@ -10,16 +10,16 @@
 #import "AppDelegate.h"
 #import "ImageCache.h"
 
-int ZOOMLEVELDEFAULT = 16;
-
-ServerOperations *serverOperationsReport;
-ServerOperations *serverOperationsInventory;
-ServerOperations *serverOperationsInventoryList;
-
-GMSMarker *currentMarker;
-CLLocationCoordinate2D currentCoord;
+static int ZOOMLEVELDEFAULT = 16;
 
 @interface ExploreViewController ()
+
+@property(nonatomic, strong) ServerOperations *serverOperationsReport;
+@property(nonatomic, strong) ServerOperations *serverOperationsInventory;
+@property(nonatomic, strong) ServerOperations *serverOperationsInventoryList;
+@property(nonatomic, strong) GMSMarker *currentMarker;
+
+@property(nonatomic, assign) CLLocationCoordinate2D currentCoord;
 
 @end
 
@@ -348,13 +348,13 @@ CLLocationCoordinate2D currentCoord;
         GMSVisibleRegion visibleRegion = [[self.mapView projection] visibleRegion];
         double distance = [self getDistance:visibleRegion.nearRight p2:visibleRegion.nearLeft];
         
-        [serverOperationsReport CancelRequest];
-        serverOperationsReport = nil;
+        [self.serverOperationsReport CancelRequest];
+        self.serverOperationsReport = nil;
         
-        serverOperationsReport = [[ServerOperations alloc]init];
-        [serverOperationsReport setTarget:self];
-        [serverOperationsReport setAction:@selector(didReceiveData:)];
-        [serverOperationsReport setActionErro:@selector(didReceiveError:data:)];
+        self.serverOperationsReport = [[ServerOperations alloc]init];
+        [self.serverOperationsReport setTarget:self];
+        [self.serverOperationsReport setAction:@selector(didReceiveData:)];
+        [self.serverOperationsReport setActionErro:@selector(didReceiveError:data:)];
         
         NSArray* searchCategories = nil;
         NSDate* searchDate = nil;
@@ -367,7 +367,7 @@ CLLocationCoordinate2D currentCoord;
         if(self->_statusToFilterId != 0)
             searchStatuses = @[[NSNumber numberWithInt:self->_statusToFilterId]];
         
-        [serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom categoryIds:searchCategories sinceDate:searchDate statuses:searchStatuses];
+        [self.serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom categoryIds:searchCategories sinceDate:searchDate statuses:searchStatuses];
         
         /*if([self->_arrFilterIDs count] > 0)
         {
@@ -764,7 +764,7 @@ CLLocationCoordinate2D currentCoord;
         
         CGPoint point = self.mapView.center;
         point.y -= 60;
-        currentCoord = [self.mapView.projection coordinateForPoint:point];
+        self.currentCoord = [self.mapView.projection coordinateForPoint:point];
         
         _isInventoryLoading = YES;
         
@@ -779,19 +779,19 @@ CLLocationCoordinate2D currentCoord;
         GMSVisibleRegion visibleRegion = [[self.mapView projection] visibleRegion];
         double distance = [self getDistance:visibleRegion.nearRight p2:visibleRegion.nearLeft];
         
-        [serverOperationsInventory CancelRequest];
-        serverOperationsInventory = nil;
+        [self.serverOperationsInventory CancelRequest];
+        self.serverOperationsInventory = nil;
         
-        serverOperationsInventory = [[ServerOperations alloc]init];
-        [serverOperationsInventory setTarget:self];
-        [serverOperationsInventory setAction:@selector(didReceiveInventoryData:operation:)];
-        [serverOperationsInventory setActionErro:@selector(didReceiveIventoryError:data:)];
+        self.serverOperationsInventory = [[ServerOperations alloc]init];
+        [self.serverOperationsInventory setTarget:self];
+        [self.serverOperationsInventory setAction:@selector(didReceiveInventoryData:operation:)];
+        [self.serverOperationsInventory setActionErro:@selector(didReceiveIventoryError:data:)];
         
         if (self.arrFilterInventoryIDs.count == 0) {
-            [serverOperationsInventory getItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom];
+            [self.serverOperationsInventory getItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom];
 
         } else {
-            [serverOperationsInventory getItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom categoryIds:self.arrFilterInventoryIDs];
+            [self.serverOperationsInventory getItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom categoryIds:self.arrFilterInventoryIDs];
 
         }
         
@@ -912,14 +912,14 @@ CLLocationCoordinate2D currentCoord;
     
     if ([Utilities isInternetActive]) {
         
-        [serverOperationsInventoryList CancelRequest];
-        serverOperationsInventoryList = nil;
+        [self.serverOperationsInventoryList CancelRequest];
+        self.serverOperationsInventoryList = nil;
         
-        serverOperationsInventoryList = [[ServerOperations alloc]init];
-        [serverOperationsInventoryList setTarget:self];
-        [serverOperationsInventoryList setAction:@selector(didReceiveData:)];
-        [serverOperationsInventoryList setActionErro:@selector(didReceiveError:data:)];
-        [serverOperationsInventoryList getInventoryForIdCategory:idCategory];
+        self.serverOperationsInventoryList = [[ServerOperations alloc]init];
+        [self.serverOperationsInventoryList setTarget:self];
+        [self.serverOperationsInventoryList setAction:@selector(didReceiveData:)];
+        [self.serverOperationsInventoryList setActionErro:@selector(didReceiveError:data:)];
+        [self.serverOperationsInventoryList getInventoryForIdCategory:idCategory];
     }
 }
 
@@ -1133,16 +1133,11 @@ CLLocationCoordinate2D currentCoord;
 
         [self.navigationController pushViewController:listVC animated:YES];
     }
-    
-
 }
 
 - (void)mapView:(GMSMapView *)mapView didEndDraggingMarker:(GMSMarker *)marker {
-    
-    currentMarker = marker;
+    self.currentMarker = marker;
     currentCoordinate = marker.position;
-    
-    
 }
 
 - (void)setPositionMarkerForSearch {

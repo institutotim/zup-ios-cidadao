@@ -411,12 +411,13 @@ addressAdditional:(NSString*)addressAdditional
 }
 
 -(BOOL)getReportCategories{
-    NSString* token = [UserDefaults getToken];
-    if(token == nil)
+    NSString *token = [UserDefaults getToken];
+    if (token == nil) {
         token = @"";
-    NSURL* url = [NSURL URLWithString:[URLreportCategoriesList stringByAppendingString:token]];
+    }
+    NSURL *url = [NSURL URLWithString:[URLreportCategoriesList stringByAppendingString:token]];
     
-    NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:url];
+    NSMutableURLRequest *postRequest = [NSMutableURLRequest requestWithURL:url];
     
     [postRequest setHTTPMethod:@"GET"];
     

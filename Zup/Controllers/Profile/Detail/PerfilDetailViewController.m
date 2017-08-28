@@ -592,20 +592,15 @@ int RESOLVIDO = 3;
         UIImageView *imgV = [[UIImageView alloc]init];
         NSURL *urlImage = [NSURL URLWithString:[dict valueForKeyPath:@"high"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
         
-        [imgV setImageWithURL:urlImage completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
-
-            if (i == arrImages.count-1
-                ) {
+        [imgV sd_setImageWithURL:urlImage completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (i == arrImages.count-1) {
                 [self.spin stopAnimating];
                 [self.pageControl setHidden:NO];
             }
-            
         }];
         
         [imgV setFrame:CGRectMake(sideSize * i, 0, sideSize, sideSize)];
-        [self.scrollImages addSubview:imgV];
-        
-        
+        [self.scrollImages addSubview:imgV];    
         i ++;
     }
     

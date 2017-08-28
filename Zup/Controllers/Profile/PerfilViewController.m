@@ -345,7 +345,7 @@
 - (void)setValuesWithDict:(NSDictionary*)dict {
     
     [self.lblName setText:[Utilities checkIfNull:[dict valueForKey:@"name"]]];
-    [self.imgUser setImageWithURL:[NSURL URLWithString:@"http://ideas.scup.com/pt/files/2012/10/user.jpg"]];
+    [self.imgUser sd_setImageWithURL:[NSURL URLWithString:@"http://ideas.scup.com/pt/files/2012/10/user.jpg"]];
 }
 
 #pragma mark - Table View Delegates

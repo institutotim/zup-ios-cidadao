@@ -76,7 +76,7 @@
             [weakSelf clearMemory];
         }
     }];
-    
+    [self.currentTask resume];
     return YES;
 //    if (self.currentConnection) {
 //        self.serverResponse = [NSMutableData data];

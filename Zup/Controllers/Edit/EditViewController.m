@@ -826,7 +826,7 @@ UITextField *activeField;
                                           ];
             FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
             login.loginBehavior = FBSDKLoginBehaviorNative;
-            __weak __typeof(self)weakSelf = self;
+            
             [login logInWithReadPermissions:arrayPermissions fromViewController:self handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
                 if (error) {
                     [weakSelf showErrorWithMessage:@"Falha de conexão"];
@@ -842,8 +842,6 @@ UITextField *activeField;
                                     [UserDefaults setFbToken:[FBSDKAccessToken currentAccessToken].tokenString];
                                     [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworFacebook];
                                     [weakSelf reloadButtons];
-                                    [weakSelf.viewSocialButtons setUserInteractionEnabled:YES];
-                                    
                                 } else {
                                     [weakSelf showErrorWithMessage:@"Não foi possível logar com o Facebook. Verifique sua conexão com a internet."];
                                 }

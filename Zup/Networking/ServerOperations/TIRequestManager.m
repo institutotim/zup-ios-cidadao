@@ -16,8 +16,8 @@ static NSString * const keyOperation = @"OPERATION";
 
 @interface TIRequestManager()
 
-@property(atomic, retain) NSMutableArray *RequestWaiting;
-@property(atomic, retain) NSMutableArray *RequestPerforming;
+@property(nonatomic, retain) NSMutableArray *RequestWaiting;
+@property(nonatomic, retain) NSMutableArray *RequestPerforming;
 
 @end
 
@@ -37,19 +37,19 @@ static TIRequestManager * _defaultManager;
 - (id)init {
     self = [super init];
     if (self) {
-        self->_RequestWaiting = [[NSMutableArray alloc] init];
-        self->_RequestPerforming = [[NSMutableArray alloc] init];
+        self.RequestWaiting = [[NSMutableArray alloc] init];
+        self.RequestPerforming = [[NSMutableArray alloc] init];
     }
     
     return self;
 }
 
-- (BOOL)startRequest:(NSURLRequest*)urlRequest forOperation:(TIRequestOperation *)requestOperation {
-    TIRequest* request = [[TIRequest alloc]init];
+- (BOOL)startRequest:(NSURLRequest *)urlRequest forOperation:(TIRequestOperation *)requestOperation {
+    TIRequest *request = [[TIRequest alloc] init];
     request.isLogin = requestOperation.isLogin;
     request.delegate = self;
     if ([request startConnection:urlRequest]) {
-        NSDictionary* OperationRequest = @{ keyOperation : requestOperation, keyRequest : request };
+        NSDictionary *OperationRequest = @{ keyOperation : requestOperation, keyRequest : request };
         [self.RequestPerforming addObject:OperationRequest];
         [self checkStatus];
         return YES;

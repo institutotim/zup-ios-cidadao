@@ -19,6 +19,12 @@
 
 @interface MainViewController ()
 
+@property (nonatomic, strong) UIActivityIndicatorView *spin;
+@property (nonatomic, strong) UIImageView *imgViewLoad;
+
+@property (nonatomic, assign) BOOL isJump;
+@property (nonatomic, assign) BOOL onlyReload;
+
 @end
 
 @implementation MainViewController
@@ -36,7 +42,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self->onlyReload = NO;
+    self.onlyReload = NO;
     
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self.scroll setDelegate:self];
@@ -59,7 +65,7 @@
     
     self.pageControl.pageIndicatorTintColor = [Utilities colorGray];
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(btJump:) name:@"jump" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btJump:) name:@"jump" object:nil];
     
     if (self.isFromPerfil || self.isFromSolicit || self.isFromReport) {
         [self setLabel];
@@ -68,14 +74,13 @@
         [self.view setUserInteractionEnabled:NO];
         [self startLoadingData];
         [self.btJump setTitle:@"Pule para acessar o aplicativo" forState:UIControlStateNormal];
-        
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionExpired) name:@"APISessionExpired" object:nil];
     
     self.logoView.image = [Utilities getTenantLoginImage];
-    if (![Utilities isIphone4inch])
-        self.logoView.hidden = YES;
+//    if (![Utilities isIphone4inch])
+//        self.logoView.hidden = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -94,7 +99,7 @@
 #pragma mark - Auxiliar Methods
 
 - (void)startLoadingData {
-    self->onlyReload = NO;
+    self.onlyReload = NO;
     
     [self getReportCategories];
     [self buildScroll];
@@ -150,28 +155,27 @@
     
     UIImage *img = [Utilities getTenantLaunchImage];
     
-    imgViewLoad = [[UIImageView alloc] initWithFrame:self.view.frame];
+    self.imgViewLoad = [[UIImageView alloc] initWithFrame:self.view.frame];
     //[imgViewLoad setImage:[UIImage imageNamed:imgName]];
-    [imgViewLoad setImage:img];
-    [self.view addSubview:imgViewLoad];
+    [self.imgViewLoad setImage:img];
+    [self.view addSubview:self.imgViewLoad];
     
-    spin = [[UIActivityIndicatorView alloc]init];
+    self.spin = [[UIActivityIndicatorView alloc] init];
     if (large) {
-        [spin setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        [spin setColor:[UIColor grayColor]];
+        [self.spin setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.spin setColor:[UIColor grayColor]];
     } else {
-        [spin setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+        [self.spin setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
     }
-    [spin setFrame:CGRectMake(self.view.center.x - (spin.frame.size.width/2), posY, spin.frame.size.width, spin.frame.size.height)];
-    [self.view addSubview:spin];
-    [spin startAnimating];
-    
+    [self.spin setFrame:CGRectMake(self.view.center.x - (self.spin.frame.size.width/2), posY, self.spin.frame.size.width, self.spin.frame.size.height)];
+    [self.view addSubview:self.spin];
+    [self.spin startAnimating];
 }
 
 - (void)getReportCategories {
     NSLog(@"Reloading report categories");
     
-    ServerOperations *server = [[ServerOperations alloc]init];
+    ServerOperations *server = [[ServerOperations alloc] init];
     [server setTarget:self];
     [server setAction:@selector(didReceiveData:)];
     [server setActionErro:@selector(didReceiveError:)];
@@ -196,7 +200,7 @@
     
     UIImageView *imgV = [[UIImageView alloc] init];
     
-    /*[imgV sd_setImageWithURL:urlIcon placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [imgV sd_setImageWithURL:urlIcon placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         if (image == nil) {
             image = [UIImage imageNamed:@"mapMarker"];
@@ -301,7 +305,7 @@
                 }
             }];
         }];
-    }];*/
+    }];
 }
 
 - (void)didReceiveData:(NSData *)data {
@@ -328,7 +332,6 @@
 }
 
 - (void)getInventoryCategories {
-    
     [[MainApiManager sharedManager] getInventoryCategories:^(id response) {
         NSLog(@"Response: %@", response);
         [self didReceiveInventoryData:response];
@@ -338,7 +341,7 @@
     }];
 }
 
-- (void)didReceiveInventoryData:(NSDictionary*)dict {
+- (void)didReceiveInventoryData:(NSDictionary *)dict {
     
     NSArray *arr = [dict valueForKey:@"categories"];
     NSMutableArray *mutArr = [[NSMutableArray alloc]init];
@@ -348,7 +351,7 @@
         NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.active"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
         
         UIImageView *imgV = [[UIImageView alloc]init];
-        /*[imgV sd_setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        [imgV sd_setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             
             if (image == nil) {
                 image = [UIImage imageNamed:@"mapMarker"];
@@ -377,8 +380,8 @@
                     
                     NSData *dataImgPin = UIImagePNGRepresentation(image);
                     
-                    NSURL* urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
-                    UIImageView* imgV = [[UIImageView alloc] init];
+                    NSURL *urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
+                    UIImageView *imgV = [[UIImageView alloc] init];
                     [imgV sd_setImageWithURL:urlMarker completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                         
                         if (image == nil) {
@@ -403,33 +406,27 @@
                         
                         [mutArr addObject:tempDict];
                         
-                        
                         if (mutArr.count == arr.count) {
                             [UserDefaults setInventoryCategories:mutArr];
-                            
-                            if(!self->onlyReload)
+                            if (!self.onlyReload) {
                                 [self getFeatureFlags];
-                            else
+                            } else {
                                 [self goToMap];
-                            
+                            }
                         }
                     }];
-                    
                 }];
-                
             }];
-            
-        }];*/
-        
+        }];
     }
     
     if (arr.count == 0) {
         [UserDefaults setInventoryCategories:mutArr];
-        
-        if (!self->onlyReload)
+        if (!self.onlyReload) {
             [self getFeatureFlags];
-        else
+        } else {
             [self goToMap];
+        }
     }
 }
 
@@ -447,29 +444,28 @@
     NSArray* flags = [dict valueForKey:@"flags"];
     [UserDefaults setFeatureFlags:flags];
     
-    if(![UserDefaults isFeatureEnabled:@"explore"])
-    {
+    if(![UserDefaults isFeatureEnabled:@"explore"]) {
         [self.btJump removeFromSuperview];
     }
     
-    if ([UserDefaults isUserLogged] && !self->onlyReload) {
+    if ([UserDefaults isUserLogged] && !self.onlyReload) {
         [self goToMap];
         //[self btJump:nil];
     }
-    self->onlyReload = YES;
+    self.onlyReload = YES;
     
     [UIView animateWithDuration:0.5 animations:^{
-        [imgViewLoad setAlpha:0];
-        [spin setAlpha:0];
-    }completion:^(BOOL finished) {
-        [imgViewLoad removeFromSuperview];
-        [spin removeFromSuperview];
+        [self.imgViewLoad setAlpha:0];
+        [self.spin setAlpha:0];
+    } completion:^(BOOL finished) {
+        [self.imgViewLoad removeFromSuperview];
+        [self.spin removeFromSuperview];
         [self.view setUserInteractionEnabled:YES];
     }];
 }
 
 - (void)didReceiveFeatureFlagsError:(NSError*)error {
-    NSString* errorString = [NSString stringWithFormat:@"%@", error];
+    NSString *errorString = [NSString stringWithFormat:@"%@", error];
     [[RavenClient sharedClient] captureMessage:errorString];
     
     [Utilities alertWithServerError];
@@ -578,7 +574,6 @@
     loginVC.mainVC = self;
     
     if (![Utilities isIpad]) {
-        
         [self.navigationController pushViewController:loginVC animated:YES];
     } else {
         UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:loginVC];
@@ -592,8 +587,6 @@
             nav.view.superview.bounds = CGRectMake(-25, 0, 470, 620);
             [nav.view.superview setBackgroundColor:[UIColor clearColor]];
         }
-        
-        
         loginVC.mainVC = self;
     }
 }

@@ -10,43 +10,33 @@
 #import "RelateViewController.h"
 #import "GAITrackedViewController.h"
 
-@interface MainViewController : GAITrackedViewController <UIScrollViewDelegate> {
-    BOOL isJump;
-    UIActivityIndicatorView *spin;
-    UIImageView *imgViewLoad;
-    
-    BOOL onlyReload;
-}
+@interface MainViewController : GAITrackedViewController <UIScrollViewDelegate>
 
-@property (strong, nonatomic) UIViewController* exploreVC;
+@property (assign, nonatomic) BOOL isFromPerfil;
+@property (assign, nonatomic) BOOL isFromSolicit;
+@property (assign, nonatomic) BOOL isFromReport;
 
-@property (nonatomic) BOOL isFromPerfil;
-@property (nonatomic) BOOL isFromSolicit;
-@property (nonatomic) BOOL isFromReport;
-@property (strong, nonatomic)  PerfilViewController *perfilVC;
-@property (strong, nonatomic)  RelateViewController *relateVC;
+@property (strong, nonatomic) PerfilViewController *perfilVC;
+@property (strong, nonatomic) RelateViewController *relateVC;
+@property (strong, nonatomic) UIViewController *exploreVC;
 
-
-@property (retain, nonatomic) IBOutlet UIScrollView *scroll;
-@property (retain, nonatomic) IBOutlet UIPageControl *pageControl;
-
-@property (retain, nonatomic) IBOutlet UILabel *lblTitle1;
-@property (retain, nonatomic) IBOutlet UILabel *lblTitle2;
-
-@property (retain, nonatomic) IBOutlet CustomButton *btLogin;
-@property (retain, nonatomic) IBOutlet CustomButton *btRegister;
-@property (retain, nonatomic) IBOutlet CustomButton *btJump;
-
-@property (nonatomic, retain) IBOutlet UIView* tabExplore;
-@property (nonatomic, retain) IBOutlet UITabBarItem* tabSolicite;
-@property (nonatomic, retain) IBOutlet UITabBarItem* tabPerfil;
-@property (nonatomic, retain) IBOutlet UITabBarItem* tabEstatisticas;
-
-@property (nonatomic, retain) IBOutlet UIImageView* logoView;
+@property (nonatomic, weak) IBOutlet UIScrollView *scroll;
+@property (nonatomic, weak) IBOutlet UIPageControl *pageControl;
+@property (nonatomic, weak) IBOutlet UILabel *lblTitle1;
+@property (nonatomic, weak) IBOutlet UILabel *lblTitle2;
+@property (nonatomic, weak) IBOutlet CustomButton *btLogin;
+@property (nonatomic, weak) IBOutlet CustomButton *btRegister;
+@property (nonatomic, weak) IBOutlet CustomButton *btJump;
+@property (nonatomic, weak) IBOutlet UIView *tabExplore;
+@property (nonatomic, weak) IBOutlet UITabBarItem *tabSolicite;
+@property (nonatomic, weak) IBOutlet UITabBarItem *tabPerfil;
+@property (nonatomic, weak) IBOutlet UITabBarItem *tabEstatisticas;
+@property (nonatomic, weak) IBOutlet UIImageView  *logoView;
 
 - (IBAction)btRegister:(id)sender;
 - (IBAction)btLogin:(id)sender;
 - (IBAction)btJump:(id)sender;
+
 - (void)didCancelButton:(id)sender;
 - (void)getReportCategories;
 

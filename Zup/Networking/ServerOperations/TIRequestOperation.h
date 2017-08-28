@@ -18,6 +18,6 @@
 @property(nonatomic) BOOL isLogin;
 
 -(void)CancelRequest;
--(BOOL)StartRequest:(NSURLRequest*)request;
+-(BOOL)StartRequest:(NSURLRequest *)request;
 
 @end
