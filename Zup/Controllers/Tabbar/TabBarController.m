@@ -12,25 +12,27 @@
 
 @interface TabBarController ()
 
+@property (nonatomic, assign) BOOL removedUnusedTabs;
+
 @end
 
 @implementation TabBarController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self->removedUnusedTabs = NO;
+        self.removedUnusedTabs = NO;
     }
     return self;
 }
 
-- (void)viewDidLoad
-{
+#pragma mark - View Lifecycle
+
+- (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[UITabBar appearance]setTintColor:[UIColor whiteColor]];
-    [[UITabBar appearance]setBackgroundImage:[UIImage imageNamed:@"tabBar"]];
+    [[UITabBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UITabBar appearance] setBackgroundImage:[UIImage imageNamed:@"tabBar"]];
     
     UITabBar *tabBar = self.tabBar;
     UITabBarItem *tabBarItem1 = [tabBar.items objectAtIndex:0];
@@ -46,11 +48,11 @@
     tabBarItem3.title = @"Minha conta";
     tabBarItem4.title = @"Estatísticas";
     
-    UINavigationController* navController = [[self viewControllers] objectAtIndex:2];
-    PerfilViewController* perfilVC = [navController.viewControllers objectAtIndex:0];
+    UINavigationController *navController = [[self viewControllers] objectAtIndex:2];
+    PerfilViewController *perfilVC = [navController.viewControllers objectAtIndex:0];
     
     navController = [[self viewControllers] objectAtIndex:1];
-    RelateViewController* relateVC = [navController.viewControllers objectAtIndex:0];
+    RelateViewController *relateVC = [navController.viewControllers objectAtIndex:0];
     
     navController = [[self viewControllers] objectAtIndex:0];
     perfilVC.exploreVC = [navController.viewControllers objectAtIndex:0];
@@ -83,7 +85,6 @@
         [tabBarItem4 setFinishedSelectedImage:[UIImage imageNamed:@"tab-bar_icon_estatisticas_normal-1"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab-bar_icon_estatisticas_active-1"]];
     }
     
-    
     //[[UITabBar appearance] setShadowImage:[[UIImage alloc]init]];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showTabBar) name:@"showTabBar" object:Nil];
@@ -105,15 +106,59 @@
     
     if ([Utilities isIOS7]) {
         [self.tabBar setTranslucent:NO];
-
     } else {
     }
 }
 
-- (void) sessionExpired
-{
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Sessão expirada" message:@"Sua sessão expirou. É necessário fazer login novamente." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if (!self.removedUnusedTabs) {
+        //UITabBar *tabBar = self.tabBar;
+        
+        NSMutableIndexSet* itemsToRemove = [NSMutableIndexSet indexSet];
+        
+        if(![UserDefaults isFeatureEnabled:@"explore"])
+            [itemsToRemove addIndex:0];
+        
+        if(![UserDefaults isFeatureEnabled:@"create_report_clients"])
+            [itemsToRemove addIndex:1];
+        
+        if(![UserDefaults isFeatureEnabled:@"stats"])
+            [itemsToRemove addIndex:3];
+        
+        NSMutableArray *tbViewControllers = [NSMutableArray arrayWithArray:[self viewControllers]];
+        [tbViewControllers removeObjectsAtIndexes:itemsToRemove];
+        [self setViewControllers:tbViewControllers];
+        
+        self.removedUnusedTabs = YES;
+    }
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - TabbarController Methods
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    if (self.selectedIndex == 1) {
+        NSArray *arrayVC = [self viewControllers];
+        UINavigationController *nav = (UINavigationController*)[arrayVC objectAtIndex:0];
+        ExploreViewController *exploreVC = [nav.viewControllers objectAtIndex:0];
+        exploreVC.isFromOtherTab = YES;
+    }
+}
+
+#pragma mark - Auxiliar Methods
+
+- (void)sessionExpired {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sessão expirada"
+                                                                   message:@"Sua sessão expirou. É necessário fazer login novamente."
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
     
     [[NSNotificationCenter defaultCenter]postNotificationName:@"pushToMainView" object:nil];
     [UserDefaults setToken:@""];
@@ -122,25 +167,20 @@
     [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworkAnyone];
 }
 
-- (void) hideTabBar {
+- (void)hideTabBar {
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
     float fHeight = screenRect.size.height;
-    if(  UIDeviceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation) )
-    {
+    if (UIDeviceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
         fHeight = screenRect.size.width;
     }
     
-    for(UIView *view in self.view.subviews)
-    {
-        if([view isKindOfClass:[UITabBar class]])
-        {
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[UITabBar class]]) {
             [view setFrame:CGRectMake(view.frame.origin.x, fHeight, view.frame.size.width, view.frame.size.height)];
-        }
-        else
-        {
+        } else {
             [view setFrame:CGRectMake(view.frame.origin.x, view.frame.origin.y, view.frame.size.width, fHeight)];
             view.backgroundColor = [UIColor blackColor];
         }
@@ -148,25 +188,20 @@
     [UIView commitAnimations];
 }
 
-- (void) showTabBar {
+- (void)showTabBar {
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     float fHeight = screenRect.size.height - 49.0;
     
-    if(  UIDeviceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation) )
-    {
+    if( UIDeviceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
         fHeight = screenRect.size.width - 49.0;
     }
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
-    for(UIView *view in self.view.subviews)
-    {
-        if([view isKindOfClass:[UITabBar class]])
-        {
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[UITabBar class]]) {
             [view setFrame:CGRectMake(view.frame.origin.x, fHeight, view.frame.size.width, view.frame.size.height)];
-        }
-        else
-        {
+        } else {
             [view setFrame:CGRectMake(view.frame.origin.x, view.frame.origin.y, view.frame.size.width, fHeight)];
         }
     }
@@ -197,50 +232,12 @@
     exploreVC.idCreatedReport = [[dict valueForKey:@"idReport"]intValue];
 }
 
-- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    if (self.selectedIndex == 1) {
-        NSArray *arrayVC = [self viewControllers];
-        UINavigationController *nav = (UINavigationController*)[arrayVC objectAtIndex:0];
-        ExploreViewController *exploreVC = [nav.viewControllers objectAtIndex:0];
-        exploreVC.isFromOtherTab = YES;
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    if(!self->removedUnusedTabs)
-    {
-        //UITabBar *tabBar = self.tabBar;
-    
-        NSMutableIndexSet* itemsToRemove = [NSMutableIndexSet indexSet];
-    
-        if(![UserDefaults isFeatureEnabled:@"explore"])
-            [itemsToRemove addIndex:0];
-    
-        if(![UserDefaults isFeatureEnabled:@"create_report_clients"])
-            [itemsToRemove addIndex:1];
-    
-        if(![UserDefaults isFeatureEnabled:@"stats"])
-            [itemsToRemove addIndex:3];
-    
-        NSMutableArray *tbViewControllers = [NSMutableArray arrayWithArray:[self viewControllers]];
-        [tbViewControllers removeObjectsAtIndexes:itemsToRemove];
-        [self setViewControllers:tbViewControllers];
-       
-        self->removedUnusedTabs = YES;
-    }
-
-}
-
-- (BOOL)isFeatureEnabled:(NSString*)feature flags:(NSArray*) flags
-{
-    for (NSDictionary* flag in flags)
-    {
-        NSString* name = [flag valueForKey:@"name"];
-        NSString* status = [flag valueForKey:@"status"];
+- (BOOL)isFeatureEnabled:(NSString *)feature flags:(NSArray *)flags {
+    for (NSDictionary *flag in flags) {
+        NSString *name = [flag valueForKey:@"name"];
+        NSString *status = [flag valueForKey:@"status"];
         
-        if([name isEqualToString:feature])
-        {
+        if ([name isEqualToString:feature]) {
             return ![status isEqualToString:@"disabled"];
         }
     }
@@ -252,20 +249,12 @@
     [Utilities alertWithServerError];
 }
 
-
 - (void)backToMap {
     [self setSelectedIndex:0];
 }
 
 - (void)pushToMainView {
-        
     [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

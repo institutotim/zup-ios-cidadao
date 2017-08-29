@@ -410,7 +410,7 @@ addressAdditional:(NSString*)addressAdditional
     return [self StartRequest:postRequest];
 }
 
--(BOOL)getReportCategories{
+- (BOOL)getReportCategories {
     NSString *token = [UserDefaults getToken];
     if (token == nil) {
         token = @"";

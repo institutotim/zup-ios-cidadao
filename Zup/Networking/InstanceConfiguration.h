@@ -17,8 +17,8 @@
         #define BASE_API_URL @"http://zup-api-maceio.cognita.ntxdev.com.br/"
         #define BASE_WEB_URL @"http://web.latest.staging.zup.ntxdev.com.br/"
     #else
-        #define BASE_API_URL @"http://api.latest.staging.zup.ntxdev.com.br/"
-        #define BASE_WEB_URL @"http://web.latest.staging.zup.ntxdev.com.br/"
+        #define BASE_API_URL @"http://zup.conexaobrasil.org:8282/"
+        #define BASE_WEB_URL @"http://zup.conexaobrasil.org:8282/"
         #define TENANT @"zup";
     #endif
 

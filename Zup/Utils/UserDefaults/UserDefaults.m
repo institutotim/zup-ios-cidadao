@@ -215,12 +215,11 @@
 }
 
 
-+(void)setReportCategories:(NSArray*)arr {
-    NSMutableArray* newarr = [[NSMutableArray alloc] init];
++ (void)setReportCategories:(NSArray *)arr {
+    NSMutableArray *newarr = [[NSMutableArray alloc] init];
     
-    for(NSDictionary* dict in arr)
-    {
-        if(![[dict valueForKey:@"private"] boolValue])
+    for (NSDictionary *dict in arr) {
+        if (![[dict valueForKey:@"private"] boolValue])
            [newarr addObject:dict];
     }
     
@@ -251,7 +250,7 @@
 
     }*/
     
-    NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:newarr forKey:@"categoriesArray"];
     [prefs synchronize];
 }

@@ -14,65 +14,77 @@ static int ZOOMLEVELDEFAULT = 16;
 
 @interface ExploreViewController ()
 
-@property(nonatomic, strong) ServerOperations *serverOperationsReport;
-@property(nonatomic, strong) ServerOperations *serverOperationsInventory;
-@property(nonatomic, strong) ServerOperations *serverOperationsInventoryList;
-@property(nonatomic, strong) GMSMarker *currentMarker;
+@property (nonatomic, strong) ServerOperations *serverOperationsReport;
+@property (nonatomic, strong) ServerOperations *serverOperationsInventory;
+@property (nonatomic, strong) ServerOperations *serverOperationsInventoryList;
+@property (nonatomic, strong) GMSMarker *currentMarker;
+@property (nonatomic, strong) CustomButton *btFilter;
+@property (nonatomic, strong) UIView *viewLogo;
+@property (nonatomic, strong) UIImageView *viewHeader;
+@property (nonatomic, strong) SearchTableViewController *searchTable;
+@property (nonatomic, strong) GMSMarker *markerSearch;
+@property (nonatomic, strong) GMSCoordinateBounds *boundsCurrent;
+@property (nonatomic, strong) FiltrarViewController *filtrarVC;
 
-@property(nonatomic, assign) CLLocationCoordinate2D currentCoord;
+@property (nonatomic, assign) CLLocationCoordinate2D currentCoordinate;
+@property (nonatomic, assign) CLLocationCoordinate2D currentCoord;
+@property (nonatomic, assign) BOOL isMoving;
+@property (nonatomic, assign) BOOL isFromSolicit;
+@property (nonatomic, assign) BOOL initializing;
 
 @end
 
 @implementation ExploreViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self->initializing = YES;
+        self.initializing = YES;
     }
     return self;
 }
 
-- (void)viewDidLoad
-{
+#pragma mark - View Lifecycle
+
+- (void)viewDidLoad {
     [super viewDidLoad];
     
-    self->initializing = YES;
+    self.initializing = YES;
     
     [self initMap];
     
-    NSString* imageName = [NSString stringWithFormat:@"explore_logo_%@", [Utilities getCurrentTenant]];
-    UIImage* logoImage = [UIImage imageNamed:imageName];
-    if(!logoImage)
+    NSString *imageName = [NSString stringWithFormat:@"explore_logo_%@", [Utilities getCurrentTenant]];
+    UIImage *logoImage = [UIImage imageNamed:imageName];
+    if (!logoImage)
         logoImage = [UIImage imageNamed:@"explore_logo"];
     
     // Calcular largura da imagem redimensionada
     float height = MIN(logoImage.size.height, 22.0f);
     int hwidth = (logoImage.size.width / logoImage.size.height) * height;
 
-    viewLogo = [[UIView alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2 - hwidth/2, (44-height)/2/*14*/, hwidth, height)];
+    self.viewLogo = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - hwidth/2, (44-height)/2/*14*/, hwidth, height)];
     UIImageView *image = [[UIImageView alloc]initWithImage:logoImage];
     image.frame = CGRectMake(0, 0, hwidth, 22);
     image.contentMode = UIViewContentModeScaleAspectFit;
-    [viewLogo addSubview:image];
-    self.navigationItem.titleView = viewLogo;
+    [self.viewLogo addSubview:image];
+    self.navigationItem.titleView = self.viewLogo;
     
-    viewHeader = [[UIImageView alloc]initWithImage:[Utilities getTenantHeaderImage]];
+    self.viewHeader = [[UIImageView alloc] initWithImage:[Utilities getTenantHeaderImage]];
 
-    int width = (viewHeader.image.size.width / viewHeader.image.size.height) * 34.0f;
+    int width = (self.viewHeader.image.size.width / self.viewHeader.image.size.height) * 34.0f;
     int realwidth = MIN(self.view.bounds.size.width/2 - 64, width);
 
-    viewHeader.frame = CGRectMake(10, 5, realwidth, 44 - 10);
-    viewHeader.contentMode = UIViewContentModeScaleAspectFit;
+    self.viewHeader.frame = CGRectMake(10, 5, realwidth, 44 - 10);
+    self.viewHeader.contentMode = UIViewContentModeScaleAspectFit;
 
-    UIBarButtonItem* spacer = [[UIBarButtonItem alloc] init];
+    UIBarButtonItem *spacer = [[UIBarButtonItem alloc] init];
     spacer.width = -5;
-    UIBarButtonItem* headerBarButton = [[UIBarButtonItem alloc] initWithCustomView:viewHeader];
+    UIBarButtonItem *headerBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.viewHeader];
     self.navigationItem.leftBarButtonItems = @[spacer, headerBarButton];
 
     [self.searchBar setBackgroundImage:[UIImage new]];
     [self.searchBar setDelegate:self];
+    
     [self.mapView setDelegate:self];
     [self.mapView setMyLocationEnabled:YES];
     
@@ -85,17 +97,17 @@ static int ZOOMLEVELDEFAULT = 16;
 
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:[Utilities fontOpensSansWithSize:15]];
     
-    btFilter = [[CustomButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 65, 5, 60, 35)];
-    [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
-    [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
-    [btFilter setFontSize:14];
-    [btFilter setTitle:@"Filtrar" forState:UIControlStateNormal];
-    [btFilter addTarget:self action:@selector(btFilter:) forControlEvents:UIControlEventTouchUpInside];
+    self.btFilter = [[CustomButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 65, 5, 60, 35)];
+    [self.btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
+    [self.btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
+    [self.btFilter setFontSize:14];
+    [self.btFilter setTitle:@"Filtrar" forState:UIControlStateNormal];
+    [self.btFilter addTarget:self action:@selector(btFilter:) forControlEvents:UIControlEventTouchUpInside];
     
     spacer = [[UIBarButtonItem alloc] init];
     spacer.width = -5;
     
-    UIBarButtonItem* filterBarButton = [[UIBarButtonItem alloc] initWithCustomView:btFilter];
+    UIBarButtonItem *filterBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.btFilter];
     self.navigationItem.rightBarButtonItems = @[spacer, filterBarButton];
     
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(didPan:)];
@@ -105,24 +117,61 @@ static int ZOOMLEVELDEFAULT = 16;
     self.dayFilter = 7;
 }
 
-- (void)setDayFilter:(int)dayFilter
-{
-    self->_dayFilter = dayFilter;
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.screenName = @"Explore";
+    
+    //[viewLogo setHidden:NO];
+    //[viewHeader setHidden:NO];
+    
+    if (self.isFromSolicit) {
+        [self.arrMarkers removeAllObjects];
+        [self requestWithNewPosition];
+        self.isFromSolicit = NO;
+    }
+    
+    if (self.isFromOtherTab) {
+        self.isFromOtherTab = NO;
+        [self.arrMarkers removeAllObjects];
+        // [self requestWithNewPosition];
+        [self createInventoryPoints];
+//        [self createPoints];
+    }
+    
+    [self performSelector:@selector(tryToShowPendingReport) withObject:nil afterDelay:1.0f];
 }
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = NO;
+    //[btFilter removeFromSuperview];
+    //[viewLogo setHidden:YES];
+    //[viewHeader setHidden:YES];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Auxiliar Methods
+
+//- (void)setDayFilter:(int)dayFilter {
+//    self.dayFilter = dayFilter;
+//}
 
 - (void)initMap {
     self.isNoInventories = YES;
     
-    self.arrFilterIDs = [[NSMutableArray alloc]init];
-    self.arrFilterInventoryIDs = [[NSMutableArray alloc]init];
-    self.arrMain = [[NSMutableArray alloc]init];
-    self.arrMainInventory = [[NSMutableArray alloc]init];
-    self.arrMarkers = [[NSMutableArray alloc]init];
+    self.arrFilterIDs = [[NSMutableArray alloc] init];
+    self.arrFilterInventoryIDs = [[NSMutableArray alloc] init];
+    self.arrMain = [[NSMutableArray alloc] init];
+    self.arrMainInventory = [[NSMutableArray alloc] init];
+    self.arrMarkers = [[NSMutableArray alloc] init];
     
     [self getCurrentLocation];
-
-    if(initializing)
-    {
+    
+    if (self.initializing) {
         int zoom;
         if ([Utilities isIpad])
             zoom = ZOOMLEVELDEFAULT;
@@ -135,83 +184,74 @@ static int ZOOMLEVELDEFAULT = 16;
                                                                 longitude:coordinate.longitude
                                                                      zoom:zoom];
         
-        
         self.mapView.camera = camera;
         [self.mapView clear];
         
-        
         [self requestWithNewPosition];
         
-        initializing = NO;
+        self.initializing = NO;
     }
 }
 
-- (void)didPan:(UIPanGestureRecognizer*)pan {
-    
+- (void)didPan:(UIPanGestureRecognizer *)pan {
     if (pan.state == UIGestureRecognizerStateEnded) {
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         [self performSelector:@selector(requestWithNewPosition) withObject:nil afterDelay:0];
     }
-    
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    self.navigationController.navigationBarHidden = NO;
-    //[btFilter removeFromSuperview];
-    //[viewLogo setHidden:YES];
-    //[viewHeader setHidden:YES];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.screenName = @"Explore";
-    
-    //[viewLogo setHidden:NO];
-    //[viewHeader setHidden:NO];
-    
-    if (isFromSolicit) {
-        [self.arrMarkers removeAllObjects];
-        [self requestWithNewPosition];
-        isFromSolicit = NO;
-    }
-    
-    if (self.isFromOtherTab) {
-        self.isFromOtherTab = NO;
-        [self.arrMarkers removeAllObjects];
-       // [self requestWithNewPosition];
-        [self createInventoryPoints];
-        [self createPoints];
-    }
-    
-    [self performSelector:@selector(tryToShowPendingReport) withObject:nil afterDelay:1.0f];
-}
-
-- (void)tryToShowPendingReport
-{
-    AppDelegate* delegate = (AppDelegate*) [UIApplication sharedApplication].delegate;
-    if(delegate.pendingReport)
-    {
+- (void)tryToShowPendingReport {
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (delegate.pendingReport) {
         [self buildDetail:delegate.pendingReport];
         //[[NSNotificationCenter defaultCenter]postNotificationName:@"backToMap" object:nil userInfo:delegate.pendingReport];
-        
         delegate.pendingReport = nil;
     }
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)convertButtonTitle:(NSString *)from toTitle:(NSString *)to inView:(UIView *)view {
+    if ([view isKindOfClass:[UIButton class]]) {
+        UIButton *button = (UIButton *)view;
+        if (from == nil || [[button titleForState:UIControlStateNormal] isEqualToString:from]) {
+            [button setTitle:to forState:UIControlStateNormal];
+            [button sizeToFit];
+        }
+    }
+    
+    for (UIView *subview in view.subviews) {
+        [self convertButtonTitle:from toTitle:to inView:subview];
+    }
 }
 
-- (IBAction)btFilter:(id)sender {
+- (void)moveSearchBarIsTop:(BOOL)isTop {
+    int positionBox = 7;
+    int positionSearchBar = 10;
     
-    
-    if (!filtrarVC) {
-        filtrarVC = [[FiltrarViewController alloc]initWithNibName:@"FiltrarViewControllerNovo" bundle:nil];
+    if (isTop) {
+        positionBox = 27;
+        positionSearchBar = 30;
     }
-    filtrarVC.exploreView = self;
-    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:filtrarVC];
+    
+    CGRect frameBox = self.imgSearchBox.frame;
+    frameBox.origin.y = positionBox;
+    
+    CGRect frameSBar = self.searchBar.frame;
+    frameSBar.origin.y = positionSearchBar;
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        [self.searchBar setFrame:frameSBar];
+        [self.imgSearchBox setFrame:frameBox];
+    }];
+}
+
+#pragma mark - Actions
+
+- (IBAction)btFilter:(id)sender {
+    if (!self.filtrarVC) {
+        self.filtrarVC = [[FiltrarViewController alloc] initWithNibName:@"FiltrarViewControllerNovo" bundle:nil];
+    }
+    self.filtrarVC.exploreView = self;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.filtrarVC];
     [nav.navigationBar setTranslucent:NO];
     
     if ([Utilities isIpad]) {
@@ -225,7 +265,7 @@ static int ZOOMLEVELDEFAULT = 16;
         [nav.view.superview setBackgroundColor:[UIColor clearColor]];
     }
     
-    [filtrarVC viewWillAppear:YES];
+    [self.filtrarVC viewWillAppear:YES];
     
     //[self viewWillAppear:YES];
 }
@@ -244,7 +284,7 @@ static int ZOOMLEVELDEFAULT = 16;
     [self.locationManager startUpdatingLocation];
     
     CLLocation *location = [self.locationManager location];
-    currentCoordinate = [location coordinate];
+    self.currentCoordinate = [location coordinate];
     
 //    #warning TESTE
 //    currentCoordinate = CLLocationCoordinate2DMake(-23.557040, -46.638610);
@@ -255,24 +295,21 @@ static int ZOOMLEVELDEFAULT = 16;
     else
         zoom = ZOOMLEVELDEFAULT;
     
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude
-                                                            longitude:currentCoordinate.longitude
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.currentCoordinate.latitude
+                                                            longitude:self.currentCoordinate.longitude
                                                                  zoom:zoom];
     
     
     self.mapView.camera = camera;
     [self.mapView clear];
     
-    
     [self requestWithNewPosition];
-    
 }
 
-- (void)locationManager:(CLLocationManager *)manager
-	 didUpdateLocations:(NSArray *)locations {
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
     CLLocation *location = [self.locationManager location];
-    currentCoordinate = [location coordinate];
+    self.currentCoordinate = [location coordinate];
     
     int zoom;
     if ([Utilities isIpad])
@@ -280,14 +317,13 @@ static int ZOOMLEVELDEFAULT = 16;
     else
         zoom = ZOOMLEVELDEFAULT;
     
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude
-                                                            longitude:currentCoordinate.longitude
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.currentCoordinate.latitude
+                                                            longitude:self.currentCoordinate.longitude
                                                                  zoom:zoom];
     
     
     self.mapView.camera = camera;
     [self.mapView clear];
-    
     
     [self requestWithNewPosition];
     
@@ -317,14 +353,13 @@ static int ZOOMLEVELDEFAULT = 16;
     
     self.mapView.camera = camera;
     
-    currentCoordinate = coordinate;
+    self.currentCoordinate = coordinate;
     [self getPoints];
     
     [self.searchBar resignFirstResponder];
 }
 
-- (void)setIsFromOtherTab:(BOOL)isFromOtherTab
-{
+- (void)setIsFromOtherTab:(BOOL)isFromOtherTab {
     
 }
 
@@ -334,7 +369,7 @@ static int ZOOMLEVELDEFAULT = 16;
     
     if ([Utilities isInternetActive]) {
         
-        _isReportsLoading = YES;
+        self.isReportsLoading = YES;
         
         int radius = self.mapView.camera.zoom;
         radius = 21 - radius;
@@ -356,18 +391,24 @@ static int ZOOMLEVELDEFAULT = 16;
         [self.serverOperationsReport setAction:@selector(didReceiveData:)];
         [self.serverOperationsReport setActionErro:@selector(didReceiveError:data:)];
         
-        NSArray* searchCategories = nil;
-        NSDate* searchDate = nil;
-        NSArray* searchStatuses = nil;
+        NSArray *searchCategories = nil;
+        NSDate *searchDate = nil;
+        NSArray *searchStatuses = nil;
         
-        if([self->_arrFilterIDs count] > 0)
+        if ([self.arrFilterIDs count] > 0)
             searchCategories = self->_arrFilterIDs;
         
-        searchDate = [Utilities todayMinusDays:self->_dayFilter];
-        if(self->_statusToFilterId != 0)
+        searchDate = [Utilities todayMinusDays:self.dayFilter];
+        if (self.statusToFilterId != 0)
             searchStatuses = @[[NSNumber numberWithInt:self->_statusToFilterId]];
         
-        [self.serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom categoryIds:searchCategories sinceDate:searchDate statuses:searchStatuses];
+        [self.serverOperationsReport getReportItemsForPosition:self.currentCoordinate.latitude
+                                                     longitude:self.currentCoordinate.longitude
+                                                        radius:distance
+                                                          zoom:self.mapView.camera.zoom 
+                                                   categoryIds:searchCategories
+                                                     sinceDate:searchDate
+                                                      statuses:searchStatuses];
         
         /*if([self->_arrFilterIDs count] > 0)
         {
@@ -378,27 +419,22 @@ static int ZOOMLEVELDEFAULT = 16;
     }
 }
 
-- (void)clearMap
-{
+- (void)clearMap {
     [self.arrMainInventory removeAllObjects];
     [self.arrMain removeAllObjects];
     
-    for(GMSMarker* marker in self.arrMarkers)
-    {
+    for (GMSMarker *marker in self.arrMarkers) {
         marker.map = nil;
     }
     
     [self.arrMarkers removeAllObjects];
 }
 
-- (void) clearClusters
-{
-    NSMutableArray* itemsToRemove = [[NSMutableArray alloc] init];
+- (void)clearClusters {
+    NSMutableArray *itemsToRemove = [[NSMutableArray alloc] init];
     
-    for(GMSMarker* marker in self.arrMarkers)
-    {
-        if([[marker.userData valueForKey:@"isCluster"] boolValue])
-        {
+    for (GMSMarker *marker in self.arrMarkers) {
+        if ([[marker.userData valueForKey:@"isCluster"] boolValue]) {
             marker.map = nil;
             [itemsToRemove addObject:marker];
         }
@@ -407,14 +443,11 @@ static int ZOOMLEVELDEFAULT = 16;
     [self.arrMarkers removeObjectsInArray:itemsToRemove];
 }
 
-- (void) clearNonClusters
-{
-    NSMutableArray* itemsToRemove = [[NSMutableArray alloc] init];
+- (void)clearNonClusters {
+    NSMutableArray *itemsToRemove = [[NSMutableArray alloc] init];
     
-    for(GMSMarker* marker in self.arrMarkers)
-    {
-        if(![[marker.userData valueForKey:@"isCluster"] boolValue])
-        {
+    for (GMSMarker *marker in self.arrMarkers) {
+        if (![[marker.userData valueForKey:@"isCluster"] boolValue]) {
             marker.map = nil;
             [itemsToRemove addObject:marker];
         }
@@ -423,23 +456,18 @@ static int ZOOMLEVELDEFAULT = 16;
     [self.arrMarkers removeObjectsInArray:itemsToRemove];
 }
 
-- (GMSMarker*) nearestClusterToMarker:(GMSMarker*)marker withArrayOfMarkers:(NSArray*)markers
-{
-    GMSMarker* nearest = nil;
+- (GMSMarker *)nearestClusterToMarker:(GMSMarker *)marker withArrayOfMarkers:(NSArray *)markers {
+    GMSMarker *nearest = nil;
     CLLocationDistance nearestDistance = CLLocationDistanceMax;
     
-    for(GMSMarker* m in markers)
-    {
-        if([[m.userData valueForKey:@"isCluster"] boolValue])
-        {
-            CLLocation* loc1 = [[CLLocation alloc] initWithLatitude:marker.position.latitude longitude:marker.position.longitude];
-            
-            CLLocation* loc2 = [[CLLocation alloc] initWithLatitude:m.position.latitude longitude:m.position.longitude];
+    for (GMSMarker *m in markers) {
+        if ([[m.userData valueForKey:@"isCluster"] boolValue]) {
+            CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:marker.position.latitude longitude:marker.position.longitude];
+            CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:m.position.latitude longitude:m.position.longitude];
             
             CLLocationDistance dist = [loc1 distanceFromLocation:loc2];
             
-            if(dist < nearestDistance)
-            {
+            if (dist < nearestDistance) {
                 nearest = m;
                 nearestDistance = dist;
             }
@@ -449,13 +477,10 @@ static int ZOOMLEVELDEFAULT = 16;
     return nearest;
 }
 
-- (GMSMarker*) clusterForReport:(int)reportId withArrayOfMarkers:(NSArray*)markers
-{
-    for(GMSMarker* m in markers)
-    {
-        if([[m.userData valueForKey:@"isCluster"] boolValue])
-        {
-            NSArray* reportIds = [m.userData valueForKey:@"reports_ids"];
+- (GMSMarker *)clusterForReport:(int)reportId withArrayOfMarkers:(NSArray *)markers {
+    for (GMSMarker *m in markers) {
+        if ([[m.userData valueForKey:@"isCluster"] boolValue]) {
+            NSArray *reportIds = [m.userData valueForKey:@"reports_ids"];
             if(reportIds && [reportIds containsObject:[NSNumber numberWithInt:reportId]])
                 return m;
         }
@@ -464,13 +489,10 @@ static int ZOOMLEVELDEFAULT = 16;
     return nil;
 }
 
-- (void) removeMarkers:(NSArray*)markers exceptFor:(NSArray*)arr
-{
-    NSMutableArray* objsToRemove = [[NSMutableArray alloc] init];
-    for(GMSMarker* marker in markers)
-    {
-        if(![arr containsObject:marker])
-        {
+- (void)removeMarkers:(NSArray*)markers exceptFor:(NSArray *)arr {
+    NSMutableArray *objsToRemove = [[NSMutableArray alloc] init];
+    for (GMSMarker *marker in markers) {
+        if (![arr containsObject:marker]) {
             marker.map = nil;
             [objsToRemove addObject:marker];
         }
@@ -478,14 +500,11 @@ static int ZOOMLEVELDEFAULT = 16;
     [self.arrMarkers removeObjectsInArray:objsToRemove];
 }
 
-- (BOOL) arrayOfMarkers:(NSArray*)array hasReport:(int)reportId
-{
-    for(GMSMarker* marker in array)
-    {
-        if(![[marker.userData valueForKey:@"isCluster"] boolValue])
-        {
-            NSNumber* _id = [marker.userData valueForKey:@"id"];
-            if(_id && !(_id.class == [NSNull class]) && [_id intValue] == reportId)
+- (BOOL)arrayOfMarkers:(NSArray *)array hasReport:(int)reportId {
+    for (GMSMarker *marker in array) {
+        if (![[marker.userData valueForKey:@"isCluster"] boolValue]) {
+            NSNumber *_id = [marker.userData valueForKey:@"id"];
+            if (_id && !(_id.class == [NSNull class]) && [_id intValue] == reportId)
                return YES;
         }
     }
@@ -493,10 +512,9 @@ static int ZOOMLEVELDEFAULT = 16;
     return NO;
 }
 
-
-- (void)didReceiveData:(NSData*)data {
+- (void)didReceiveData:(NSData *)data {
     
-    _isReportsLoading = NO;
+    self.isReportsLoading = NO;
     
     if(self.isNoReports)
         return;
@@ -688,9 +706,8 @@ static int ZOOMLEVELDEFAULT = 16;
         }
         
         int _id = [[dict valueForKey:@"id"] intValue];
-        if(![self arrayOfMarkers:markers hasReport:_id])
-        {
-            CLLocationCoordinate2D pos = marker.position;
+        if (![self arrayOfMarkers:markers hasReport:_id]) {
+//            CLLocationCoordinate2D pos = marker.position;
             GMSMarker* nearestCluster = [self clusterForReport:_id withArrayOfMarkers:markers];
             
             NSDictionary* changeDict = @{
@@ -740,13 +757,11 @@ static int ZOOMLEVELDEFAULT = 16;
 
 #pragma mark - Get Inventory
 
-- (double)mtorad:(double)x
-{
+- (double)mtorad:(double)x {
     return x * M_PI / (double)180;
 }
 
-- (double)getDistance:(CLLocationCoordinate2D)p1 p2:(CLLocationCoordinate2D)p2
-{
+- (double)getDistance:(CLLocationCoordinate2D)p1 p2:(CLLocationCoordinate2D)p2 {
     double R = 6378137; // Earth’s mean radius in meter
     double dLat = [self mtorad:p2.latitude - p1.latitude];
     double dLong = [self mtorad:p2.longitude - p1.longitude];
@@ -788,27 +803,29 @@ static int ZOOMLEVELDEFAULT = 16;
         [self.serverOperationsInventory setActionErro:@selector(didReceiveIventoryError:data:)];
         
         if (self.arrFilterInventoryIDs.count == 0) {
-            [self.serverOperationsInventory getItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom];
-
+            [self.serverOperationsInventory getItemsForPosition:self.currentCoordinate.latitude
+                                                      longitude:self.currentCoordinate.longitude
+                                                         radius:distance
+                                                           zoom:self.mapView.camera.zoom];
         } else {
-            [self.serverOperationsInventory getItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom categoryIds:self.arrFilterInventoryIDs];
-
+            [self.serverOperationsInventory getItemsForPosition:self.currentCoordinate.latitude
+                                                      longitude:self.currentCoordinate.longitude
+                                                         radius:distance
+                                                           zoom:self.mapView.camera.zoom
+                                                    categoryIds:self.arrFilterInventoryIDs];
         }
-        
     }
 }
 
 - (void)didReceiveInventoryData:(NSData*)data operation:(TIRequestOperation*)operation {
+    self.isInventoryLoading = NO;
     
-    _isInventoryLoading = NO;
-    
-    if(self.isNoInventories)
+    if (self.isNoInventories)
         return;
     
     [self clearMap];
     
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
     
     NSArray *arr = [dict valueForKey:@"items"];
     
@@ -818,8 +835,7 @@ static int ZOOMLEVELDEFAULT = 16;
         }
     }
     
-    NSArray* clusters = [dict valueForKey:@"clusters"];
-    
+    NSArray *clusters = [dict valueForKey:@"clusters"];
     
     [self createInventoryPoints];
     [self createPointsForClusters:clusters inventory:YES];
@@ -827,36 +843,27 @@ static int ZOOMLEVELDEFAULT = 16;
 
 - (void)didReceiveIventoryError:(NSError*)error data:(NSData*)data {
     [Utilities alertWithServerError];
-    _isInventoryLoading = NO;
+    self.isInventoryLoading = NO;
 }
 
 - (void)createInventoryPoints {
-    
-    
     for (NSDictionary *dict in self.arrMainInventory) {
-        
         if (self.arrFilterInventoryIDs.count > 0) {
-            
             int intId = [[dict valueForKey:@"inventory_category_id"]intValue];
             NSNumber *numberId = [NSNumber numberWithInt:intId];
-            
-            
             if ([self.arrFilterInventoryIDs containsObject:numberId]) {
                 [self setLocationWithCoordinate:dict];
             }
-        }
-        else if (!self.isFromFilter){
+        } else if (!self.isFromFilter) {
             if (!self.isNoInventories) {
                 [self setLocationWithCoordinate:dict];
             }
         }
-        
     }
-    
 }
 
 - (void)getMarkersForLocation:(CLLocationCoordinate2D)location {
-    currentCoordinate = location;
+    self.currentCoordinate = location;
     
     [self getPoints];
     [self getIventoryPoints];
@@ -866,9 +873,7 @@ static int ZOOMLEVELDEFAULT = 16;
                                  snippet:(NSString*)snippet
                                draggable:(BOOL)draggable
                                     type:(int)type
-                                userData:(NSDictionary*)dict{
-    
-    
+                                userData:(NSDictionary *)dict {
     NSDictionary *catDict = [UserDefaults getInventoryCategory:[[dict valueForKey:@"inventory_category_id"]intValue]];
     
     GMSMarker *marker = [[GMSMarker alloc] init];
@@ -898,7 +903,7 @@ static int ZOOMLEVELDEFAULT = 16;
         }
     }
     
-    marker.Map = self.mapView;
+    marker.map = self.mapView;
     [self.arrMarkers addObject:marker];
     
     return marker;
@@ -906,12 +911,8 @@ static int ZOOMLEVELDEFAULT = 16;
 
 #pragma mark - Get Inventory List
 
-
 - (void)getInventoryListForId:(int)idCategory {
-    
-    
     if ([Utilities isInternetActive]) {
-        
         [self.serverOperationsInventoryList CancelRequest];
         self.serverOperationsInventoryList = nil;
         
@@ -923,10 +924,8 @@ static int ZOOMLEVELDEFAULT = 16;
     }
 }
 
-- (void)didReceiveInventoryListData:(NSData*)data {
+- (void)didReceiveInventoryListData:(NSData *)data {
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    
     self.arrMain = [[NSMutableArray alloc]initWithArray:[dict valueForKey:@"items"]];
     [self createInventoryPoints];
 }
@@ -935,10 +934,9 @@ static int ZOOMLEVELDEFAULT = 16;
     [Utilities alertWithServerError];
 }
 
-
 #pragma mark - Map Handle
 
-- (GMSMarker*)setLocationWithCoordinate:(NSDictionary*)dict{
+- (GMSMarker *)setLocationWithCoordinate:(NSDictionary *)dict {
     
     NSString *latStr = [dict valueForKeyPath:@"position.latitude"];
     
@@ -952,7 +950,6 @@ static int ZOOMLEVELDEFAULT = 16;
         return [self setMarkerWithCoordinate:coord snippet:nil draggable:NO type:[[dict valueForKey:@"category_id"]intValue] userData:dict];
         
     }
-    
 }
 
 - (UIView *)mapView:(GMSMapView *)mapView markerInfoWindow:(GMSMarker *)marker {
@@ -991,10 +988,9 @@ static int ZOOMLEVELDEFAULT = 16;
     
     NSString* iconId = [NSString stringWithFormat:@"marker_category_%i", [[dict valueForKey:@"category_id"] intValue]];
     UIImage* cachedImage = [[ImageCache defaultCache] imageWithName:iconId];
-    if(cachedImage)
+    if (cachedImage)
         img = cachedImage;
-    else
-    {
+    else {
         img = [UIImage imageWithData:[catDict valueForKey:@"markerData"]];
         img = [Utilities imageWithImage:img scaledToSize:CGSizeMake(img.size.width/2, img.size.height/2)];
     }
@@ -1009,16 +1005,14 @@ static int ZOOMLEVELDEFAULT = 16;
             return tempMarker;
         }
     }
-    marker.Map = self.mapView;
+    marker.map = self.mapView;
     [self.arrMarkers addObject:marker];
     
     return marker;
 }
 
-
 - (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker {
-    if([[[marker userData] valueForKey:@"isCluster"] boolValue])
-    {
+    if ([[[marker userData] valueForKey:@"isCluster"] boolValue]) {
         GMSCameraPosition* camera = [GMSCameraPosition cameraWithLatitude:marker.position.latitude
                                                                 longitude:marker.position.longitude
                                                                      zoom:self.mapView.camera.zoom + 1];
@@ -1029,16 +1023,14 @@ static int ZOOMLEVELDEFAULT = 16;
         return NO;
     }
     
-    isMoving = YES;
+    self.isMoving = YES;
     
     return NO;
 }
 
 
 - (void)mapView:(GMSMapView *)mapView didTapInfoWindowOfMarker:(GMSMarker *)marker {
-    
     [self gotoDetail:marker];
-    
 }
 
 - (void)gotoDetail:(GMSMarker*)marker {
@@ -1079,24 +1071,21 @@ static int ZOOMLEVELDEFAULT = 16;
 }
 
 - (void)buildDetail:(NSDictionary*)dict {
-    
     if (![self.navigationController.visibleViewController isKindOfClass:[ExploreViewController class]]) {
         [self.navigationController popToRootViewControllerAnimated:NO];
     }
-    
     
     NSString *latStr = [dict valueForKeyPath:@"position.latitude"];
     NSString *lngStr = [dict valueForKeyPath:@"position.longitude"];
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latStr.floatValue, lngStr.floatValue);
     
-    currentCoordinate = coord;
+    self.currentCoordinate = coord;
     
-    isFromSolicit = YES;
+    self.isFromSolicit = YES;
     
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude
-                                                            longitude:currentCoordinate.longitude
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.currentCoordinate.latitude
+                                                            longitude:self.currentCoordinate.longitude
                                                                  zoom:16];
-    
     
     self.mapView.camera = camera;
         
@@ -1137,72 +1126,49 @@ static int ZOOMLEVELDEFAULT = 16;
 
 - (void)mapView:(GMSMapView *)mapView didEndDraggingMarker:(GMSMarker *)marker {
     self.currentMarker = marker;
-    currentCoordinate = marker.position;
+    self.currentCoordinate = marker.position;
 }
 
 - (void)setPositionMarkerForSearch {
     
-    CLLocationCoordinate2D location = currentCoordinate;
+    CLLocationCoordinate2D location = self.currentCoordinate;
     location.latitude -= 0.001;
-    markerSearch = [GMSMarker markerWithPosition:location];
-    [markerSearch setTappable:NO];
-    markerSearch.map = self.mapView;
+    self.markerSearch = [GMSMarker markerWithPosition:location];
+    [self.markerSearch setTappable:NO];
+    self.markerSearch.map = self.mapView;
 }
 
-
 - (void)requestWithNewPosition {
-    
-    if (!isFromSolicit) {
+    if (!self.isFromSolicit) {
         CGPoint point = self.mapView.center;
         point.y -= 60;
-        currentCoordinate = [self.mapView.projection coordinateForPoint:point];
+        self.currentCoordinate = [self.mapView.projection coordinateForPoint:point];
     }
     
-    isFromSolicit = NO;
+    self.isFromSolicit = NO;
     
-    boundsCurrent = [[GMSCoordinateBounds alloc]
+    self.boundsCurrent = [[GMSCoordinateBounds alloc]
                                    initWithRegion: self.mapView.projection.visibleRegion];
     
     if (!_isInventoryLoading && !_isNoInventories)[self getIventoryPoints];
     if (!_isReportsLoading && !_isNoReports)[self getPoints];
- 
 }
 
-- (void) mapView: (GMSMapView *) mapView didChangeCameraPosition: (GMSCameraPosition *) position {
+- (void)mapView:(GMSMapView *)mapView didChangeCameraPosition:(GMSCameraPosition *)position {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(mapMovementEnd) object:nil];
     
     //[self mapMovementEnd];
-        if (!isMoving) {
-            [self performSelector:@selector(mapMovementEnd) withObject:nil afterDelay:0.15];
-        }
-    
+    if (!self.isMoving) {
+        [self performSelector:@selector(mapMovementEnd) withObject:nil afterDelay:0.15];
+    }
 }
 
-
-- (void) mapMovementEnd {
-    isMoving = NO;
+- (void)mapMovementEnd {
+    self.isMoving = NO;
     //    [self.mapView clear];
     
     [self getIventoryPoints];
     [self getPoints];
-}
-
-- (void)convertButtonTitle:(NSString *)from toTitle:(NSString *)to inView:(UIView *)view
-{
-    if ([view isKindOfClass:[UIButton class]])
-    {
-        UIButton *button = (UIButton *)view;
-        if (from == nil || [[button titleForState:UIControlStateNormal] isEqualToString:from])
-        {
-            [button setTitle:to forState:UIControlStateNormal];
-            [button sizeToFit];
-        }
-    }
-    
-    for (UIView *subview in view.subviews)
-    {
-        [self convertButtonTitle:from toTitle:to inView:subview];
-    }
 }
 
 #pragma mark - Search Bar delegates
@@ -1213,26 +1179,26 @@ static int ZOOMLEVELDEFAULT = 16;
     [searchBar setNeedsLayout];
     [searchBar layoutIfNeeded];
     
-    if (!searchTable) {
+    if (!self.searchTable) {
         
-        searchTable = [[SearchTableViewController alloc]initWithNibName:@"SearchTableViewController" bundle:nil];
-        searchTable.explorerView = self;
-        searchTable.isExplore = YES;
+        self.searchTable = [[SearchTableViewController alloc]initWithNibName:@"SearchTableViewController" bundle:nil];
+        self.searchTable.explorerView = self;
+        self.searchTable.isExplore = YES;
         
         if ([Utilities isIpad]) {
-            [searchTable.view setFrame:CGRectMake(self.searchBar.frame.origin.x, self.searchBar.frame.origin.y + self.searchBar.frame.size.height + 10, searchTable.view.frame.size.width, searchTable.view.frame.size.height)];
+            [self.searchTable.view setFrame:CGRectMake(self.searchBar.frame.origin.x, self.searchBar.frame.origin.y + self.searchBar.frame.size.height + 10, self.searchTable.view.frame.size.width, self.searchTable.view.frame.size.height)];
         } else {
-            [searchTable.view setFrame:self.view.bounds];
-            [searchTable.view setBackgroundColor:[Utilities colorGrayLight]];
-            [searchTable.tableView setContentInset:UIEdgeInsetsMake(80, 0, 0, 0)];
-            [searchTable.tableView setScrollIndicatorInsets:UIEdgeInsetsMake(80, 0, 0, 0)];
+            [self.searchTable.view setFrame:self.view.bounds];
+            [self.searchTable.view setBackgroundColor:[Utilities colorGrayLight]];
+            [self.searchTable.tableView setContentInset:UIEdgeInsetsMake(80, 0, 0, 0)];
+            [self.searchTable.tableView setScrollIndicatorInsets:UIEdgeInsetsMake(80, 0, 0, 0)];
             
         }
         
-        [searchTable.view.layer setCornerRadius:5];
-        [searchTable.view.layer setShadowOffset:CGSizeMake(0, 2)];
-        [searchTable.view.layer setShadowColor:[[UIColor blackColor]CGColor]];
-        [self.view addSubview:searchTable.view];
+        [self.searchTable.view.layer setCornerRadius:5];
+        [self.searchTable.view.layer setShadowOffset:CGSizeMake(0, 2)];
+        [self.searchTable.view.layer setShadowColor:[[UIColor blackColor]CGColor]];
+        [self.view addSubview:self.searchTable.view];
         
         [self.view bringSubviewToFront:self.imgSearchBox];
         [self.view bringSubviewToFront:self.searchBar];
@@ -1243,21 +1209,20 @@ static int ZOOMLEVELDEFAULT = 16;
         [self moveSearchBarIsTop:YES];
     }
     
-    [searchTable.view setHidden:NO];
-    [searchTable.view setAlpha:0];
+    [self.searchTable.view setHidden:NO];
+    [self.searchTable.view setAlpha:0];
     [UIView animateWithDuration:0.7 animations:^{
-        [searchTable.view setAlpha:1];
+        [self.searchTable.view setAlpha:1];
     }];
     
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    
     //[self.arrFilterIDs removeAllObjects];
     //[self.arrFilterInventoryIDs removeAllObjects];
     
     [searchBar setShowsCancelButton:NO animated:YES];
-    [searchTable.view setHidden:YES];
+    [self.searchTable.view setHidden:YES];
     
     if (![Utilities isIpad]) {
         [self.navigationController setNavigationBarHidden:NO animated:YES];
@@ -1266,9 +1231,8 @@ static int ZOOMLEVELDEFAULT = 16;
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    
-    if (markerSearch) {
-        markerSearch.map = nil;
+    if (self.markerSearch) {
+        self.markerSearch.map = nil;
     }
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
@@ -1276,12 +1240,11 @@ static int ZOOMLEVELDEFAULT = 16;
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [searchTable getLocationWithString:searchBar.text andLocation:boundsCurrent];
+    [self.searchTable getLocationWithString:searchBar.text andLocation:self.boundsCurrent];
 }
 
 - (void)requestAddresses {
-    [searchTable getLocationWithString:self.searchBar.text andLocation:boundsCurrent];
-    
+    [self.searchTable getLocationWithString:self.searchBar.text andLocation:self.boundsCurrent];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
@@ -1290,37 +1253,14 @@ static int ZOOMLEVELDEFAULT = 16;
     
     [searchBar setText:@""];
     
-    [searchTable clearTable];
+    [self.searchTable clearTable];
     
-    [searchTable.view setHidden:YES];
+    [self.searchTable.view setHidden:YES];
     
     if (![Utilities isIpad]) {
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         [self moveSearchBarIsTop:NO];
     }
 }
-
-
-- (void)moveSearchBarIsTop:(BOOL)isTop {
-    int positionBox = 7;
-    int positionSearchBar = 10;
-    
-    if (isTop) {
-        positionBox = 27;
-        positionSearchBar = 30;
-    }
-    
-    CGRect frameBox = self.imgSearchBox.frame;
-    frameBox.origin.y = positionBox;
-    
-    CGRect frameSBar = self.searchBar.frame;
-    frameSBar.origin.y = positionSearchBar;
-    
-    [UIView animateWithDuration:0.2 animations:^{
-        [self.searchBar setFrame:frameSBar];
-        [self.imgSearchBox setFrame:frameBox];
-    }];
-}
-
 
 @end

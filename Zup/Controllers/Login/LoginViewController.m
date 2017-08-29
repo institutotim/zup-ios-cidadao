@@ -71,7 +71,6 @@
     
     if ([Utilities isIOS7]) {
         [self setTitle:titleStr];
-        
     } else {
         UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 40)];
         [lblTitle setFont:[Utilities fontOpensSansLightWithSize:18]];
@@ -181,7 +180,6 @@
 }
 
 - (IBAction)btForogt:(id)sender {
-    
     ForgotViewController *forgotVC = [[ForgotViewController alloc]initWithNibName:@"ForgotViewController" bundle:nil];
     
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:forgotVC];
@@ -214,7 +212,6 @@
         [UserDefaults setIsUserLogged:YES];
         
         [self.mainVC getReportCategories];
-
         /*if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit ) {
             
             [self dismissViewControllerAnimated:YES completion:nil];

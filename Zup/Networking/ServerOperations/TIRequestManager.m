@@ -110,8 +110,7 @@ static TIRequestManager * _defaultManager;
 }
 
 - (void)request:(TIRequest *)request DidFinishLoadingWithResult:(NSData *)result {
-    
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.%@ = %@", keyRequest, request];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.%@ = %@", keyRequest, request];
     NSArray* arrayRequest = [self.RequestPerforming filteredArrayUsingPredicate:predicate];
     
     NSString *stringData = [[NSString alloc]initWithData:result encoding:NSUTF8StringEncoding];
@@ -125,7 +124,6 @@ static TIRequestManager * _defaultManager;
     [self.RequestPerforming removeObject:dictionary];
     [self checkStatus];
 }
-
 
 - (void)checkStatus {
     if (self.RequestPerforming.count > 0) {

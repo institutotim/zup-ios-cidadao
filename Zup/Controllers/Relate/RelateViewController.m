@@ -4,20 +4,27 @@
 //
 
 #import "RelateViewController.h"
+
 #import "SolicitacaoMapViewController.h"
 #import "NavigationControllerViewController.h"
-#import <QuartzCore/QuartzCore.h>
 #import "LoginViewController.h"
 #import "CellFiltrarCategoria.h"
 
+#import <QuartzCore/QuartzCore.h>
+
 @interface RelateViewController ()
+
+@property (nonatomic, strong) NSArray *categories;
+@property (nonatomic, strong) NSMutableArray *expandedCategories;
+@property (nonatomic, strong) NSString *tokenStr;
+
+@property (nonatomic, assign) int selectedCategoryId;
 
 @end
 
 @implementation RelateViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -25,15 +32,50 @@
     return self;
 }
 
+#pragma mark - View Lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self.lblTitle setFont:[Utilities fontOpensSansBoldWithSize:12]];
+    
+    for (UILabel *lbl in self.arrLabel) {
+        [lbl setFont:[Utilities fontOpensSansLightWithSize:10]];
+    }
+    
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    
+    NSString *titleStr = @"Nova solicitação";
+    
+    UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 40)];
+    [lblTitle setFont:[Utilities fontOpensSansLightWithSize:18]];
+    [lblTitle setTextColor:[UIColor blackColor]];
+    [lblTitle setText:titleStr];
+    [self.navigationController.navigationBar.topItem setTitleView:lblTitle];
+    
+    [self createButtons];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"CellFiltrarCategoria" bundle:nil] forCellReuseIdentifier:@"Cell"];
+    
+    self.categories = [UserDefaults getReportRootCategories];
+    self.selectedCategoryId = 0;
+    self.expandedCategories = [[NSMutableArray alloc] init];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    [self hideToolbar:NO];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
+    
     self.screenName = @"Seleção de Categoria (Novo Relato)";
 
     [self setToken];
     
-    self->categories = [UserDefaults getReportRootCategories];
-    self->selectedCategoryId = 0;
-    self->expandedCategories = [[NSMutableArray alloc] init];
+    self.categories = [UserDefaults getReportRootCategories];
+    self.selectedCategoryId = 0;
+    self.expandedCategories = [[NSMutableArray alloc] init];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     [self.tableView reloadData];
@@ -41,13 +83,18 @@
     //[self.navigationController presentViewController:self animated:YES completion:nil];
 }
 
-- (void)setToken {
-    tokenStr = [UserDefaults getToken];
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
+#pragma mark - Auxiliar Methods
+
+- (void)setToken {
+    self.tokenStr = [UserDefaults getToken];
 }
 
 - (void)callLoginView {
-    
     MainViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"mainVC"];
     loginVC.isFromSolicit = YES;
     loginVC.relateVC = self;
@@ -63,43 +110,9 @@
     [self presentViewController:navLogin animated:YES completion:nil];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    [self.lblTitle setFont:[Utilities fontOpensSansBoldWithSize:12]];
-    
-    
-    for (UILabel *lbl in self.arrLabel) {
-        [lbl setFont:[Utilities fontOpensSansLightWithSize:10]];
-    }
-
-    [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
-    NSString *titleStr = @"Nova solicitação";
- 
-        UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 40)];
-        [lblTitle setFont:[Utilities fontOpensSansLightWithSize:18]];
-        [lblTitle setTextColor:[UIColor blackColor]];
-        [lblTitle setText:titleStr];
-        [self.navigationController.navigationBar.topItem setTitleView:lblTitle];
-    
-    [self createButtons];
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"CellFiltrarCategoria" bundle:nil] forCellReuseIdentifier:@"Cell"];
-    
-    self->categories = [UserDefaults getReportRootCategories];
-    self->selectedCategoryId = 0;
-    self->expandedCategories = [[NSMutableArray alloc] init];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    [self hideToolbar:NO];
-}
-
 - (void)createButtons {
     
-    self.arrMain = [[NSArray alloc]initWithArray:[UserDefaults getReportCategories]];
+    self.arrMain = [[NSArray alloc] initWithArray:[UserDefaults getReportCategories]];
 
     int i = 0;
     int lines = 1;
@@ -178,14 +191,205 @@
     }
     
     [self.scroll setCenter:self.view.center];
+}
+
+- (BOOL)disablesAutomaticKeyboardDismissal {
+    return NO;
+}
+
+- (void)hideToolbar:(BOOL)animated {
+    CGRect newframe_tableview = self.tableView.frame;
+    newframe_tableview.size.height = self.view.frame.size.height - newframe_tableview.origin.y;
     
+    CGRect newframe_bar = self.toolbarView.frame;
+    newframe_bar.origin.y = self.view.frame.size.height;
     
+    if (animated) {
+        [UIView animateWithDuration:.3 animations:^{
+            self.tableView.frame = newframe_tableview;
+            self.toolbarView.frame = newframe_bar;
+        }];
+    } else {
+        self.tableView.frame = newframe_tableview;
+        self.toolbarView.frame = newframe_bar;
+    }
+}
+
+- (void)showToolbar:(BOOL)animated {
+    CGRect newframe_bar = self.toolbarView.frame;
+    newframe_bar.origin.y = self.view.frame.size.height - newframe_bar.size.height;
+    
+    CGRect newframe_tableview = self.tableView.frame;
+    newframe_tableview.size.height = self.view.frame.size.height - newframe_tableview.origin.y - newframe_bar.size.height;
+    
+    if (animated) {
+        [UIView animateWithDuration:.3 animations:^{
+            self.tableView.frame = newframe_tableview;
+            self.toolbarView.frame = newframe_bar;
+        }];
+    } else {
+        self.tableView.frame = newframe_tableview;
+        self.toolbarView.frame = newframe_bar;
+    }
+}
+
+- (BOOL) isPhysicalCategory:(NSInteger)index {
+    return [self categoryAtIndex:index] != nil;
+}
+
+- (NSDictionary *)categoryAtIndex:(NSInteger)index {
+    int idx = 0;
+    idx++; // Placeholder
+    for (int i = 0; i < [self.categories count]; i++) {
+        NSDictionary* cat = [self.categories objectAtIndex:i];
+        if (idx == index)
+            return cat;
+        
+        NSNumber *catid = [cat objectForKey:@"id"];
+        BOOL expanded = [self.expandedCategories containsObject:catid];
+        idx++;
+        if (expanded) {
+            NSArray *subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
+            
+            for (int j = 0; j < [subcategories count]; j++) {
+                NSDictionary *subcat = [subcategories objectAtIndex:j];
+                if (idx == index)
+                    return subcat;
+                idx++;
+            }
+        }
+        
+        idx++;
+    }
+    
+    return nil;
+}
+
+- (int)extensorNumberAtIndex:(NSInteger)index {
+    int idx = 0;
+    idx++; // Placeholder
+    int extensorsSoFar = 0;
+    for (int i = 0; i < [self.categories count]; i++) {
+        NSDictionary *cat = [self.categories objectAtIndex:i];
+        NSNumber *catid = [cat objectForKey:@"id"];
+        BOOL expanded = [self.expandedCategories containsObject:catid];
+        if (expanded) {
+            NSArray *subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
+            idx += [subcategories count];
+        }
+        idx++;
+        if (idx == index)
+            return extensorsSoFar;
+        
+        idx++;
+        extensorsSoFar++;
+    }
+    
+    return -1;
+}
+
+- (NSDictionary *)categoryForExtensor:(int)index {
+    return [self.categories objectAtIndex:index];
+}
+
+- (int)indexOfCategory:(int)cat_id {
+    int idx = 0;
+    idx++; // Placeholder
+    for (int i = 0; i < [self.categories count]; i++) {
+        NSDictionary* cat = [self.categories objectAtIndex:i];
+        
+        NSNumber *catid = [cat objectForKey:@"id"];
+        
+        if ([catid intValue] == cat_id)
+            return idx;
+        
+        BOOL expanded = [self.expandedCategories containsObject:catid];
+        
+        idx++;
+        
+        if (expanded) {
+            NSArray *subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
+            
+            idx += [subcategories count];
+        }
+        
+        idx++;
+    }
+    
+    return -1;
+}
+
+- (void)setIsFromOtherTab:(BOOL)isFromOtherTab {
     
 }
 
+- (BOOL)isCategoryRoot:(NSDictionary *)cat {
+    return [cat objectForKey:@"parent_id"] == nil;
+}
+
+- (BOOL)isRootCategorySelected:(NSDictionary *)cat {
+    NSNumber *catid = [cat objectForKey:@"id"];
+    if ([self isCategorySelected:cat])
+        return YES;
+    
+    if (self.selectedCategoryId != 0) {
+        NSDictionary *selcat = [UserDefaults getCategory:self.selectedCategoryId];
+        if ([[selcat valueForKey:@"parent_id"] intValue] == [catid intValue])
+            return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)isCategorySelected:(NSDictionary*)cat {
+    NSNumber *catid = [cat objectForKey:@"id"];
+    
+    return self.selectedCategoryId == [catid intValue];
+}
+
+- (void)expandCategory:(int)catid {
+    [self.expandedCategories addObject:[NSNumber numberWithInt:catid]];
+    
+    NSArray *subcats = [UserDefaults getReportSubCategories:catid];
+    
+    [self.tableView beginUpdates];
+    NSMutableArray *rowIndexes = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [subcats count]; i++) {
+        int index = [self indexOfCategory:catid] + 1 + i;
+        [rowIndexes addObject:[NSIndexPath indexPathForItem:index inSection:0]];
+    }
+    
+    [self.tableView insertRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationBottom];
+    
+    [self.tableView endUpdates];
+    
+    int indexToReload = [self indexOfCategory:catid] + 1;
+    indexToReload += [subcats count];
+    
+    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForItem:indexToReload inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (void)reloadData:(BOOL)animated {
+    [self.tableView reloadData];
+    
+    if (animated) {
+        CATransition *animation = [CATransition animation];
+        [animation setType:kCATransitionFade];
+        [animation setSubtype:kCATransitionReveal];
+        //[animation setType:kCATransitionPush];
+        //[animation setSubtype:kCATransitionFromBottom];
+        [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [animation setFillMode:kCAFillModeBoth];
+        [animation setDuration:.15];
+        [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
+    }
+}
+
+#pragma mark - Actions
+
 - (IBAction)btExibirRelato:(id)sender {
-   
-    if (tokenStr.length == 0) {
+    if (self.tokenStr.length == 0) {
         [self callLoginView];
         return;
     }
@@ -215,81 +419,23 @@
         nav.view.superview.bounds = CGRectMake(-25, 0, 470, 620);
         [nav.view.superview setBackgroundColor:[UIColor clearColor]];
     }
-    
 }
 
-- (BOOL)disablesAutomaticKeyboardDismissal {
-    return NO;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void) hideToolbar:(BOOL)animated
-{
-    CGRect newframe_tableview = self.tableView.frame;
-    newframe_tableview.size.height = self.view.frame.size.height - newframe_tableview.origin.y;
-    
-    CGRect newframe_bar = self.toolbarView.frame;
-    newframe_bar.origin.y = self.view.frame.size.height;
-    
-    if(animated)
-    {
-        [UIView animateWithDuration:.3 animations:^{
-            self.tableView.frame = newframe_tableview;
-            self.toolbarView.frame = newframe_bar;
-        }];
-    }
-    else
-    {
-        self.tableView.frame = newframe_tableview;
-        self.toolbarView.frame = newframe_bar;
-    }
-}
-
-- (void) showToolbar:(BOOL)animated
-{
-    CGRect newframe_bar = self.toolbarView.frame;
-    newframe_bar.origin.y = self.view.frame.size.height - newframe_bar.size.height;
-    
-    CGRect newframe_tableview = self.tableView.frame;
-    newframe_tableview.size.height = self.view.frame.size.height - newframe_tableview.origin.y - newframe_bar.size.height;
-    
-    if(animated)
-    {
-        [UIView animateWithDuration:.3 animations:^{
-            self.tableView.frame = newframe_tableview;
-            self.toolbarView.frame = newframe_bar;
-        }];
-    }
-    else
-    {
-        self.tableView.frame = newframe_tableview;
-        self.toolbarView.frame = newframe_bar;
-    }
-}
-
-- (IBAction)criarRelato:(id)sender
-{
-    if (tokenStr.length == 0) {
+- (IBAction)criarRelato:(id)sender {
+    if (self.tokenStr.length == 0) {
         [self callLoginView];
         return;
     }
     
-    NSDictionary *dict = [UserDefaults getCategory:self->selectedCategoryId];
-    UIImage* icon;
-    if([dict valueForKey:@"parent_id"])
-    {
+    NSDictionary *dict = [UserDefaults getCategory:self.selectedCategoryId];
+    UIImage *icon;
+    if ([dict valueForKey:@"parent_id"]) {
         int parentid = [[dict valueForKey:@"parent_id"] intValue];
-        NSDictionary* parentdict = [UserDefaults getCategory:parentid];
-        
+        NSDictionary *parentdict = [UserDefaults getCategory:parentid];
         icon = [UIImage imageWithData:[parentdict valueForKey:@"iconData"]];
-    }
-    else
+    } else {
         icon = [UIImage imageWithData:[dict valueForKey:@"iconData"]];
+    }
     
     NSString *strCat = [dict valueForKey:@"id"];
     
@@ -312,57 +458,43 @@
     }
 }
 
-// -- TABLE VIEW -- //
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+#pragma mark - UITableView DataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    int idx = 0;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSInteger idx = 0;
     idx++; // Placeholder
-    for(int i = 0; i < [self->categories count]; i++)
-    {
-        NSDictionary* cat = [self->categories objectAtIndex:i];
+    for (int i = 0; i < [self.categories count]; i++) {
+        NSDictionary *cat = [self.categories objectAtIndex:i];
         NSNumber *catid = [cat objectForKey:@"id"];
         
-        BOOL expanded = [self->expandedCategories containsObject:catid];
-        
+        BOOL expanded = [self.expandedCategories containsObject:catid];
         idx++;
-        
-        if(expanded)
-        {
-            NSArray* subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
-            
+        if (expanded) {
+            NSArray *subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
             idx += [subcategories count];
         }
-        
         idx++;
     }
-    
     return idx;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-     BOOL isPhysicalCategory = [self isPhysicalCategory:indexPath.item];
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    BOOL isPhysicalCategory = [self isPhysicalCategory:indexPath.item];
     //BOOL isPhysicalCategory = (indexPath.item % 2) == 0;
-    if(indexPath.item == 0)
-    {
+    if (indexPath.item == 0) {
         return 20;
-    }
-    else if(isPhysicalCategory)
-    {
+    } else if (isPhysicalCategory) {
         CellFiltrarCategoria *cell = (CellFiltrarCategoria *)[tableView dequeueReusableCellWithIdentifier:@"Cell"];
-        
-        if(cell == nil)
-        {
+        if (cell == nil) {
             cell = [[CellFiltrarCategoria alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
         }
         
-        NSDictionary* cat = [self categoryAtIndex:indexPath.item];
-        NSNumber *catid = [cat objectForKey:@"id"];
+        NSDictionary *cat = [self categoryAtIndex:indexPath.item];
+//        NSNumber *catid = [cat objectForKey:@"id"];
         
         BOOL selected = [self isCategorySelected:cat];
         
@@ -373,306 +505,105 @@
         
         return cell.height;
         //return 50;
-    }
-    else
-    {
+    } else {
         return 50;
     }
-    
 }
 
-- (BOOL) isPhysicalCategory:(int)index
-{
-    return [self categoryAtIndex:index] != nil;
-}
-
-- (int) extensorNumberAtIndex:(int)index
-{
-    int idx = 0;
-    idx++; // Placeholder
-    int extensorsSoFar = 0;
-    for(int i = 0; i < [self->categories count]; i++)
-    {
-        NSDictionary* cat = [self->categories objectAtIndex:i];
-        
-        NSNumber *catid = [cat objectForKey:@"id"];
-        
-        BOOL expanded = [self->expandedCategories containsObject:catid];
-        
-        if(expanded)
-        {
-            NSArray* subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
-            
-            idx += [subcategories count];
-        }
-        
-        idx++;
-        if(idx == index)
-            return extensorsSoFar;
-        
-        idx++;
-        extensorsSoFar++;
-    }
-    
-    return -1;
-}
-
-- (NSDictionary*) categoryForExtensor:(int)index
-{
-    return [self->categories objectAtIndex:index];
-}
-
-- (NSDictionary*) categoryAtIndex:(int)index
-{
-    int idx = 0;
-    idx++; // Placeholder
-    for(int i = 0; i < [self->categories count]; i++)
-    {
-        NSDictionary* cat = [self->categories objectAtIndex:i];
-        if(idx == index)
-            return cat;
-        
-        NSNumber *catid = [cat objectForKey:@"id"];
-        
-        BOOL expanded = [self->expandedCategories containsObject:catid];
-        
-        idx++;
-        
-        if(expanded)
-        {
-            NSArray* subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
-            
-            for(int j = 0; j < [subcategories count]; j++)
-            {
-                NSDictionary* subcat = [subcategories objectAtIndex:j];
-                
-                if(idx == index)
-                    return subcat;
-                
-                idx++;
-            }
-        }
-        
-        idx++;
-    }
-    
-    return nil;
-}
-
-- (int)indexOfCategory:(int)cat_id
-{
-    int idx = 0;
-    idx++; // Placeholder
-    for(int i = 0; i < [self->categories count]; i++)
-    {
-        NSDictionary* cat = [self->categories objectAtIndex:i];
-        
-        NSNumber *catid = [cat objectForKey:@"id"];
-        
-        if([catid intValue] == cat_id)
-            return idx;
-        
-        BOOL expanded = [self->expandedCategories containsObject:catid];
-        
-        idx++;
-        
-        if(expanded)
-        {
-            NSArray* subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
-            
-            idx += [subcategories count];
-        }
-        
-        idx++;
-    }
-    
-    return -1;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIdentifier = @"Cell";
     
     CellFiltrarCategoria *cell = (CellFiltrarCategoria *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    if(cell == nil)
-    {
+    if (cell == nil) {
         cell = [[CellFiltrarCategoria alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     [cell setViewBackgroundColor:[UIColor whiteColor]];
     
     BOOL isPhysicalCategory = [self isPhysicalCategory:indexPath.item];
-    if(indexPath.item == 0) // placeholder
-    {
+    if (indexPath.item == 0) { // placeholder
         [cell setPlaceholder];
-    }
-    else if(isPhysicalCategory)
-    {
-        NSDictionary* cat = [self categoryAtIndex:indexPath.item];//[self->categories objectAtIndex:indexPath.item / 2];
-        NSNumber *catid = [cat objectForKey:@"id"];
+    } else if (isPhysicalCategory) {
+        NSDictionary *cat = [self categoryAtIndex:indexPath.item];//[self->categories objectAtIndex:indexPath.item / 2];
+//        NSNumber *catid = [cat objectForKey:@"id"];
         
         BOOL selected = [self isCategorySelected:cat];
         
         [cell setvalues:cat selected:selected iconColored:[self isRootCategorySelected:cat]];
-    }
-    else
-    {
-        NSDictionary* cat = [self categoryForExtensor:[self extensorNumberAtIndex:indexPath.item]];
+    } else {
+        NSDictionary *cat = [self categoryForExtensor:[self extensorNumberAtIndex:indexPath.item]];
         NSNumber *catid = [cat objectForKey:@"id"];
-        BOOL expanded = [self->expandedCategories containsObject:catid];
-        NSArray* subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
+        BOOL expanded = [self.expandedCategories containsObject:catid];
+        NSArray *subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
         
-        if([subcategories count] > 0)
+        if ([subcategories count] > 0) {
             [cell setShowMoreExpanded:expanded];
-        else
+        } else {
             [cell setPlaceholder];
+        }
     }
     return cell;
 }
 
-- (void)setIsFromOtherTab:(BOOL)isFromOtherTab
-{
-    
-}
+#pragma mark - UITableView Delegate
 
-- (BOOL)isCategoryRoot:(NSDictionary*)cat
-{
-    return [cat objectForKey:@"parent_id"] == nil;
-}
-
-- (BOOL)isRootCategorySelected:(NSDictionary*)cat
-{
-    NSNumber *catid = [cat objectForKey:@"id"];
-    if([self isCategorySelected:cat])
-        return YES;
-    
-    if(self->selectedCategoryId != 0)
-    {
-        NSDictionary* selcat = [UserDefaults getCategory:self->selectedCategoryId];
-        if([[selcat valueForKey:@"parent_id"] intValue] == [catid intValue])
-            return YES;
-    }
-    
-    return NO;
-}
-
-- (BOOL)isCategorySelected:(NSDictionary*)cat
-{
-    NSNumber *catid = [cat objectForKey:@"id"];
-    
-    return self->selectedCategoryId == [catid intValue];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     BOOL isPhysicalCategory = [self isPhysicalCategory:indexPath.item];
-    if(indexPath.item == 0)
+    if (indexPath.item == 0) {
         return;
-    else if(isPhysicalCategory)
-    {
-        NSDictionary* cat = [self categoryAtIndex:indexPath.item];
+    } else if (isPhysicalCategory) {
+        NSDictionary *cat = [self categoryAtIndex:indexPath.item];
         NSNumber *catid = [cat objectForKey:@"id"];
         
-        BOOL selected = [self isCategorySelected:cat];
-        BOOL expanded = [self->expandedCategories containsObject:catid];
+//        BOOL selected = [self isCategorySelected:cat];
+        BOOL expanded = [self.expandedCategories containsObject:catid];
         
-        if(!expanded && [[UserDefaults getReportSubCategories:[catid intValue]] count] > 0)
-        {
+        if (!expanded && [[UserDefaults getReportSubCategories:[catid intValue]] count] > 0) {
             [self expandCategory:[catid intValue]];
-        }
-        else
-        {
-        
-        if(self->selectedCategoryId == 0)
-        {
-            [self showToolbar:YES];
-        }
-        
-        self->selectedCategoryId = [catid intValue];
-        
-        //[self.tableView reloadData];
+        } else {
+            if (self.selectedCategoryId == 0) {
+                [self showToolbar:YES];
+            }
+            self.selectedCategoryId = [catid intValue];
+            //[self.tableView reloadData];
             [self reloadData:YES];
         }
-    }
-    else
-    {
-        NSDictionary* cat = [self categoryForExtensor:[self extensorNumberAtIndex:indexPath.item]];
+    } else {
+        NSDictionary *cat = [self categoryForExtensor:[self extensorNumberAtIndex:indexPath.item]];
         NSNumber *catid = [cat objectForKey:@"id"];
-        NSArray* subcats = [UserDefaults getReportSubCategories:[catid intValue]];
+        NSArray *subcats = [UserDefaults getReportSubCategories:[catid intValue]];
         
-        BOOL expanded = [self->expandedCategories containsObject:catid];
+        BOOL expanded = [self.expandedCategories containsObject:catid];
         
-        if(expanded)
-            [self->expandedCategories removeObject:catid];
-        else
-            [self->expandedCategories addObject:catid];
+        if (expanded) {
+            [self.expandedCategories removeObject:catid];
+        } else {
+            [self.expandedCategories addObject:catid];
+        }
         
         [self.tableView beginUpdates];
         NSMutableArray* rowIndexes = [[NSMutableArray alloc] init];
         
-        for(int i = 0; i < [subcats count]; i++)
-        {
+        for (int i = 0; i < [subcats count]; i++) {
             int index = [self indexOfCategory:[catid intValue]] + 1 + i;
             [rowIndexes addObject:[NSIndexPath indexPathForItem:index inSection:0]];
         }
         
-        if(expanded)
+        if (expanded) {
             [self.tableView deleteRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationBottom];
-        else
+        } else {
             [self.tableView insertRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationBottom];
+        }
         
         [self.tableView endUpdates];
         
         int indexToReload = [self indexOfCategory:[catid intValue]] + 1;
-        if(!expanded)
+        if (!expanded) {
             indexToReload += [subcats count];
+        }
+        
         [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForItem:indexToReload inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        
-    }
-}
-
-- (void)expandCategory:(int)catid
-{
-    [self->expandedCategories addObject:[NSNumber numberWithInt:catid]];
-    
-    NSArray* subcats = [UserDefaults getReportSubCategories:catid];
-    
-    [self.tableView beginUpdates];
-    NSMutableArray* rowIndexes = [[NSMutableArray alloc] init];
-    
-    for(int i = 0; i < [subcats count]; i++)
-    {
-        int index = [self indexOfCategory:catid] + 1 + i;
-        [rowIndexes addObject:[NSIndexPath indexPathForItem:index inSection:0]];
-    }
-    
-    [self.tableView insertRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationBottom];
-    
-    [self.tableView endUpdates];
-    
-    int indexToReload = [self indexOfCategory:catid] + 1;
-    indexToReload += [subcats count];
-    
-    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForItem:indexToReload inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-}
-
-- (void)reloadData:(BOOL)animated
-{
-    [self.tableView reloadData];
-    
-    if (animated) {
-        
-        CATransition *animation = [CATransition animation];
-        [animation setType:kCATransitionFade];
-        [animation setSubtype:kCATransitionReveal];
-        //[animation setType:kCATransitionPush];
-        //[animation setSubtype:kCATransitionFromBottom];
-        [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [animation setFillMode:kCAFillModeBoth];
-        [animation setDuration:.15];
-        [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
-        
     }
 }
 

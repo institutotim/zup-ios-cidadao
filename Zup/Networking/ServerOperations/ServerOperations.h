@@ -89,10 +89,9 @@ description:(NSString*)description
 -(BOOL)getReportItemsForInventory:(NSString*)inventId;
 
 //+ (NSString*) baseWebUrl;
-+ (NSString*) baseAPIUrl;
++ (NSString *) baseAPIUrl;
 
 - (BOOL)getReportComments:(int)reportId;
 - (BOOL) validateBoundariesWithLatitude:(float)latitude longitude:(float)longitude;
-
 
 @end

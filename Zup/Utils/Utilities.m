@@ -146,9 +146,10 @@ static BOOL didShowMain = false;
 }
 
 
-+ (NSString*)checkIfNull:(NSString*)textToCheck {
-    if ([textToCheck isKindOfClass:[NSNull class]])
++ (NSString *)checkIfNull:(NSString *)textToCheck {
+    if ([textToCheck isKindOfClass:[NSNull class]]) {
         return @"";
+    }
     return textToCheck;
 }
 

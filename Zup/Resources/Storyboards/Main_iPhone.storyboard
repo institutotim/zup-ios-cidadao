@@ -161,7 +161,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="njy-a7-dbO" customClass="CustomButton">
-                                <rect key="frame" x="65.5" y="126" width="245" height="35"/>
+                                <rect key="frame" x="66" y="126" width="245" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="Esqueceu a senha?">
@@ -172,7 +172,7 @@
                                 </connections>
                             </button>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="u45-FU-Wql">
-                                <rect key="frame" x="178.5" y="162" width="20" height="20"/>
+                                <rect key="frame" x="179" y="162" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="E-mail" minimumFontSize="17" background="textbox_1linha-larga_normal" translatesAutoresizingMaskIntoConstraints="NO" id="Vu1-9J-GAD">
@@ -314,7 +314,7 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="BCz-0x-UoG">
-                                <rect key="frame" x="27.5" y="387" width="320" height="20"/>
+                                <rect key="frame" x="27" y="387" width="320" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
@@ -371,7 +371,7 @@
                                 </cells>
                             </collectionView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="wwK-oo-8Ds">
-                                <rect key="frame" x="177.5" y="323.5" width="20" height="20"/>
+                                <rect key="frame" x="177" y="324" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
@@ -440,7 +440,7 @@
                                         </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jaa-VR-2wd">
-                                        <rect key="frame" x="27.5" y="0.0" width="320" height="1"/>
+                                        <rect key="frame" x="27" y="0.0" width="320" height="1"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <color key="backgroundColor" red="0.87805986404418945" green="0.87803357839584351" blue="0.87804853916168213" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </imageView>
@@ -534,7 +534,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="imgSearchBox" destination="t3p-be-ny0" id="bBH-JX-klX"/>
-                        <outlet property="mapView" destination="b91-Ka-dbM" id="CwL-w8-tMj"/>
+                        <outlet property="mapView" destination="b91-Ka-dbM" id="dEJ-x3-gEy"/>
                         <outlet property="searchBar" destination="fQd-i3-0mk" id="gvv-8b-fbi"/>
                     </connections>
                 </viewController>
