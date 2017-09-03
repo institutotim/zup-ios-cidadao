@@ -552,11 +552,10 @@ typedef enum {
     return CLLocationCoordinate2DMake(0, 0);
 }
 
-+ (UIImage*) getTenantLaunchImage
-{
++ (UIImage *) getTenantLaunchImage {
     NSString *imgName;
 
-    NSString* fmt;
+    NSString *fmt;
 
     if ([Utilities isIpad]) {
         fmt = @"launch_%@_ipad";

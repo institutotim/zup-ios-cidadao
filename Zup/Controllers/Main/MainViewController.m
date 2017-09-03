@@ -211,7 +211,7 @@
         NSArray *keys = [dictTemp allKeys];
         NSArray *values = [dictTemp allValues];
         
-        NSMutableDictionary *dictStatus = [[NSMutableDictionary alloc]init];
+        NSMutableDictionary *dictStatus = [[NSMutableDictionary alloc] init];
         int i = 0;
         for (NSString *key in keys) {
             NSString *newValue = [Utilities checkIfNull:[values objectAtIndex:i]];
@@ -236,12 +236,12 @@
                                                                                     @"iconData": dataImgIcon,
                                                                                     @"markerData" : dataImgMarker,
                                                                                     @"iconDataDisabled" : dataImgIconDisabled,
-                                                                                    @"id" : [dict valueForKey:@"id"],
+                                                                                    @"id" : @([[dict valueForKey:@"id"] intValue]),
                                                                                     @"title" : [dict valueForKey:@"title"],
                                                                                     @"resolution_time" : [Utilities checkIfNull:[dict valueForKey:@"resolution_time"]],
                                                                                     @"statuses" : arrStatus,
                                                                                     @"user_response_time" : [Utilities checkIfNull:[dict valueForKey:@"user_response_time"]],
-                                                                                    @"color" :[dict valueForKey:@"color"],
+                                                                                    @"color" : [dict valueForKey:@"color"],
                                                                                     @"inventory_categories": arrCategories,
                                                                                     @"resolution_time_enabled": resolution_time_enabled,
                                                                                     @"private_resolution_time": private_resolution_time
@@ -261,7 +261,7 @@
     }
     
     NSArray *subCategories = [dict valueForKey:@"subcategories"];
-    if (subCategories != nil){
+    if (subCategories != nil) {
         for (NSDictionary *subdict in subCategories) {
             [self parseCategory:subdict mutArr:mutArr arr:arr];
         }
@@ -550,7 +550,7 @@
     [Utilities alertWithServerError];
 }
 
-- (void)didReceiveInventoryError:(NSString*)errorString {
+- (void)didReceiveInventoryError:(NSString *)errorString {
     [[RavenClient sharedClient] captureMessage:errorString];
     
     [Utilities alertWithServerError];
@@ -704,22 +704,24 @@
 #pragma mark - Navigation
 
 - (void)goToMap {
-    if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit && !self.isFromReport) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-        [self btJump:nil];
-    } else {
-        if (!self.isFromPerfil && !self.isFromSolicit && !self.isFromReport) {
-            TabBarController *tabBar = [self.storyboard instantiateViewControllerWithIdentifier:@"tabBar"];
-            [self.navigationController setNavigationBarHidden:YES];
-            [self.navigationController pushViewController:tabBar animated:YES];
-        } else {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit && !self.isFromReport) {
             [self dismissViewControllerAnimated:YES completion:nil];
-            [self.perfilVC getData];
-            //if ([Utilities isIpad]) {
-            [self.relateVC setToken];
-            //}
+            [self btJump:nil];
+        } else {
+            if (!self.isFromPerfil && !self.isFromSolicit && !self.isFromReport) {
+                TabBarController *tabBar = [self.storyboard instantiateViewControllerWithIdentifier:@"tabBar"];
+                [self.navigationController setNavigationBarHidden:YES];
+                [self.navigationController pushViewController:tabBar animated:YES];
+            } else {
+                [self dismissViewControllerAnimated:YES completion:nil];
+                [self.perfilVC getData];
+                //if ([Utilities isIpad]) {
+                [self.relateVC setToken];
+                //}
+            }
         }
-    }
+    });
 }
 
 @end

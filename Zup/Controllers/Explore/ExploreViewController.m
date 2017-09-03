@@ -513,110 +513,107 @@ static int ZOOMLEVELDEFAULT = 16;
 }
 
 - (void)didReceiveData:(NSData *)data {
-    
-    self.isReportsLoading = NO;
-    
-    if(self.isNoReports)
-        return;
-    
-    //[self clearMap];
-    //NSArray* oldItems = [self.arrMain copy];
-    NSArray* markersToRemoveFromMap = [self.arrMarkers copy];
-    //[self clearMap];
-    
-    [self.arrMain removeAllObjects];
-    [self.arrMarkers removeAllObjects];
-    
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    NSArray *arr = [dict valueForKey:@"reports"];
-    NSArray* arrClusters = [dict valueForKey:@"clusters"];
-    
-    for (NSDictionary *dict in arr) {
-        if (![self.arrMain containsObject:dict]) {
-            [self.arrMain addObject:dict];
-        }
-    }
-    
-    int maxCount = 0;
-    if ([Utilities isIpad] || [Utilities isIphone4inch]) maxCount = maxMarkersCountiPhone5iPad;
-    else maxCount = maxMarkersCountiPhone4;
-    
-    NSUInteger markersCount = [self.arrMain count];
-    if (markersCount > maxCount) {
-        unsigned long markersToRemove = self.arrMain.count - maxCount;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.isReportsLoading = NO;
         
-        for (int i = 0; i < markersToRemove; i ++) {
-            
-            NSDictionary *dict = [self.arrMain objectAtIndex:0];
-            if(![self markerPassesValidation:dict])
-            {
-                [self.arrMain removeObjectAtIndex:0];
-                continue;
+        if (self.isNoReports)
+            return;
+        
+        //[self clearMap];
+        //NSArray* oldItems = [self.arrMain copy];
+        NSArray* markersToRemoveFromMap = [self.arrMarkers copy];
+        //[self clearMap];
+        
+        [self.arrMain removeAllObjects];
+        [self.arrMarkers removeAllObjects];
+        
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        NSArray *arr = [dict valueForKey:@"reports"];
+        NSArray* arrClusters = [dict valueForKey:@"clusters"];
+        
+        for (NSDictionary *dict in arr) {
+            if (![self.arrMain containsObject:dict]) {
+                [self.arrMain addObject:dict];
             }
+        }
+        
+        int maxCount = 0;
+        if ([Utilities isIpad] || [Utilities isIphone4inch]) maxCount = maxMarkersCountiPhone5iPad;
+        else maxCount = maxMarkersCountiPhone4;
+        
+        NSUInteger markersCount = [self.arrMain count];
+        if (markersCount > maxCount) {
+            unsigned long markersToRemove = self.arrMain.count - maxCount;
             
-            int markerId = [[dict valueForKey:@"id"]intValue];
-            
-            NSArray *arr = [NSArray arrayWithArray:self.arrMarkers];
-            for (GMSMarker *tempMarker in arr) {
-                int tempMarkerId = [[tempMarker.userData valueForKey:@"id"]intValue];
-                if (tempMarkerId == markerId) {
-                    tempMarker.map = nil;
-                    [self.arrMarkers removeObject:tempMarker];
+            for (int i = 0; i < markersToRemove; i ++) {
+                
+                NSDictionary *dict = [self.arrMain objectAtIndex:0];
+                if(![self markerPassesValidation:dict])
+                {
+                    [self.arrMain removeObjectAtIndex:0];
+                    continue;
                 }
+                
+                int markerId = [[dict valueForKey:@"id"]intValue];
+                
+                NSArray *arr = [NSArray arrayWithArray:self.arrMarkers];
+                for (GMSMarker *tempMarker in arr) {
+                    int tempMarkerId = [[tempMarker.userData valueForKey:@"id"]intValue];
+                    if (tempMarkerId == markerId) {
+                        tempMarker.map = nil;
+                        [self.arrMarkers removeObject:tempMarker];
+                    }
+                }
+                
+                [self.arrMain removeObjectAtIndex:0];
+                
             }
-            
-            [self.arrMain removeObjectAtIndex:0];
             
         }
         
-    }
-    
-    [self createPointsWithOldMarkers:markersToRemoveFromMap];
-    [self createPointsForClusters:arrClusters inventory:NO];
-    
-    // Prematurely remove clusters
-    for(GMSMarker* marker in markersToRemoveFromMap)
-    {
-        if([[marker.userData valueForKey:@"isCluster"] boolValue])
-            marker.map = nil;
-    }
-    
-    [CATransaction begin];
-    [CATransaction setCompletionBlock:^{
-        for(GMSMarker* marker in markersToRemoveFromMap)
-        {
-            marker.map = nil;
+        [self createPointsWithOldMarkers:markersToRemoveFromMap];
+        [self createPointsForClusters:arrClusters inventory:NO];
+        
+        // Prematurely remove clusters
+        for (GMSMarker *marker in markersToRemoveFromMap) {
+            if ([[marker.userData valueForKey:@"isCluster"] boolValue])
+                marker.map = nil;
         }
-    }];
-    [CATransaction setAnimationDuration:.350];
-    
-    for(GMSMarker* marker in markersToRemoveFromMap)
-    {
-        if(![[marker.userData valueForKey:@"isCluster"] boolValue])
-        {
-            int _id = [[marker.userData valueForKey:@"id"] intValue];
-            GMSMarker* cluster = [self clusterForReport:_id withArrayOfMarkers:self.arrMarkers];
-            
-            marker.position = cluster.position;
-            marker.opacity = 0;
+        
+        [CATransaction begin];
+        [CATransaction setCompletionBlock:^{
+            for (GMSMarker *marker in markersToRemoveFromMap) {
+                marker.map = nil;
+            }
+        }];
+        [CATransaction setAnimationDuration:.350];
+        
+        for (GMSMarker *marker in markersToRemoveFromMap) {
+            if (![[marker.userData valueForKey:@"isCluster"] boolValue]) {
+                int _id = [[marker.userData valueForKey:@"id"] intValue];
+                GMSMarker *cluster = [self clusterForReport:_id withArrayOfMarkers:self.arrMarkers];
+                
+                marker.position = cluster.position;
+                marker.opacity = 0;
+            }
         }
-    }
-
-    [CATransaction commit];
-    
-    //[self removeMarkers:markersToRemoveFromMap exceptFor:self.arrMarkers];
+        
+        [CATransaction commit];
+        
+        //[self removeMarkers:markersToRemoveFromMap exceptFor:self.arrMarkers];
+    });
 }
 
-- (void)didReceiveError:(NSError*)error data:(NSData*)data {
-    [Utilities alertWithServerError];
-    _isReportsLoading = NO;
+- (void)didReceiveError:(NSError *)error data:(NSData *)data {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [Utilities alertWithServerError];
+        _isReportsLoading = NO;
+    });
 }
 
-- (void)createPointsForClusters:(NSArray*)clusters inventory:(BOOL)inv
-{
-    for(NSDictionary* cluster in clusters)
-    {
+- (void)createPointsForClusters:(NSArray *)clusters inventory:(BOOL)inv {
+    for (NSDictionary *cluster in clusters) {
         /*BOOL passesCategoryValidation = NO;
         
         if (self.arrFilterIDs.count > 0) {

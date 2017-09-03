@@ -255,17 +255,14 @@
     [prefs synchronize];
 }
 
-+(NSArray*) getReportSubCategories:(int)idCat
-{
++ (NSArray *)getReportSubCategories:(int)idCat {
     NSMutableArray* result = [[NSMutableArray alloc] init];
     
     NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
     NSArray *arr = [prefs valueForKey:@"categoriesArray"];
     
-    for (NSDictionary *dict in arr)
-    {
-        if ([dict objectForKey:@"parent_id"] != nil && [[dict objectForKey:@"parent_id"] intValue] == idCat)
-        {
+    for (NSDictionary *dict in arr) {
+        if ([dict objectForKey:@"parent_id"] != nil && [[dict objectForKey:@"parent_id"] intValue] == idCat) {
             [result addObject:dict];
         }
     }
@@ -273,17 +270,14 @@
     return result;
 }
 
-+(NSArray*) getReportRootCategories
-{
++ (NSArray *)getReportRootCategories {
     NSMutableArray* result = [[NSMutableArray alloc] init];
     
     NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
     NSArray *arr = [prefs valueForKey:@"categoriesArray"];
     
-    for (NSDictionary *dict in arr)
-    {
-        if ([dict objectForKey:@"parent_id"] == nil)
-        {
+    for (NSDictionary *dict in arr) {
+        if ([dict objectForKey:@"parent_id"] == nil) {
             [result addObject:dict];
         }
     }
@@ -291,13 +285,13 @@
     return result;
 }
 
-+(NSArray*)getReportCategories{
++ (NSArray *)getReportCategories {
     NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
     return [prefs valueForKey:@"categoriesArray"];
 }
 
-+(NSDictionary*)getCategory:(int)idCat{
-    NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
++ (NSDictionary *)getCategory:(int)idCat {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     NSArray *arr = [prefs valueForKey:@"categoriesArray"];
     
@@ -306,25 +300,21 @@
             return dict;
         }
     }
-    
     return nil;
 }
 
-
-
-+(void)setInventoryCategories:(NSArray*)arr {
-    
++ (void)setInventoryCategories:(NSArray*)arr {
     NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:arr forKey:@"inventoryCategoriesArray"];
     [prefs synchronize];
 }
 
-+(NSArray*)getInventoryCategories{
++ (NSArray *)getInventoryCategories {
     NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
     return [prefs valueForKey:@"inventoryCategoriesArray"];
 }
 
-+(NSDictionary*)getInventoryCategory:(int)idCat{
++ (NSDictionary *)getInventoryCategory:(int)idCat {
     NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
     
     NSArray *arr = [prefs valueForKey:@"inventoryCategoriesArray"];
@@ -338,8 +328,7 @@
     return nil;
 }
 
-+ (NSArray*)getSectionsFroInventoryId:(int)idCat {
-
++ (NSArray *)getSectionsFroInventoryId:(int)idCat {
     NSDictionary *dicCat = [UserDefaults getInventoryCategory:idCat];
     
     NSArray *arr = [NSKeyedUnarchiver unarchiveObjectWithData:[dicCat valueForKey:@"sectionsData"]];
@@ -347,7 +336,7 @@
     return arr;
 }
 
-+ (NSString*)getTitleForFieldId:(int)idField idCat:(int)idCat {
++ (NSString *)getTitleForFieldId:(int)idField idCat:(int)idCat {
     
     NSArray *arrSections = [UserDefaults getSectionsFroInventoryId:idCat];
     

@@ -16,6 +16,10 @@
     #elif defined(MACEIO)
         #define BASE_API_URL @"http://zup-api-maceio.cognita.ntxdev.com.br/"
         #define BASE_WEB_URL @"http://web.latest.staging.zup.ntxdev.com.br/"
+    #elif defined(CASCAVEL)
+        #define BASE_API_URL @"http://particity.cascavel.pr.gov.br:8282/"
+        #define BASE_WEB_URL @"http://particity.cascavel.pr.gov.br:8282/"
+        #define TENANT @"cascavel";
     #else
         #define BASE_API_URL @"http://zup.conexaobrasil.org:8282/"
         #define BASE_WEB_URL @"http://zup.conexaobrasil.org:8282/"

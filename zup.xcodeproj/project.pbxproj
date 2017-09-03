@@ -7,7 +7,147 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		060F3903F28ACA4FAF4086F4 /* libPods-cascavel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07812EF2910C6FA71B5870E4 /* libPods-cascavel.a */; };
 		1BA4DED39D9EDE74EB887592 /* libPods-zup_sbc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E74CA144EFCE087E331C0D /* libPods-zup_sbc.a */; };
+		552206A21F58B05F00C06775 /* Zup.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 552206A11F58B05F00C06775 /* Zup.xcassets */; };
+		552206A61F58B10200C06775 /* XLVideoZoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF831F536B9400FA73D3 /* XLVideoZoom.m */; };
+		552206A71F58B10200C06775 /* HeaderProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF6D1F536B5500FA73D3 /* HeaderProfileCell.m */; };
+		552206A81F58B10200C06775 /* ComentarioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0B01F53700400FA73D3 /* ComentarioViewController.m */; };
+		552206A91F58B10200C06775 /* CellGaleriaInventario.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF641F536B3700FA73D3 /* CellGaleriaInventario.m */; };
+		552206AA1F58B10200C06775 /* RavenClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF00F1F536CEF00FA73D3 /* RavenClient.m */; };
+		552206AB1F58B10200C06775 /* CreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0AA1F536FF700FA73D3 /* CreateViewController.m */; };
+		552206AC1F58B10200C06775 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF1271F53778000FA73D3 /* Utilities.m */; };
+		552206AD1F58B10200C06775 /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEFA11F536BF200FA73D3 /* OAuth+Additions.m */; };
+		552206AE1F58B10200C06775 /* SearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0501F536ED200FA73D3 /* SearchTableViewController.m */; };
+		552206AF1F58B10200C06775 /* ServerOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEFFC1F536CD300FA73D3 /* ServerOperations.m */; };
+		552206B01F58B10200C06775 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF06A1F536F2D00FA73D3 /* MainViewController.m */; };
+		552206B11F58B10200C06775 /* UIApplication+name.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEFA31F536BF200FA73D3 /* UIApplication+name.m */; };
+		552206B21F58B10200C06775 /* EstatisticasViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0331F536E5500FA73D3 /* EstatisticasViewController.m */; };
+		552206B31F58B10200C06775 /* PostController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0191F536CFC00FA73D3 /* PostController.m */; };
+		552206B41F58B10200C06775 /* PlaceMark.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF501F536AD700FA73D3 /* PlaceMark.m */; };
+		552206B51F58B10200C06775 /* TWSignedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEFF71F536CC600FA73D3 /* TWSignedRequest.m */; };
+		552206B61F58B10200C06775 /* XLMediaZoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF811F536B9400FA73D3 /* XLMediaZoom.m */; };
+		552206B71F58B10200C06775 /* SocialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF04A1F536EC100FA73D3 /* SocialViewController.m */; };
+		552206B81F58B10200C06775 /* ApiNetworkingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0211F536D1700FA73D3 /* ApiNetworkingManager.m */; };
+		552206B91F58B10200C06775 /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF9F1F536BF200FA73D3 /* NSString+Utils.m */; };
+		552206BA1F58B10200C06775 /* SSDrawingUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF8C1F536BB300FA73D3 /* SSDrawingUtilities.m */; };
+		552206BB1F58B10200C06775 /* FilterEstatisticasViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF08A1F536F8B00FA73D3 /* FilterEstatisticasViewController.m */; };
+		552206BC1F58B10200C06775 /* FiltrarCategoriasViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0981F536FB700FA73D3 /* FiltrarCategoriasViewController.m */; };
+		552206BD1F58B10200C06775 /* ListExploreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0721F536F4C00FA73D3 /* ListExploreViewController.m */; };
+		552206BE1F58B10200C06775 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF00A1F536CE200FA73D3 /* Reachability.m */; };
+		552206BF1F58B10200C06775 /* PerfilViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF05A1F536EFD00FA73D3 /* PerfilViewController.m */; };
+		552206C01F58B10200C06775 /* SolicitacaoPublicarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0381F536E8E00FA73D3 /* SolicitacaoPublicarViewController.m */; };
+		552206C11F58B10200C06775 /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF901F536BBF00FA73D3 /* OAuthCore.m */; };
+		552206C21F58B10200C06775 /* GraphicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF741F536B6500FA73D3 /* GraphicCell.m */; };
+		552206C31F58B10200C06775 /* CustomUIImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0A61F536FE900FA73D3 /* CustomUIImagePickerController.m */; };
+		552206C41F58B10200C06775 /* RavenJSONUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0131F536CEF00FA73D3 /* RavenJSONUtilities.m */; };
+		552206C51F58B10200C06775 /* TIRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0011F536CD300FA73D3 /* TIRequestManager.m */; };
+		552206C61F58B10200C06775 /* NavigationControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0661F536F1900FA73D3 /* NavigationControllerViewController.m */; };
+		552206C71F58B10200C06775 /* CellFiltrarCategoria.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF7B1F536B7900FA73D3 /* CellFiltrarCategoria.m */; };
+		552206C81F58B10200C06775 /* CellMinhaConta.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF5E1F536B1C00FA73D3 /* CellMinhaConta.m */; };
+		552206C91F58B10200C06775 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF06E1F536F3B00FA73D3 /* LoginViewController.m */; };
+		552206CA1F58B10200C06775 /* CustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF591F536AFE00FA73D3 /* CustomButton.m */; };
+		552206CB1F58B10200C06775 /* InfoWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0781F536F5B00FA73D3 /* InfoWindow.m */; };
+		552206CC1F58B10200C06775 /* UserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF881F536BA400FA73D3 /* UserDefaults.m */; };
+		552206CD1F58B10200C06775 /* UIImageView+Zoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEFA51F536BF200FA73D3 /* UIImageView+Zoom.m */; };
+		552206CE1F58B10200C06775 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF9B1F536BEA00FA73D3 /* NSString+MD5.m */; };
+		552206CF1F58B10200C06775 /* SSPieProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF4C1F536ACA00FA73D3 /* SSPieProgressView.m */; };
+		552206D01F58B10200C06775 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEFAC1F536C0800FA73D3 /* NSData+Base64.m */; };
+		552206D11F58B10200C06775 /* FiltrarPeriodoStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0901F536F9A00FA73D3 /* FiltrarPeriodoStatusViewController.m */; };
+		552206D21F58B10200C06775 /* TermosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0291F536E3700FA73D3 /* TermosViewController.m */; };
+		552206D31F58B10200C06775 /* TWAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEFF51F536CC600FA73D3 /* TWAPIManager.m */; };
+		552206D41F58B10200C06775 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 88387C99184045DC0059C826 /* AppDelegate.m */; };
+		552206D51F58B10200C06775 /* MainApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0231F536D1700FA73D3 /* MainApiManager.m */; };
+		552206D61F58B10200C06775 /* SolicitacaoPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF03E1F536EA000FA73D3 /* SolicitacaoPhotoViewController.m */; };
+		552206D71F58B10200C06775 /* PerfilDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF05F1F536F0900FA73D3 /* PerfilDetailViewController.m */; };
+		552206D81F58B10200C06775 /* TIRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0031F536CD300FA73D3 /* TIRequestOperation.m */; };
+		552206D91F58B10200C06775 /* ExploreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF09C1F536FC800FA73D3 /* ExploreViewController.m */; };
+		552206DA1F58B10200C06775 /* RavenConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0111F536CEF00FA73D3 /* RavenConfig.m */; };
+		552206DB1F58B10200C06775 /* FiltrarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0841F536F7F00FA73D3 /* FiltrarViewController.m */; };
+		552206DC1F58B10200C06775 /* NSData+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF991F536BEA00FA73D3 /* NSData+MD5.m */; };
+		552206DD1F58B10200C06775 /* TIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEFFE1F536CD300FA73D3 /* TIRequest.m */; };
+		552206DE1F58B10200C06775 /* FiltrarInventarioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0941F536FA900FA73D3 /* FiltrarInventarioViewController.m */; };
+		552206DF1F58B10200C06775 /* ForgotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF07E1F536F6800FA73D3 /* ForgotViewController.m */; };
+		552206E01F58B10200C06775 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF941F536BCE00FA73D3 /* ImageCache.m */; };
+		552206E21F58B10200C06775 /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0A01F536FD800FA73D3 /* EditViewController.m */; };
+		552206E31F58B10200C06775 /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF02F1F536E4500FA73D3 /* TabBarController.m */; };
+		552206E41F58B10200C06775 /* SolicitacaoMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0441F536EAB00FA73D3 /* SolicitacaoMapViewController.m */; };
+		552206E51F58B10200C06775 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEFAF1F536C1D00FA73D3 /* main.m */; };
+		552206E61F58B10200C06775 /* RelateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0561F536EEA00FA73D3 /* RelateViewController.m */; };
+		552206E71F58B10200C06775 /* CustomMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF551F536AEF00FA73D3 /* CustomMap.m */; };
+		552206E91F58B10200C06775 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052B1B0E210A006E4087 /* libsqlite3.dylib */; };
+		552206EA1F58B10200C06775 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387CD718404A1C0059C826 /* MapKit.framework */; };
+		552206EB1F58B10200C06775 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E70E76184800A6000018E2 /* Security.framework */; };
+		552206EC1F58B10200C06775 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E70E741848009E000018E2 /* MediaPlayer.framework */; };
+		552206ED1F58B10200C06775 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E70E721848008C000018E2 /* CoreMotion.framework */; };
+		552206EE1F58B10200C06775 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E70E7018480080000018E2 /* AssetsLibrary.framework */; };
+		552206EF1F58B10200C06775 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E70E6E1847F983000018E2 /* Accounts.framework */; };
+		552206F01F58B10200C06775 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE4C1846C05500722148 /* QuartzCore.framework */; };
+		552206F11F58B10200C06775 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE4A1846C04A00722148 /* OpenGLES.framework */; };
+		552206F21F58B10200C06775 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE481846C04400722148 /* libz.dylib */; };
+		552206F31F58B10200C06775 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE461846C03C00722148 /* libicucore.dylib */; };
+		552206F41F58B10200C06775 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE441846C02C00722148 /* libc++.dylib */; };
+		552206F51F58B10200C06775 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE421846C00900722148 /* GLKit.framework */; };
+		552206F61F58B10200C06775 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE401846C00300722148 /* CoreText.framework */; };
+		552206F71F58B10200C06775 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE3E1846BFFB00722148 /* CoreLocation.framework */; };
+		552206F81F58B10200C06775 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE3C1846BFF400722148 /* CoreData.framework */; };
+		552206F91F58B10200C06775 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE3A1846BFED00722148 /* AVFoundation.framework */; };
+		552206FA1F58B10200C06775 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387CF918404DBB0059C826 /* SystemConfiguration.framework */; };
+		552206FB1F58B10200C06775 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387CDD18404B4E0059C826 /* ImageIO.framework */; };
+		552206FC1F58B10200C06775 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C8B184045DC0059C826 /* CoreGraphics.framework */; };
+		552206FD1F58B10200C06775 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C8D184045DC0059C826 /* UIKit.framework */; };
+		552206FE1F58B10200C06775 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C89184045DC0059C826 /* Foundation.framework */; };
+		552207011F58B10200C06775 /* bocalobo5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFCE1F536C8C00FA73D3 /* bocalobo5.jpg */; };
+		552207021F58B10200C06775 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFE71F536C9700FA73D3 /* OpenSans-Regular.ttf */; };
+		552207031F58B10200C06775 /* EditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0A11F536FD800FA73D3 /* EditViewController.xib */; };
+		552207041F58B10200C06775 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFC31F536C7D00FA73D3 /* Main_iPad.storyboard */; };
+		552207051F58B10200C06775 /* ForgotViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF07F1F536F6800FA73D3 /* ForgotViewController.xib */; };
+		552207061F58B10200C06775 /* HeaderProfileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEF6E1F536B5500FA73D3 /* HeaderProfileCell.xib */; };
+		552207071F58B10200C06775 /* termo-de-uso.html in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFB11F536C1D00FA73D3 /* termo-de-uso.html */; };
+		552207081F58B10200C06775 /* CreateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0AB1F536FF700FA73D3 /* CreateViewController.xib */; };
+		552207091F58B10200C06775 /* SearchTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0511F536ED200FA73D3 /* SearchTableViewController.xib */; };
+		5522070A1F58B10200C06775 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFC41F536C7D00FA73D3 /* Main_iPhone.storyboard */; };
+		5522070B1F58B10200C06775 /* ListExploreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0731F536F4C00FA73D3 /* ListExploreViewController.xib */; };
+		5522070C1F58B10200C06775 /* entulho3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFD11F536C8C00FA73D3 /* entulho3.jpg */; };
+		5522070D1F58B10200C06775 /* FilterEstatisticasViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF08B1F536F8B00FA73D3 /* FilterEstatisticasViewController.xib */; };
+		5522070E1F58B10200C06775 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFE41F536C9700FA73D3 /* OpenSans-Bold.ttf */; };
+		5522070F1F58B10200C06775 /* entulho1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFCF1F536C8C00FA73D3 /* entulho1.jpg */; };
+		552207101F58B10200C06775 /* bocalobo2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFCB1F536C8C00FA73D3 /* bocalobo2.jpg */; };
+		552207111F58B10200C06775 /* Marcacoes.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFB01F536C1D00FA73D3 /* Marcacoes.plist */; };
+		552207121F58B10200C06775 /* praca-wifi1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFD41F536C8C00FA73D3 /* praca-wifi1.jpg */; };
+		552207131F58B10200C06775 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFBD1F536C5700FA73D3 /* InfoPlist.strings */; };
+		552207141F58B10200C06775 /* Termos.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFB21F536C1D00FA73D3 /* Termos.rtf */; };
+		552207151F58B10200C06775 /* SolicitacaoPublicarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0391F536E8E00FA73D3 /* SolicitacaoPublicarViewController.xib */; };
+		552207161F58B10200C06775 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFEE1F536CA600FA73D3 /* Images.xcassets */; };
+		552207171F58B10200C06775 /* SocialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF04B1F536EC100FA73D3 /* SocialViewController.xib */; };
+		552207181F58B10200C06775 /* bocalobo3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFCC1F536C8C00FA73D3 /* bocalobo3.jpg */; };
+		552207191F58B10200C06775 /* entulho4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFD21F536C8C00FA73D3 /* entulho4.jpg */; };
+		5522071A1F58B10200C06775 /* InfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0791F536F5B00FA73D3 /* InfoWindow.xib */; };
+		5522071B1F58B10200C06775 /* bocalobo4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFCD1F536C8C00FA73D3 /* bocalobo4.jpg */; };
+		5522071C1F58B10200C06775 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFC21F536C7D00FA73D3 /* Launch Screen.xib */; };
+		5522071D1F58B10200C06775 /* SolicitacaoPhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF03F1F536EA000FA73D3 /* SolicitacaoPhotoViewController.xib */; };
+		5522071E1F58B10200C06775 /* GraphicCell_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEF721F536B6500FA73D3 /* GraphicCell_iPad.xib */; };
+		5522071F1F58B10200C06775 /* scrollSample.png in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFD51F536C8C00FA73D3 /* scrollSample.png */; };
+		552207201F58B10200C06775 /* CellGaleriaInventario.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEF651F536B3700FA73D3 /* CellGaleriaInventario.xib */; };
+		552207211F58B10200C06775 /* arvore1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFC91F536C8C00FA73D3 /* arvore1.jpg */; };
+		552207221F58B10200C06775 /* bocalobo1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFCA1F536C8C00FA73D3 /* bocalobo1.jpg */; };
+		552207231F58B10200C06775 /* ComentarioViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0B11F53700400FA73D3 /* ComentarioViewController.xib */; };
+		552207241F58B10200C06775 /* CellMinhaConta.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEF5F1F536B1C00FA73D3 /* CellMinhaConta.xib */; };
+		552207251F58B10200C06775 /* FiltrarViewControllerNovo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0851F536F7F00FA73D3 /* FiltrarViewControllerNovo.xib */; };
+		552207261F58B10200C06775 /* CellFiltrarCategoria.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEF7C1F536B7900FA73D3 /* CellFiltrarCategoria.xib */; };
+		552207271F58B10200C06775 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFE61F536C9700FA73D3 /* OpenSans-Light.ttf */; };
+		552207281F58B10200C06775 /* Zup.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 552206A11F58B05F00C06775 /* Zup.xcassets */; };
+		552207291F58B10200C06775 /* entulho2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFD01F536C8C00FA73D3 /* entulho2.jpg */; };
+		5522072A1F58B10200C06775 /* SolicitacaoMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0451F536EAB00FA73D3 /* SolicitacaoMapViewController.xib */; };
+		5522072B1F58B10200C06775 /* GraphicCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEF751F536B6500FA73D3 /* GraphicCell.xib */; };
+		5522072C1F58B10200C06775 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFE51F536C9700FA73D3 /* OpenSans-ExtraBold.ttf */; };
+		5522072D1F58B10200C06775 /* PerfilDetailViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF05D1F536F0900FA73D3 /* PerfilDetailViewController_iPad.xib */; };
+		5522072E1F58B10200C06775 /* CellFiltrarInventarioHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEF691F536B4400FA73D3 /* CellFiltrarInventarioHeader.xib */; };
+		5522072F1F58B10200C06775 /* TermosViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF02A1F536E3700FA73D3 /* TermosViewController.xib */; };
+		552207301F58B10200C06775 /* PerfilDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0601F536F0900FA73D3 /* PerfilDetailViewController.xib */; };
+		552207391F58B12100C06775 /* CASCAVEL.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFED1F536CA600FA73D3 /* CASCAVEL.xcassets */; };
+		5522073B1F58B17300C06775 /* cascavel-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5522073A1F58B17300C06775 /* cascavel-Info.plist */; };
+		5522073C1F58B52600C06775 /* NetworkingConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF01D1F536D0700FA73D3 /* NetworkingConstants.m */; };
 		55EDEF4D1F536ACA00FA73D3 /* SSPieProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF4C1F536ACA00FA73D3 /* SSPieProgressView.m */; };
 		55EDEF511F536AD700FA73D3 /* PlaceMark.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF501F536AD700FA73D3 /* PlaceMark.m */; };
 		55EDEF561F536AEF00FA73D3 /* CustomMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF551F536AEF00FA73D3 /* CustomMap.m */; };
@@ -230,6 +370,7 @@
 		55EDF1241F53723F00FA73D3 /* ComentarioViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0B11F53700400FA73D3 /* ComentarioViewController.xib */; };
 		55EDF1251F53724100FA73D3 /* ComentarioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0B01F53700400FA73D3 /* ComentarioViewController.m */; };
 		55EDF1281F53778000FA73D3 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF1271F53778000FA73D3 /* Utilities.m */; };
+		55F03E201F5B8EE600CCAB2A /* Cascavel.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 55F03E1F1F5B8EE600CCAB2A /* Cascavel.gpx */; };
 		88387C8A184045DC0059C826 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C89184045DC0059C826 /* Foundation.framework */; };
 		88387C8C184045DC0059C826 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C8B184045DC0059C826 /* CoreGraphics.framework */; };
 		88387C8E184045DC0059C826 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C8D184045DC0059C826 /* UIKit.framework */; };
@@ -297,8 +438,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		07812EF2910C6FA71B5870E4 /* libPods-cascavel.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cascavel.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		26D6A0E4B8403FB3E1ED2960 /* Pods-zup_sbc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zup_sbc.debug.xcconfig"; path = "Pods/Target Support Files/Pods-zup_sbc/Pods-zup_sbc.debug.xcconfig"; sourceTree = "<group>"; };
 		3FF3F0DB0F8AC0AD4383108F /* Pods-zup_sbc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zup_sbc.release.xcconfig"; path = "Pods/Target Support Files/Pods-zup_sbc/Pods-zup_sbc.release.xcconfig"; sourceTree = "<group>"; };
+		552206A11F58B05F00C06775 /* Zup.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Zup.xcassets; sourceTree = "<group>"; };
+		552207371F58B10200C06775 /* particity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = particity.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5522073A1F58B17300C06775 /* cascavel-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "cascavel-Info.plist"; sourceTree = "<group>"; };
 		55EDEF4B1F536ACA00FA73D3 /* SSPieProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSPieProgressView.h; sourceTree = "<group>"; };
 		55EDEF4C1F536ACA00FA73D3 /* SSPieProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSPieProgressView.m; sourceTree = "<group>"; };
 		55EDEF4F1F536AD700FA73D3 /* PlaceMark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceMark.h; sourceTree = "<group>"; };
@@ -485,7 +630,9 @@
 		55EDF0B11F53700400FA73D3 /* ComentarioViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ComentarioViewController.xib; sourceTree = "<group>"; };
 		55EDF1261F53778000FA73D3 /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
 		55EDF1271F53778000FA73D3 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
+		55F03E1F1F5B8EE600CCAB2A /* Cascavel.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Cascavel.gpx; sourceTree = "<group>"; };
 		5F75DCB35DF6417AF835050A /* Pods-zup.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zup.debug.xcconfig"; path = "Pods/Target Support Files/Pods-zup/Pods-zup.debug.xcconfig"; sourceTree = "<group>"; };
+		65EDF1A682EFA47D13AF0376 /* Pods-cascavel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cascavel.debug.xcconfig"; path = "Pods/Target Support Files/Pods-cascavel/Pods-cascavel.debug.xcconfig"; sourceTree = "<group>"; };
 		6E434F0B827F1E5AABA55708 /* Pods-zupTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zupTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-zupTests/Pods-zupTests.debug.xcconfig"; sourceTree = "<group>"; };
 		88387C86184045DC0059C826 /* zup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = zup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88387C89184045DC0059C826 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -521,6 +668,7 @@
 		88E70E79184800C4000018E2 /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GooglePlus.framework; sourceTree = "<group>"; };
 		88EDEC6618550F83001F84EE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		88EDEC6718550F83001F84EE /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = "<group>"; };
+		9AC5A6B3D2BA936F1B985C4B /* Pods-cascavel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cascavel.release.xcconfig"; path = "Pods/Target Support Files/Pods-cascavel/Pods-cascavel.release.xcconfig"; sourceTree = "<group>"; };
 		9C5ECE951AA7DAA000BD1791 /* vcsbc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vcsbc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C93052B1B0E210A006E4087 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		9CA81D931AE5B44A0071AC89 /* libPods-zup.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-zup.a"; path = "Pods/../build/Release-iphoneos/libPods-zup.a"; sourceTree = "<group>"; };
@@ -534,6 +682,36 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		552206E81F58B10200C06775 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				552206E91F58B10200C06775 /* libsqlite3.dylib in Frameworks */,
+				552206EA1F58B10200C06775 /* MapKit.framework in Frameworks */,
+				552206EB1F58B10200C06775 /* Security.framework in Frameworks */,
+				552206EC1F58B10200C06775 /* MediaPlayer.framework in Frameworks */,
+				552206ED1F58B10200C06775 /* CoreMotion.framework in Frameworks */,
+				552206EE1F58B10200C06775 /* AssetsLibrary.framework in Frameworks */,
+				552206EF1F58B10200C06775 /* Accounts.framework in Frameworks */,
+				552206F01F58B10200C06775 /* QuartzCore.framework in Frameworks */,
+				552206F11F58B10200C06775 /* OpenGLES.framework in Frameworks */,
+				552206F21F58B10200C06775 /* libz.dylib in Frameworks */,
+				552206F31F58B10200C06775 /* libicucore.dylib in Frameworks */,
+				552206F41F58B10200C06775 /* libc++.dylib in Frameworks */,
+				552206F51F58B10200C06775 /* GLKit.framework in Frameworks */,
+				552206F61F58B10200C06775 /* CoreText.framework in Frameworks */,
+				552206F71F58B10200C06775 /* CoreLocation.framework in Frameworks */,
+				552206F81F58B10200C06775 /* CoreData.framework in Frameworks */,
+				552206F91F58B10200C06775 /* AVFoundation.framework in Frameworks */,
+				552206FA1F58B10200C06775 /* SystemConfiguration.framework in Frameworks */,
+				552206FB1F58B10200C06775 /* ImageIO.framework in Frameworks */,
+				552206FC1F58B10200C06775 /* CoreGraphics.framework in Frameworks */,
+				552206FD1F58B10200C06775 /* UIKit.framework in Frameworks */,
+				552206FE1F58B10200C06775 /* Foundation.framework in Frameworks */,
+				060F3903F28ACA4FAF4086F4 /* libPods-cascavel.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		88387C83184045DC0059C826 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -669,6 +847,7 @@
 				55EDEFC01F536C5C00FA73D3 /* Base.lproj */,
 				55EDEFBC1F536C4C00FA73D3 /* en.lproj */,
 				55EDEFAE1F536C1D00FA73D3 /* Constants.h */,
+				5522073A1F58B17300C06775 /* cascavel-Info.plist */,
 				55EDEFAF1F536C1D00FA73D3 /* main.m */,
 				55EDEFB01F536C1D00FA73D3 /* Marcacoes.plist */,
 				55EDEFB11F536C1D00FA73D3 /* termo-de-uso.html */,
@@ -676,6 +855,7 @@
 				55EDEFB31F536C1D00FA73D3 /* zup_sbc-Info.plist */,
 				55EDEFB41F536C1D00FA73D3 /* zup-Info.plist */,
 				55EDEFB51F536C1D00FA73D3 /* zup-Prefix.pch */,
+				55F03E1F1F5B8EE600CCAB2A /* Cascavel.gpx */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -976,6 +1156,7 @@
 				55EDEFED1F536CA600FA73D3 /* CASCAVEL.xcassets */,
 				55EDEFEE1F536CA600FA73D3 /* Images.xcassets */,
 				55EDEFEF1F536CA600FA73D3 /* SBC.xcassets */,
+				552206A11F58B05F00C06775 /* Zup.xcassets */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -1343,6 +1524,8 @@
 				C98BBA04CDA250244415FDBC /* Pods-zupTests.release.xcconfig */,
 				26D6A0E4B8403FB3E1ED2960 /* Pods-zup_sbc.debug.xcconfig */,
 				3FF3F0DB0F8AC0AD4383108F /* Pods-zup_sbc.release.xcconfig */,
+				65EDF1A682EFA47D13AF0376 /* Pods-cascavel.debug.xcconfig */,
+				9AC5A6B3D2BA936F1B985C4B /* Pods-cascavel.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1364,6 +1547,7 @@
 				88387C86184045DC0059C826 /* zup.app */,
 				88387CAD184045DC0059C826 /* zupTests.xctest */,
 				9C5ECE951AA7DAA000BD1791 /* vcsbc.app */,
+				552207371F58B10200C06775 /* particity.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1405,6 +1589,7 @@
 				DA2CC9C3ABF9B0E595D1716D /* libPods-zup.a */,
 				E1ABCF43713FEEF641872443 /* libPods-zupTests.a */,
 				C1E74CA144EFCE087E331C0D /* libPods-zup_sbc.a */,
+				07812EF2910C6FA71B5870E4 /* libPods-cascavel.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1446,6 +1631,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		552206A31F58B10200C06775 /* particity */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 552207341F58B10200C06775 /* Build configuration list for PBXNativeTarget "particity" */;
+			buildPhases = (
+				552206A41F58B10200C06775 /* [CP] Check Pods Manifest.lock */,
+				552206A51F58B10200C06775 /* Sources */,
+				552206E81F58B10200C06775 /* Frameworks */,
+				552207001F58B10200C06775 /* Resources */,
+				552207311F58B10200C06775 /* ShellScript */,
+				552207321F58B10200C06775 /* [CP] Embed Pods Frameworks */,
+				552207331F58B10200C06775 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = particity;
+			productName = Zup;
+			productReference = 552207371F58B10200C06775 /* particity.app */;
+			productType = "com.apple.product-type.application";
+		};
 		88387C85184045DC0059C826 /* zup */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 88387CBE184045DC0059C826 /* Build configuration list for PBXNativeTarget "zup" */;
@@ -1518,6 +1724,10 @@
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = ntxdev;
 				TargetAttributes = {
+					552206A31F58B10200C06775 = {
+						DevelopmentTeam = 8U89B7P2NY;
+						ProvisioningStyle = Manual;
+					};
 					88387C85184045DC0059C826 = {
 						DevelopmentTeam = K2Q453W5U7;
 						ProvisioningStyle = Automatic;
@@ -1546,11 +1756,69 @@
 				88387C85184045DC0059C826 /* zup */,
 				88387CAC184045DC0059C826 /* zupTests */,
 				9C5ECE101AA7DAA000BD1791 /* zup_sbc */,
+				552206A31F58B10200C06775 /* particity */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		552207001F58B10200C06775 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				552207011F58B10200C06775 /* bocalobo5.jpg in Resources */,
+				552207021F58B10200C06775 /* OpenSans-Regular.ttf in Resources */,
+				552207031F58B10200C06775 /* EditViewController.xib in Resources */,
+				552207041F58B10200C06775 /* Main_iPad.storyboard in Resources */,
+				552207391F58B12100C06775 /* CASCAVEL.xcassets in Resources */,
+				552207051F58B10200C06775 /* ForgotViewController.xib in Resources */,
+				552207061F58B10200C06775 /* HeaderProfileCell.xib in Resources */,
+				552207071F58B10200C06775 /* termo-de-uso.html in Resources */,
+				552207081F58B10200C06775 /* CreateViewController.xib in Resources */,
+				552207091F58B10200C06775 /* SearchTableViewController.xib in Resources */,
+				5522070A1F58B10200C06775 /* Main_iPhone.storyboard in Resources */,
+				5522070B1F58B10200C06775 /* ListExploreViewController.xib in Resources */,
+				5522070C1F58B10200C06775 /* entulho3.jpg in Resources */,
+				5522070D1F58B10200C06775 /* FilterEstatisticasViewController.xib in Resources */,
+				5522070E1F58B10200C06775 /* OpenSans-Bold.ttf in Resources */,
+				5522070F1F58B10200C06775 /* entulho1.jpg in Resources */,
+				552207101F58B10200C06775 /* bocalobo2.jpg in Resources */,
+				552207111F58B10200C06775 /* Marcacoes.plist in Resources */,
+				552207121F58B10200C06775 /* praca-wifi1.jpg in Resources */,
+				552207131F58B10200C06775 /* InfoPlist.strings in Resources */,
+				552207141F58B10200C06775 /* Termos.rtf in Resources */,
+				552207151F58B10200C06775 /* SolicitacaoPublicarViewController.xib in Resources */,
+				552207161F58B10200C06775 /* Images.xcassets in Resources */,
+				552207171F58B10200C06775 /* SocialViewController.xib in Resources */,
+				552207181F58B10200C06775 /* bocalobo3.jpg in Resources */,
+				552207191F58B10200C06775 /* entulho4.jpg in Resources */,
+				5522071A1F58B10200C06775 /* InfoWindow.xib in Resources */,
+				5522071B1F58B10200C06775 /* bocalobo4.jpg in Resources */,
+				5522071C1F58B10200C06775 /* Launch Screen.xib in Resources */,
+				5522071D1F58B10200C06775 /* SolicitacaoPhotoViewController.xib in Resources */,
+				5522071E1F58B10200C06775 /* GraphicCell_iPad.xib in Resources */,
+				55F03E201F5B8EE600CCAB2A /* Cascavel.gpx in Resources */,
+				5522071F1F58B10200C06775 /* scrollSample.png in Resources */,
+				552207201F58B10200C06775 /* CellGaleriaInventario.xib in Resources */,
+				552207211F58B10200C06775 /* arvore1.jpg in Resources */,
+				552207221F58B10200C06775 /* bocalobo1.jpg in Resources */,
+				552207231F58B10200C06775 /* ComentarioViewController.xib in Resources */,
+				552207241F58B10200C06775 /* CellMinhaConta.xib in Resources */,
+				552207251F58B10200C06775 /* FiltrarViewControllerNovo.xib in Resources */,
+				552207261F58B10200C06775 /* CellFiltrarCategoria.xib in Resources */,
+				552207271F58B10200C06775 /* OpenSans-Light.ttf in Resources */,
+				552207281F58B10200C06775 /* Zup.xcassets in Resources */,
+				552207291F58B10200C06775 /* entulho2.jpg in Resources */,
+				5522072A1F58B10200C06775 /* SolicitacaoMapViewController.xib in Resources */,
+				5522072B1F58B10200C06775 /* GraphicCell.xib in Resources */,
+				5522072C1F58B10200C06775 /* OpenSans-ExtraBold.ttf in Resources */,
+				5522072D1F58B10200C06775 /* PerfilDetailViewController_iPad.xib in Resources */,
+				5522072E1F58B10200C06775 /* CellFiltrarInventarioHeader.xib in Resources */,
+				5522072F1F58B10200C06775 /* TermosViewController.xib in Resources */,
+				552207301F58B10200C06775 /* PerfilDetailViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		88387C84184045DC0059C826 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1562,6 +1830,7 @@
 				55EDF0811F536F6800FA73D3 /* ForgotViewController.xib in Resources */,
 				55EDEF701F536B5500FA73D3 /* HeaderProfileCell.xib in Resources */,
 				55EDEFB81F536C1D00FA73D3 /* termo-de-uso.html in Resources */,
+				5522073B1F58B17300C06775 /* cascavel-Info.plist in Resources */,
 				55EDF0AD1F536FF700FA73D3 /* CreateViewController.xib in Resources */,
 				55EDF0531F536ED200FA73D3 /* SearchTableViewController.xib in Resources */,
 				55EDEFC71F536C7D00FA73D3 /* Main_iPhone.storyboard in Resources */,
@@ -1594,6 +1863,7 @@
 				55EDF0871F536F7F00FA73D3 /* FiltrarViewControllerNovo.xib in Resources */,
 				55EDEF7E1F536B7900FA73D3 /* CellFiltrarCategoria.xib in Resources */,
 				55EDEFEA1F536C9700FA73D3 /* OpenSans-Light.ttf in Resources */,
+				552206A21F58B05F00C06775 /* Zup.xcassets in Resources */,
 				55EDEFDD1F536C8C00FA73D3 /* entulho2.jpg in Resources */,
 				55EDF0471F536EAB00FA73D3 /* SolicitacaoMapViewController.xib in Resources */,
 				55EDEF781F536B6500FA73D3 /* GraphicCell.xib in Resources */,
@@ -1759,6 +2029,72 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		552206A41F58B10200C06775 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-cascavel-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		552207311F58B10200C06775 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 006930176e97a2cd66938b247c84d076712cd7c1 1f143853fae9d19622951e02045a83d329258a9f6782cc6b375d0fbaf8de02d7";
+		};
+		552207321F58B10200C06775 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-cascavel/Pods-cascavel-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		552207331F58B10200C06775 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-cascavel/Pods-cascavel-resources.sh",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-cascavel/Pods-cascavel-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		778D03A81E92C408448EC0FB /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1858,6 +2194,79 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		552206A51F58B10200C06775 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				552206A61F58B10200C06775 /* XLVideoZoom.m in Sources */,
+				552206A71F58B10200C06775 /* HeaderProfileCell.m in Sources */,
+				552206A81F58B10200C06775 /* ComentarioViewController.m in Sources */,
+				552206A91F58B10200C06775 /* CellGaleriaInventario.m in Sources */,
+				552206AA1F58B10200C06775 /* RavenClient.m in Sources */,
+				552206AB1F58B10200C06775 /* CreateViewController.m in Sources */,
+				552206AC1F58B10200C06775 /* Utilities.m in Sources */,
+				552206AD1F58B10200C06775 /* OAuth+Additions.m in Sources */,
+				552206AE1F58B10200C06775 /* SearchTableViewController.m in Sources */,
+				552206AF1F58B10200C06775 /* ServerOperations.m in Sources */,
+				552206B01F58B10200C06775 /* MainViewController.m in Sources */,
+				552206B11F58B10200C06775 /* UIApplication+name.m in Sources */,
+				552206B21F58B10200C06775 /* EstatisticasViewController.m in Sources */,
+				552206B31F58B10200C06775 /* PostController.m in Sources */,
+				552206B41F58B10200C06775 /* PlaceMark.m in Sources */,
+				552206B51F58B10200C06775 /* TWSignedRequest.m in Sources */,
+				552206B61F58B10200C06775 /* XLMediaZoom.m in Sources */,
+				552206B71F58B10200C06775 /* SocialViewController.m in Sources */,
+				552206B81F58B10200C06775 /* ApiNetworkingManager.m in Sources */,
+				552206B91F58B10200C06775 /* NSString+Utils.m in Sources */,
+				552206BA1F58B10200C06775 /* SSDrawingUtilities.m in Sources */,
+				552206BB1F58B10200C06775 /* FilterEstatisticasViewController.m in Sources */,
+				552206BC1F58B10200C06775 /* FiltrarCategoriasViewController.m in Sources */,
+				552206BD1F58B10200C06775 /* ListExploreViewController.m in Sources */,
+				552206BE1F58B10200C06775 /* Reachability.m in Sources */,
+				552206BF1F58B10200C06775 /* PerfilViewController.m in Sources */,
+				552206C01F58B10200C06775 /* SolicitacaoPublicarViewController.m in Sources */,
+				552206C11F58B10200C06775 /* OAuthCore.m in Sources */,
+				552206C21F58B10200C06775 /* GraphicCell.m in Sources */,
+				552206C31F58B10200C06775 /* CustomUIImagePickerController.m in Sources */,
+				552206C41F58B10200C06775 /* RavenJSONUtilities.m in Sources */,
+				552206C51F58B10200C06775 /* TIRequestManager.m in Sources */,
+				552206C61F58B10200C06775 /* NavigationControllerViewController.m in Sources */,
+				5522073C1F58B52600C06775 /* NetworkingConstants.m in Sources */,
+				552206C71F58B10200C06775 /* CellFiltrarCategoria.m in Sources */,
+				552206C81F58B10200C06775 /* CellMinhaConta.m in Sources */,
+				552206C91F58B10200C06775 /* LoginViewController.m in Sources */,
+				552206CA1F58B10200C06775 /* CustomButton.m in Sources */,
+				552206CB1F58B10200C06775 /* InfoWindow.m in Sources */,
+				552206CC1F58B10200C06775 /* UserDefaults.m in Sources */,
+				552206CD1F58B10200C06775 /* UIImageView+Zoom.m in Sources */,
+				552206CE1F58B10200C06775 /* NSString+MD5.m in Sources */,
+				552206CF1F58B10200C06775 /* SSPieProgressView.m in Sources */,
+				552206D01F58B10200C06775 /* NSData+Base64.m in Sources */,
+				552206D11F58B10200C06775 /* FiltrarPeriodoStatusViewController.m in Sources */,
+				552206D21F58B10200C06775 /* TermosViewController.m in Sources */,
+				552206D31F58B10200C06775 /* TWAPIManager.m in Sources */,
+				552206D41F58B10200C06775 /* AppDelegate.m in Sources */,
+				552206D51F58B10200C06775 /* MainApiManager.m in Sources */,
+				552206D61F58B10200C06775 /* SolicitacaoPhotoViewController.m in Sources */,
+				552206D71F58B10200C06775 /* PerfilDetailViewController.m in Sources */,
+				552206D81F58B10200C06775 /* TIRequestOperation.m in Sources */,
+				552206D91F58B10200C06775 /* ExploreViewController.m in Sources */,
+				552206DA1F58B10200C06775 /* RavenConfig.m in Sources */,
+				552206DB1F58B10200C06775 /* FiltrarViewController.m in Sources */,
+				552206DC1F58B10200C06775 /* NSData+MD5.m in Sources */,
+				552206DD1F58B10200C06775 /* TIRequest.m in Sources */,
+				552206DE1F58B10200C06775 /* FiltrarInventarioViewController.m in Sources */,
+				552206DF1F58B10200C06775 /* ForgotViewController.m in Sources */,
+				552206E01F58B10200C06775 /* ImageCache.m in Sources */,
+				552206E21F58B10200C06775 /* EditViewController.m in Sources */,
+				552206E31F58B10200C06775 /* TabBarController.m in Sources */,
+				552206E41F58B10200C06775 /* SolicitacaoMapViewController.m in Sources */,
+				552206E51F58B10200C06775 /* main.m in Sources */,
+				552206E61F58B10200C06775 /* RelateViewController.m in Sources */,
+				552206E71F58B10200C06775 /* CustomMap.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		88387C82184045DC0059C826 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2040,6 +2449,80 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		552207351F58B10200C06775 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 65EDF1A682EFA47D13AF0376 /* Pods-cascavel.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 8U89B7P2NY;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Zup/Supporting Files/zup-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					CASCAVEL,
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Zup/Supporting Files/cascavel-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Release-iphoneos",
+				);
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "br.com.lfdb.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "7984b076-3982-41db-8dc7-0f5925ae8dbd";
+				PROVISIONING_PROFILE_SPECIFIER = "particity-adhoc";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7s armv7";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		552207361F58B10200C06775 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9AC5A6B3D2BA936F1B985C4B /* Pods-cascavel.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 8U89B7P2NY;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Zup/Supporting Files/zup-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					CASCAVEL,
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Zup/Supporting Files/cascavel-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Release-iphoneos",
+				);
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "br.com.lfdb.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "7984b076-3982-41db-8dc7-0f5925ae8dbd";
+				PROVISIONING_PROFILE_SPECIFIER = "particity-adhoc";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7s armv7";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 		88387CBC184045DC0059C826 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2327,6 +2810,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		552207341F58B10200C06775 /* Build configuration list for PBXNativeTarget "particity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				552207351F58B10200C06775 /* Debug */,
+				552207361F58B10200C06775 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		88387C81184045DC0059C826 /* Build configuration list for PBXProject "zup" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
