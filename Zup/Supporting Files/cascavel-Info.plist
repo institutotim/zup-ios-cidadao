@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Cascavel Staging</string>
+	<string>Particity Staging</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIcons</key>
@@ -29,7 +29,7 @@
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
-		<string>b4e65954c5311e9478b811354a85bab993be65d6</string>
+		<string>006930176e97a2cd66938b247c84d076712cd7c1</string>
 		<key>Kits</key>
 		<array>
 			<dict>
