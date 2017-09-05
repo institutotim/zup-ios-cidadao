@@ -210,8 +210,8 @@
     [self.collectionView reloadData];
 }
 
-- (void)didReceiveError:(NSError*)error {
-    [Utilities alertWithServerError];
+- (void)didReceiveError:(NSError *)error {
+    [Utilities alertWithServerErrorInViewController:self];
     [self.spin stopAnimating];
 }
 

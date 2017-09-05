@@ -141,10 +141,10 @@
 - (void)didLoginButton {
     if (self.tfPass.text.length == 0 || self.tfEmail.text.length == 0) {
         if (![Utilities isValidEmail:self.tfEmail.text]) {
-            //[Utilities alertWithError:@"Insira um e-mail válido!"];
+            [Utilities alertWithError:@"E-mail inválido!" inViewController:self];
             return;
         }
-        [Utilities alertWithError:@"Preencha todos os campos!"];
+        [Utilities alertWithError:@"Preencha todos os campos!" inViewController:self];
         return;
     }
     
@@ -162,6 +162,8 @@
         [serverOp setAction:@selector(didReceiveData:)];
         [serverOp setActionErro:@selector(didReceiveError:operation:data:)];
         [serverOp authenticate:self.tfEmail.text pass:self.tfPass.text];
+    } else {
+        [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
     }
 }
 
@@ -204,33 +206,48 @@
 #pragma mark - Login Selectors
 
 - (void)didReceiveData:(NSData *)data {
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-   
-    if (![Utilities checkIfError:dict]) {
-        [UserDefaults setUserId:[dict valueForKeyPath:@"user.id"]];
-        [UserDefaults setToken:[dict valueForKey:@"token"]];
-        [UserDefaults setIsUserLogged:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         
-        [self.mainVC getReportCategories];
-        /*if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit ) {
+        if (![Utilities checkIfError:dict]) {
+            [UserDefaults setUserId:[dict valueForKeyPath:@"user.id"]];
+            [UserDefaults setToken:[dict valueForKey:@"token"]];
+            [UserDefaults setIsUserLogged:YES];
             
-            [self dismissViewControllerAnimated:YES completion:nil];
-            [self.mainVC btJump:nil];
+            [self.mainVC getReportCategories];
+            /*if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit ) {
+             
+             [self dismissViewControllerAnimated:YES completion:nil];
+             [self.mainVC btJump:nil];
+             } else {
+             
+             if (!self.isFromPerfil && !self.isFromSolicit) {
+             TabBarController *tabBar = [self.storyboard instantiateViewControllerWithIdentifier:@"tabBar"];
+             [self.navigationController setNavigationBarHidden:YES];
+             [self.navigationController pushViewController:tabBar animated:YES];
+             } else {
+             [self dismissViewControllerAnimated:YES completion:nil];
+             [self.perfilVC getData];
+             if ([Utilities isIpad]) {
+             [self.relateVC setToken];
+             }
+             }
+             }*/
         } else {
-            
-            if (!self.isFromPerfil && !self.isFromSolicit) {
-                    TabBarController *tabBar = [self.storyboard instantiateViewControllerWithIdentifier:@"tabBar"];
-                    [self.navigationController setNavigationBarHidden:YES];
-                    [self.navigationController pushViewController:tabBar animated:YES];
-            } else {
-                [self dismissViewControllerAnimated:YES completion:nil];
-                [self.perfilVC getData];
-                if ([Utilities isIpad]) {
-                    [self.relateVC setToken];
-                }
-            }
-        }*/
-    } else {
+            self.tfEmail.enabled = YES;
+            self.tfPass.enabled = YES;
+            self.btForgot.enabled = YES;
+            self.btLogin.hidden = NO;
+            [self.spin stopAnimating];
+            self.navigationItem.rightBarButtonItem = self.buttonLogin;
+            self.navigationItem.leftBarButtonItems = @[self.buttonCancel];
+            [Utilities alertWithError:[dict valueForKey:@"error"] inViewController:self];
+        }
+    });
+}
+
+- (void)didReceiveError:(NSError*)error operation:(ServerOperations*)operation data:(NSData*)data {
+    dispatch_async(dispatch_get_main_queue(), ^{
         self.tfEmail.enabled = YES;
         self.tfPass.enabled = YES;
         self.btForgot.enabled = YES;
@@ -238,29 +255,19 @@
         [self.spin stopAnimating];
         self.navigationItem.rightBarButtonItem = self.buttonLogin;
         self.navigationItem.leftBarButtonItems = @[self.buttonCancel];
-    }
-}
-
-- (void)didReceiveError:(NSError*)error operation:(ServerOperations*)operation data:(NSData*)data {
-    self.tfEmail.enabled = YES;
-    self.tfPass.enabled = YES;
-    self.btForgot.enabled = YES;
-    self.btLogin.hidden = NO;
-    [self.spin stopAnimating];
-    self.navigationItem.rightBarButtonItem = self.buttonLogin;
-    self.navigationItem.leftBarButtonItems = @[self.buttonCancel];
-    
-    NSString* errorString = [NSString stringWithFormat:@"%@", error];
-    [[RavenClient sharedClient] captureMessage:errorString];
-    
-    if (data != nil) {
-        NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         
-        NSString* err = [dict valueForKey:@"error"];
-        [Utilities alertWithError:err];
-    }
-    else
-        [Utilities alertWithServerError];
+        NSString* errorString = [NSString stringWithFormat:@"%@", error];
+        [[RavenClient sharedClient] captureMessage:errorString];
+        
+        if (data != nil) {
+            NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            
+            NSString* err = [dict valueForKey:@"error"];
+            [Utilities alertWithError:err inViewController:self];
+        }
+        else
+            [Utilities alertWithServerErrorInViewController:self];
+    });
 }
 
 #pragma mark - TextField Delegate

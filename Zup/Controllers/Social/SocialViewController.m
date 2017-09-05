@@ -160,20 +160,24 @@
                             NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
                             [parameters setValue:@"id, name, email, friends{id,name,picture}" forKey:@"fields"];
                             [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:parameters] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                                if (!error) {
-                                    [UserDefaults setFbToken:[FBSDKAccessToken currentAccessToken].tokenString];
-                                    [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworFacebook];
-                                    [self gotoNextPage];
-                                } else {
-                                    [weakSelf showErrorWithMessage:@"Não foi possível logar com o Facebook. Verifique sua conexão com a internet."];
-                                }
-                                [weakSelf.viewSocialButtons setUserInteractionEnabled:YES];
-                                [weakSelf.spin stopAnimating];
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    if (!error) {
+                                        [UserDefaults setFbToken:[FBSDKAccessToken currentAccessToken].tokenString];
+                                        [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworFacebook];
+                                        [self gotoNextPage];
+                                    } else {
+                                        [weakSelf showErrorWithMessage:@"Não foi possível logar com o Facebook. Verifique sua conexão com a internet."];
+                                    }
+                                    [weakSelf.viewSocialButtons setUserInteractionEnabled:YES];
+                                    [weakSelf.spin stopAnimating];
+                                });
                             }];
                         }
                     }
                 }
             }];
+        } else {
+            [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
         }
     }
 }
@@ -193,14 +197,16 @@
         __weak __typeof(self)weakSelf = self;
         // need access first
         [accountStore requestAccessToAccountsWithType:accountType options:nil completion:^(BOOL granted, NSError *error) {
-            if (granted) {
-                [weakSelf _showListOfTwitterAccountsFromStore:accountStore];
-            } else {
-                [Utilities alertWithMessage:[NSString stringWithFormat:@"O %@ não tem permissão para acessar sua conta do Twitter", [UIApplication displayName]]];
-                
-                [weakSelf.spin stopAnimating];
-                [weakSelf.viewSocialButtons setUserInteractionEnabled:YES];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (granted) {
+                    [weakSelf _showListOfTwitterAccountsFromStore:accountStore];
+                } else {
+                    [Utilities alertWithMessage:[NSString stringWithFormat:@"O %@ não tem permissão para acessar sua conta do Twitter", [UIApplication displayName]] inViewController:self];
+                    
+                    [weakSelf.spin stopAnimating];
+                    [weakSelf.viewSocialButtons setUserInteractionEnabled:YES];
+                }
+            });
         }];
     }
 }
@@ -224,26 +230,28 @@
         __weak __typeof(self)weakSelf = self;
         self.apiManager = [[TWAPIManager alloc] init];
         [self.apiManager performReverseAuthForAccount:account withHandler:^(NSData *responseData, NSError *error) {
-            if (responseData) {
-                NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-                
-                NSLog(@"Reverse Auth process returned: %@", responseStr);
-                
-                NSArray *parts = [responseStr componentsSeparatedByString:@"&"];
-                NSString *lined = [parts componentsJoinedByString:@"\n"];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:lined delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    //[alert show];
-                    [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworTwitter];
-                    [weakSelf gotoNextPage];
-                });
-            } else {
-                NSLog(@"Reverse Auth process failed. Error returned was: %@\n", [error localizedDescription]);
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (responseData) {
+                    NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+                    
+                    NSLog(@"Reverse Auth process returned: %@", responseStr);
+                    
+                    NSArray *parts = [responseStr componentsSeparatedByString:@"&"];
+                    NSString *lined = [parts componentsJoinedByString:@"\n"];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:lined delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        //[alert show];
+                        [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworTwitter];
+                        [weakSelf gotoNextPage];
+                    });
+                } else {
+                    NSLog(@"Reverse Auth process failed. Error returned was: %@\n", [error localizedDescription]);
+                }
+            });
         }];
     } else {
-        [Utilities alertWithMessage:@"Você não tem nenhuma conta do Twitter configurada. Por favor, vá até Ajustes e adicione."];
+        [Utilities alertWithMessage:@"Você não tem nenhuma conta do Twitter configurada. Por favor, vá até Ajustes e adicione." inViewController:self];
     }
 }
 

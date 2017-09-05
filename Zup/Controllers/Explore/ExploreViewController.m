@@ -366,7 +366,6 @@ static int ZOOMLEVELDEFAULT = 16;
 #pragma mark - Get Reports
 
 - (void)getPoints {
-    
     if ([Utilities isInternetActive]) {
         
         self.isReportsLoading = YES;
@@ -416,6 +415,8 @@ static int ZOOMLEVELDEFAULT = 16;
         }
         else
             [serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom];*/
+    } else {
+        [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
     }
 }
 
@@ -607,7 +608,7 @@ static int ZOOMLEVELDEFAULT = 16;
 
 - (void)didReceiveError:(NSError *)error data:(NSData *)data {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [Utilities alertWithServerError];
+        [Utilities alertWithServerErrorInViewController:self];
         _isReportsLoading = NO;
     });
 }
@@ -811,36 +812,42 @@ static int ZOOMLEVELDEFAULT = 16;
                                                            zoom:self.mapView.camera.zoom
                                                     categoryIds:self.arrFilterInventoryIDs];
         }
+    } else {
+        [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
     }
 }
 
 - (void)didReceiveInventoryData:(NSData*)data operation:(TIRequestOperation*)operation {
-    self.isInventoryLoading = NO;
-    
-    if (self.isNoInventories)
-        return;
-    
-    [self clearMap];
-    
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    NSArray *arr = [dict valueForKey:@"items"];
-    
-    for (NSDictionary *dict in arr) {
-        if (![self.arrMainInventory containsObject:dict]) {
-            [self.arrMainInventory addObject:dict];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.isInventoryLoading = NO;
+        
+        if (self.isNoInventories)
+            return;
+        
+        [self clearMap];
+        
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        NSArray *arr = [dict valueForKey:@"items"];
+        
+        for (NSDictionary *dict in arr) {
+            if (![self.arrMainInventory containsObject:dict]) {
+                [self.arrMainInventory addObject:dict];
+            }
         }
-    }
-    
-    NSArray *clusters = [dict valueForKey:@"clusters"];
-    
-    [self createInventoryPoints];
-    [self createPointsForClusters:clusters inventory:YES];
+        
+        NSArray *clusters = [dict valueForKey:@"clusters"];
+        
+        [self createInventoryPoints];
+        [self createPointsForClusters:clusters inventory:YES];
+    });
 }
 
 - (void)didReceiveIventoryError:(NSError*)error data:(NSData*)data {
-    [Utilities alertWithServerError];
-    self.isInventoryLoading = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [Utilities alertWithServerErrorInViewController:self];
+        self.isInventoryLoading = NO;
+    });
 }
 
 - (void)createInventoryPoints {
@@ -918,17 +925,23 @@ static int ZOOMLEVELDEFAULT = 16;
         [self.serverOperationsInventoryList setAction:@selector(didReceiveData:)];
         [self.serverOperationsInventoryList setActionErro:@selector(didReceiveError:data:)];
         [self.serverOperationsInventoryList getInventoryForIdCategory:idCategory];
+    } else {
+        [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
     }
 }
 
 - (void)didReceiveInventoryListData:(NSData *)data {
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    self.arrMain = [[NSMutableArray alloc]initWithArray:[dict valueForKey:@"items"]];
-    [self createInventoryPoints];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        self.arrMain = [[NSMutableArray alloc]initWithArray:[dict valueForKey:@"items"]];
+        [self createInventoryPoints];
+    });
 }
 
 - (void)didReceiveInventoryListError:(NSError*)error data:(NSData*)data {
-    [Utilities alertWithServerError];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [Utilities alertWithServerErrorInViewController:self];
+    });
 }
 
 #pragma mark - Map Handle
@@ -1031,7 +1044,6 @@ static int ZOOMLEVELDEFAULT = 16;
 }
 
 - (void)gotoDetail:(GMSMarker*)marker {
-    
     NSDictionary *dict = marker.userData;
     
     if (![dict valueForKey:@"inventory_category_id"]) {
@@ -1063,8 +1075,7 @@ static int ZOOMLEVELDEFAULT = 16;
         listVC.dictMain = marker.userData;
         
         [self.navigationController pushViewController:listVC animated:YES];
-    }
-    
+    }    
 }
 
 - (void)buildDetail:(NSDictionary*)dict {

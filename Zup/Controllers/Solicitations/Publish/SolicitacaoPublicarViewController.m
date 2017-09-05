@@ -172,7 +172,7 @@
 
 - (IBAction)btPublicar:(id)sender {
     if (self.tvDetalhe.text.length > 800) {
-        [Utilities alertWithMessage:@"Você ultrapassou o limite máximo de 800 caracteres."];
+        [Utilities alertWithMessage:@"Você ultrapassou o limite máximo de 800 caracteres." inViewController:self];
         return;
     }
     
@@ -263,113 +263,117 @@
 #pragma mark - Network Requests
 
 - (void)didReceiveData:(NSData *)data {
-    [viewLoading removeFromSuperview];
-    
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    self.dictTemp = dict;
-    
-    if (![Utilities checkIfError:dict]) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [viewLoading removeFromSuperview];
         
-        NSDictionary *dictCat = [UserDefaults getCategory:self.catStr.intValue];
-        NSNumber* resolution_time_enabled = [dictCat valueForKey:@"resolution_time_enabled"];
-        NSNumber* private_resolution_time = [dictCat valueForKey:@"private_resolution_time"];
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        self.dictTemp = dict;
         
-        NSString* sentence;
-        
-        // Exibir tempo de resolução?
-        if ([UserDefaults isFeatureEnabled:@"show_resolution_time_to_clients"] && [resolution_time_enabled boolValue] && ![private_resolution_time boolValue]) {
-            int resolutionInt = [[dictCat valueForKey:@"resolution_time"]intValue];
-        
-            //int hours = resolutionInt/60/60/24;
-            int time = resolutionInt / 60; // Minutes
-            NSString *unit = @"minutos";
+        if (![Utilities checkIfError:dict]) {
             
-            if (time == 1)
-                unit = @"minuto";
+            NSDictionary *dictCat = [UserDefaults getCategory:self.catStr.intValue];
+            NSNumber* resolution_time_enabled = [dictCat valueForKey:@"resolution_time_enabled"];
+            NSNumber* private_resolution_time = [dictCat valueForKey:@"private_resolution_time"];
             
-            if (time > 60) {
-                time = time / 60;
-                unit = @"horas";
+            NSString* sentence;
+            
+            // Exibir tempo de resolução?
+            if ([UserDefaults isFeatureEnabled:@"show_resolution_time_to_clients"] && [resolution_time_enabled boolValue] && ![private_resolution_time boolValue]) {
+                int resolutionInt = [[dictCat valueForKey:@"resolution_time"]intValue];
                 
-                if(time == 1)
-                    unit = @"hora";
-            }
-            if (time > 24) {
-                time = time / 24;
-                unit = @"dias";
+                //int hours = resolutionInt/60/60/24;
+                int time = resolutionInt / 60; // Minutes
+                NSString *unit = @"minutos";
                 
                 if (time == 1)
-                    unit = @"dia";
+                    unit = @"minuto";
+                
+                if (time > 60) {
+                    time = time / 60;
+                    unit = @"horas";
+                    
+                    if(time == 1)
+                        unit = @"hora";
+                }
+                if (time > 24) {
+                    time = time / 24;
+                    unit = @"dias";
+                    
+                    if (time == 1)
+                        unit = @"dia";
+                }
+                
+                NSString *timeStr = [NSString stringWithFormat:@"%i %@", time, unit];
+                
+                sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@\nPrazo estimado para a solução: %@", [dict valueForKeyPath:@"report.protocol"], timeStr];
+                
+                if (resolutionInt / 60 / 60 < 1) {
+                    sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@\nPrazo estimado para a solução: menos de uma hora", [dict valueForKeyPath:@"report.protocol"]];
+                }
+            } else {
+                sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@", [dict valueForKeyPath:@"report.protocol"]];
             }
             
-            NSString *timeStr = [NSString stringWithFormat:@"%i %@", time, unit];
-        
-            sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@\nPrazo estimado para a solução: %@", [dict valueForKeyPath:@"report.protocol"], timeStr];
-        
-            if (resolutionInt / 60 / 60 < 1) {
-                sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@\nPrazo estimado para a solução: menos de uma hora", [dict valueForKeyPath:@"report.protocol"]];
-            }
-        } else {
-            sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@", [dict valueForKeyPath:@"report.protocol"]];
-        }
-        
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Solicitação Enviada" message:sentence preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-        [self presentViewController:alert animated:YES completion:nil];
-        
-        SocialNetworkType social = [UserDefaults getSocialNetworkType];
-        
-        BOOL facebookEnabled = [UserDefaults isFeatureEnabled:@"social_networks_facebook"];
-        BOOL twitterEnabled = [UserDefaults isFeatureEnabled:@"social_networks_twitter"];
-        
-        if (self.swFacebook.on && social != kSocialNetworkAnyone) {
-            NSString* message = [Utilities defaultShareMessage];
-            NSString* link = [Utilities linkForReportId:[[dict valueForKeyPath:@"report.id"] intValue]];
-            NSString* cat = [dictCat valueForKeyPath:@"title"];
-            NSString* desc = [dict valueForKeyPath:@"report.description"];
-            NSString* image = @"";
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Solicitação Enviada" message:sentence preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
             
-            if(desc == nil)
-                desc = @"";
+            SocialNetworkType social = [UserDefaults getSocialNetworkType];
             
-            NSArray *arrImages = [dict valueForKeyPath:@"report.images"];
-            if (arrImages != nil && [arrImages count] > 0) {
-                NSDictionary* firstImage = [arrImages objectAtIndex:0];
-                image = [firstImage valueForKey:@"high"];
-            }
+            BOOL facebookEnabled = [UserDefaults isFeatureEnabled:@"social_networks_facebook"];
+            BOOL twitterEnabled = [UserDefaults isFeatureEnabled:@"social_networks_twitter"];
             
-            if (social == kSocialNetworFacebook && facebookEnabled) {
-                [PostController postMessageWithFacebook:message link:link linkTitle:cat linkDesc:desc image:image];
-                [self dismissViewControllerAnimated:YES completion:nil];
-                [self callReportDetail];
-            } else if (social == kSocialNetworTwitter && twitterEnabled) {
-                self.messageTemp = message;
-                self.linkTemp = link;
-                [self postMessageWithTwitter];
-                //[self dismissViewControllerAnimated:YES completion:nil];
+            if (self.swFacebook.on && social != kSocialNetworkAnyone) {
+                NSString* message = [Utilities defaultShareMessage];
+                NSString* link = [Utilities linkForReportId:[[dict valueForKeyPath:@"report.id"] intValue]];
+                NSString* cat = [dictCat valueForKeyPath:@"title"];
+                NSString* desc = [dict valueForKeyPath:@"report.description"];
+                NSString* image = @"";
+                
+                if(desc == nil)
+                    desc = @"";
+                
+                NSArray *arrImages = [dict valueForKeyPath:@"report.images"];
+                if (arrImages != nil && [arrImages count] > 0) {
+                    NSDictionary* firstImage = [arrImages objectAtIndex:0];
+                    image = [firstImage valueForKey:@"high"];
+                }
+                
+                if (social == kSocialNetworFacebook && facebookEnabled) {
+                    [PostController postMessageWithFacebook:message link:link linkTitle:cat linkDesc:desc image:image];
+                    [self dismissViewControllerAnimated:YES completion:nil];
+                    [self callReportDetail];
+                } else if (social == kSocialNetworTwitter && twitterEnabled) {
+                    self.messageTemp = message;
+                    self.linkTemp = link;
+                    [self postMessageWithTwitter];
+                    //[self dismissViewControllerAnimated:YES completion:nil];
+                } else {
+                    [self dismissViewControllerAnimated:YES completion:nil];
+                    [self callReportDetail];
+                }
             } else {
                 [self dismissViewControllerAnimated:YES completion:nil];
                 [self callReportDetail];
+                
+                //            if (social == kSocialNetworFacebook || social == kSocialNetworGooglePlus) {
+                //                [self dismissViewControllerAnimated:YES completion:nil];
+                //                [self callReportDetail];
+                //            } else if (social == kSocialNetworTwitter) {
+                //                [self postMessageWithTwitter];
+                //            }
             }
         } else {
-            [self dismissViewControllerAnimated:YES completion:nil];
-            [self callReportDetail];
-            
-//            if (social == kSocialNetworFacebook || social == kSocialNetworGooglePlus) {
-//                [self dismissViewControllerAnimated:YES completion:nil];
-//                [self callReportDetail];
-//            } else if (social == kSocialNetworTwitter) {
-//                [self postMessageWithTwitter];
-//            }
+            [Utilities alertWithError:@"Erro ao publicar." inViewController:self];
         }
-    } else {
-        [Utilities alertWithError:@"Erro ao publicar."];
-    }
+    });
 }
 
 - (void)didReceiveError:(NSError *)error data:(NSData *)data {
-    [Utilities alertWithServerError];
-    [viewLoading removeFromSuperview];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [Utilities alertWithServerErrorInViewController:self];
+        [viewLoading removeFromSuperview];
+    });
 }
 
 #pragma mark - Text View Delegates

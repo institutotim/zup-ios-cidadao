@@ -18,7 +18,7 @@
         if([keyValue count] == 2) {
             NSString *key = keyValue[0];
             NSString *value = keyValue[1];
-            value = [value stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            value = [value stringByRemovingPercentEncoding];
             if(key && value)
                 dict[key] = value;
         }

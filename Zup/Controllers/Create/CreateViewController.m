@@ -25,8 +25,9 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+#pragma mark - View Lifecycle
+
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [self.navigationController.navigationBar setTranslucent:NO];
@@ -156,6 +157,20 @@
 
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [btCreate setHidden:YES];
+    [btCancel removeFromSuperview];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Auxiliar Methods
+
 - (BOOL)checkFields {
     BOOL isEmpty = NO;
     
@@ -231,8 +246,7 @@
             msg = @"Preencha todos os campos!";
         }
         
-        [Utilities alertWithMessage:msg];
-        
+        [Utilities alertWithMessage:msg inViewController:self];
     }
     
     return isEmpty;
@@ -241,9 +255,7 @@
 - (void)didCreateButton {
 
     if ([self checkFields]) {
-    
         return;
-        
     }
     
     if (![Utilities isValidEmail:self.tfEmail.text]) {
@@ -255,7 +267,7 @@
     }
     
     if (![Utilities isValidCPF:self.tfCpf.text]) {
-        [Utilities alertWithError:@"CPF inválido!"];
+        [Utilities alertWithError:@"CPF inválido!" inViewController:self];
         
         self.tfCpf.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
         self.tfCpf.background = [Utilities changeColorForImage:self.tfCpf.background toColor:[UIColor redColor]];
@@ -265,7 +277,7 @@
     }
     
     if (![self.tfConfirmPass.text isEqualToString:self.tfPass.text]) {
-        [Utilities alertWithError:@"Confirmação de senha não coincide!"];
+        [Utilities alertWithError:@"Confirmação de senha não coincide!" inViewController:self];
         
         self.tfPass.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
         self.tfPass.background = [Utilities changeColorForImage:self.tfPass.background toColor:[UIColor redColor]];
@@ -284,81 +296,25 @@
         [serverOp setAction:@selector(didReceiveData:response:)];
         [serverOp setActionErro:@selector(didReceiveError:operation:data:)];
         [serverOp createUser:self.tfEmail.text pass:self.tfPass.text name:self.tfName.text phone:self.tfPhone.text document:self.tfCpf.text address:self.tfAddress.text addressAdditional:self.tfComplement.text postalCode:self.tfCep.text district:self.tfBairro.text city:self.tfCidade.text];
+    } else {
+        [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
     }
 }
 
-- (void)showLoadingOverlay
-{
+- (void)showLoadingOverlay {
     btCancel.enabled = NO;
     btCreate.enabled = NO;
     self.loadingOverlay.hidden = NO;
     [self.view bringSubviewToFront:self.loadingOverlay];
 }
 
-- (void)hideLoadingOverlay
-{
+- (void)hideLoadingOverlay {
     btCancel.enabled = YES;
     btCreate.enabled = YES;
     self.loadingOverlay.hidden = YES;
 }
 
-- (void)didReceiveData:(NSData*)data response:(NSURLResponse*)response{
-    [self hideLoadingOverlay];
-    
-    if (![data isKindOfClass:[NSNull class]]) {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        
-        if (dict.allKeys.count == 0) {
-            return;
-        }
-        
-        if ([dict valueForKeyPath:@"errors.email"]) {
-            [Utilities alertWithError:[[dict valueForKeyPath:@"errors.email"]objectAtIndex:0]];
-        } else if ([dict valueForKey:@"message"]) {
-            [self login];
-        }
-    
-    }
-    
-}
-
-
-- (void)login {
-    [self showLoadingOverlay];
-    
-    if ([Utilities isInternetActive]) {
-        ServerOperations *serverOp = [[ServerOperations alloc]init];
-        [serverOp setTarget:self];
-        [serverOp setAction:@selector(didReceiveLoginData:)];
-        [serverOp setActionErro:@selector(didReceiveLoginError:data:)];
-        [serverOp authenticate:self.tfEmail.text pass:self.tfPass.text];
-    }
-}
-
-- (void)didReceiveLoginData:(NSData*)data {
-    //[self hideLoadingOverlay];
-    
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    if (![Utilities checkIfError:dict]) {
-        [UserDefaults setUserId:[dict valueForKeyPath:@"user.id"]];
-        [UserDefaults setToken:[dict valueForKey:@"token"]];
-        [UserDefaults setIsUserLogged:YES];
-        
-        [self.mainVC getReportCategories];
-        
-        //[self callNextView];
-        
-    }
-}
-
-- (void)didReceiveLoginError:(NSError*)error data:(NSData*)data {
-    [self hideLoadingOverlay];
-    [Utilities alertWithServerError];
-}
-
 - (void)callNextView {
-    
     BOOL facebookEnabled = [UserDefaults isFeatureEnabled:@"social_networks_facebook"];
     BOOL twitterEnabled = [UserDefaults isFeatureEnabled:@"social_networks_twitter"];
     BOOL plusEnabled = [UserDefaults isFeatureEnabled:@"social_networks_gplus"];
@@ -366,25 +322,18 @@
     [btCancel removeFromSuperview];
     [btCreate removeFromSuperview];
     
-    if(facebookEnabled || twitterEnabled || plusEnabled)
-    {
+    if (facebookEnabled || twitterEnabled || plusEnabled) {
         SocialViewController *social = [[SocialViewController alloc]initWithNibName:@"SocialViewController" bundle:nil];
         social.isFromPerfil = self.isFromPerfil;
         social.isFromSolicit = self.isFromSolicit;
         social.perfilVC = self.perfilVC;
         social.relateVC = self.relateVC;
         [self.navigationController pushViewController:social animated:YES];
-    }
-    else if ([Utilities isIpad])
-    {
-        
+    } else if ([Utilities isIpad]) {
         [self dismissViewControllerAnimated:YES completion:^{
             [[NSNotificationCenter defaultCenter]postNotificationName:@"jump" object:nil];
         }];
-        
-    }
-    else
-    {
+    } else {
         NSString *strName = @"Main_iPhone";
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:strName bundle: nil];
@@ -395,60 +344,121 @@
     }
 }
 
-- (void)didReceiveError:(NSError*)error operation:(ServerOperations*)op data:(NSData*)data {
-    [self hideLoadingOverlay];
-    
-    NSString* message;
-    if(data != nil)
-    {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        
-        message = @"";
+#pragma mark - API Networking
 
-        NSDictionary* fields = @{
-                                 @"name": self.tfName,
-                                 @"email": self.tfEmail,
-                                 @"password": self.tfPass,
-                                 @"password_confirmation": self.tfConfirmPass,
-                                 @"phone": self.tfPhone,
-                                 @"document": self.tfCpf,
-                                 @"address": self.tfAddress,
-                                 @"address_additional": self.tfComplement,
-                                 @"postal_code": self.tfCep,
-                                 @"district": self.tfBairro,
-                                 @"city": self.tfCidade
-                                 };
+- (void)didReceiveData:(NSData *)data response:(NSURLResponse *)response {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideLoadingOverlay];
         
-        for(NSString* key in [fields keyEnumerator])
-        {
-            UITextField* field = [fields valueForKey:key];
-            field.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
-        }
-        
-        NSDictionary* errorDict = [dict valueForKey:@"error"];
-        for(NSString* key in [errorDict keyEnumerator])
-        {
-            NSArray* messageArray = [errorDict valueForKey:key];
-            NSString* keymessages = @"";
+        if (![data isKindOfClass:[NSNull class]]) {
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
             
-            for(NSString* msg in messageArray)
-            {
-                keymessages = [keymessages stringByAppendingFormat:@"%@\r", msg];
+            if (dict.allKeys.count == 0) {
+                return;
             }
             
-            message = [message stringByAppendingFormat:@"%@: %@\r", key, keymessages];
-            
-            UITextField* field = [fields valueForKey:key];
-            field.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
-            field.background = [Utilities changeColorForImage:self.tfEmail.background toColor:[UIColor redColor]];
-            
-            [self.scroll scrollsToTop];
+            if ([dict valueForKeyPath:@"errors.email"]) {
+                [Utilities alertWithError:[[dict valueForKeyPath:@"errors.email"]objectAtIndex:0] inViewController:self];
+            } else if ([dict valueForKey:@"message"]) {
+                [self login];
+            }
         }
-    }
-    else
-    {
-        message = [NSString stringWithFormat:@"Erro ao cadastrar.\r%@", error.localizedDescription];
-        [Utilities alertWithMessage:message];
+    });
+}
+
+- (void)didReceiveLoginData:(NSData *)data {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //[self hideLoadingOverlay];
+        
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        if (![Utilities checkIfError:dict]) {
+            [UserDefaults setUserId:[dict valueForKeyPath:@"user.id"]];
+            [UserDefaults setToken:[dict valueForKey:@"token"]];
+            [UserDefaults setIsUserLogged:YES];
+            
+            [self.mainVC getReportCategories];
+            
+            //[self callNextView];
+        } else {
+            [Utilities alertWithError:[dict valueForKey:@"error"] inViewController:self];
+        }
+    });
+}
+
+- (void)didReceiveLoginError:(NSError *)error data:(NSData *)data {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideLoadingOverlay];
+        [Utilities alertWithServerErrorInViewController:self];
+    });
+}
+
+- (void)didReceiveError:(NSError *)error operation:(ServerOperations *)op data:(NSData *)data {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideLoadingOverlay];
+        
+        NSString *message;
+        if (data != nil) {
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            
+            message = @"";
+            
+            NSDictionary* fields = @{
+                                     @"name": self.tfName,
+                                     @"email": self.tfEmail,
+                                     @"password": self.tfPass,
+                                     @"password_confirmation": self.tfConfirmPass,
+                                     @"phone": self.tfPhone,
+                                     @"document": self.tfCpf,
+                                     @"address": self.tfAddress,
+                                     @"address_additional": self.tfComplement,
+                                     @"postal_code": self.tfCep,
+                                     @"district": self.tfBairro,
+                                     @"city": self.tfCidade
+                                     };
+            
+            for (NSString *key in [fields keyEnumerator]) {
+                UITextField* field = [fields valueForKey:key];
+                field.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
+            }
+            
+            NSDictionary *errorDict = [dict valueForKey:@"error"];
+            for (NSString *key in [errorDict keyEnumerator]) {
+                NSArray *messageArray = [errorDict valueForKey:key];
+                NSString *keymessages = @"";
+                
+                for (NSString *msg in messageArray) {
+                    keymessages = [keymessages stringByAppendingFormat:@"%@\r", msg];
+                }
+                
+                message = [message stringByAppendingFormat:@"%@: %@\r", key, keymessages];
+                
+                UITextField *field = [fields valueForKey:key];
+                field.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
+                field.background = [Utilities changeColorForImage:self.tfEmail.background toColor:[UIColor redColor]];
+                
+                [self.scroll scrollsToTop];
+            }
+        } else {
+            message = [NSString stringWithFormat:@"Erro ao cadastrar.\r%@", error.localizedDescription];
+            [Utilities alertWithMessage:message inViewController:self];
+        }
+    });
+}
+
+#pragma mark - Actions
+
+- (void)login {
+    [self showLoadingOverlay];
+    
+    if ([Utilities isInternetActive]) {
+        ServerOperations *serverOp = [[ServerOperations alloc]init];
+        [serverOp setTarget:self];
+        [serverOp setAction:@selector(didReceiveLoginData:)];
+        [serverOp setActionErro:@selector(didReceiveLoginError:data:)];
+        [serverOp authenticate:self.tfEmail.text pass:self.tfPass.text];
+    } else {
+        [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
     }
 }
 
@@ -464,21 +474,20 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [btCreate setHidden:YES];
-    [btCancel removeFromSuperview];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (IBAction)btTerms:(id)sender {
+    TermosViewController *termsVC = [[TermosViewController alloc]initWithNibName:@"TermosViewController" bundle:nil];
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:termsVC];
+    [self presentViewController:nav animated:YES completion:nil];
+    
+    if ([Utilities isIpad]) {
+        nav.view.superview.bounds = CGRectMake(-25, 0, 470, 620);
+        [nav.view.superview setBackgroundColor:[UIColor clearColor]];
+    }
 }
 
 #pragma mark - Keyboard Handle
 
-- (void)registerForKeyboardNotifications
-{
+- (void)registerForKeyboardNotifications {
     
     if (([Utilities isIpad] && self.isFromPerfil) ||([Utilities isIpad] && self.isFromSolicit)) {
         return;
@@ -494,13 +503,12 @@
     
 }
 
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
+- (void)keyboardWasShown:(NSNotification *)aNotification {
 
     if ([Utilities isIpad]) {
         return;
     }
-    NSDictionary* info = [aNotification userInfo];
+    NSDictionary *info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height + 20, 0.0);
@@ -519,8 +527,7 @@
 }
 
 
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
-{
+- (void)keyboardWillBeHidden:(NSNotification *)aNotification {
     
     if ([Utilities isIpad]) {
         [UIView animateWithDuration:0.2 animations:^{
@@ -545,8 +552,7 @@
 
 #pragma mark - Text Field Delegates
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
     
     if (([Utilities isIpad] && self.isFromPerfil) ||([Utilities isIpad] && self.isFromSolicit)) {
         return;
@@ -585,8 +591,7 @@
     }
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
+- (void)textFieldDidEndEditing:(UITextField *)textField {
     self.activeField = nil;
     
     for (UITextField *tf in self.arrTf) {
@@ -595,11 +600,9 @@
                 [textField setBackground:[UIImage imageNamed:@"textbox_1linha-larga_normal"]];
             else
                 [textField setBackground:[UIImage imageNamed:@"textbox_1linha-curta_normal"]];
-            
         }
     }
 }
-
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
@@ -737,15 +740,4 @@
     return YES;
 }
 
-
-- (IBAction)btTerms:(id)sender {
-    TermosViewController *termsVC = [[TermosViewController alloc]initWithNibName:@"TermosViewController" bundle:nil];
-    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:termsVC];
-    [self presentViewController:nav animated:YES completion:nil];
-    
-    if ([Utilities isIpad]) {
-        nav.view.superview.bounds = CGRectMake(-25, 0, 470, 620);
-        [nav.view.superview setBackgroundColor:[UIColor clearColor]];
-    }
-}
 @end

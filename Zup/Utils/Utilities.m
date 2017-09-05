@@ -25,30 +25,24 @@ static BOOL hostActive;
 static BOOL hasInternetChecked;
 static BOOL didShowMain = false;
 
-+ (BOOL) didShowTabBarView
-{
++ (BOOL)didShowTabBarView {
     return didShowMain;
 }
 
-+ (void) setDidShowTabBarView
-{
++ (void) setDidShowTabBarView {
     didShowMain = YES;
 }
 
-+(BOOL)isNetworkOnline{
++ (BOOL)isNetworkOnline {
     if (!hasInternetChecked) {
         return [Utilities hasInternet];
     }
     return internetActive && hostActive;
 }
 
-+(BOOL)isInternetActive{
++ (BOOL)isInternetActive {
     if (!hasInternetChecked) {
         return [Utilities hasInternet];
-    }
-
-    if (!internetActive) {
-        [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente."];
     }
 
     return internetActive;
@@ -119,32 +113,38 @@ static BOOL didShowMain = false;
     return str;
 }
 
-+ (void)alertWithMessage:(NSString*)message {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:[UIApplication displayName] message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    [alert show];
++ (void)alertWithMessage:(NSString *)message inViewController:(UIViewController *)viewController {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[UIApplication displayName]
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [viewController presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void)alertWithError:(NSString*)message {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Erro" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    [alert show];
++ (void)alertWithError:(NSString *)message inViewController:(UIViewController *)viewController {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [viewController presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void)alertWithServerError {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Erro" message:@"Não foi possível acessar o serviço no momento. Por favor, tente novamente mais tarde." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    [alert show];
++ (void)alertWithServerErrorInViewController:(UIViewController *)viewController {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                   message:@"Não foi possível acessar o serviço no momento. Por favor, tente novamente mais tarde."
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [viewController presentViewController:alert animated:YES completion:nil];
 }
 
-+ (BOOL)checkIfError:(NSDictionary*)dict {
++ (BOOL)checkIfError:(NSDictionary *)dict {
     if ([dict valueForKey:@"error"]) {
-        if ([[dict valueForKey:@"error"]length] > 0) {
-            [Utilities alertWithError:[dict valueForKey:@"error"]];
+        if ([[dict valueForKey:@"error"] length] > 0) {
             return YES;
         }
     }
-
     return NO;
 }
-
 
 + (NSString *)checkIfNull:(NSString *)textToCheck {
     if ([textToCheck isKindOfClass:[NSNull class]]) {
@@ -153,7 +153,7 @@ static BOOL didShowMain = false;
     return textToCheck;
 }
 
-+(CGSize)sizeOfText:(NSString *)textToMesure widthOfTextView:(CGFloat)width withFont:(UIFont*)font {
++ (CGSize)sizeOfText:(NSString *)textToMesure widthOfTextView:(CGFloat)width withFont:(UIFont*)font {
     NSAttributedString *attributedText =
     [[NSAttributedString alloc]
      initWithString:textToMesure
@@ -169,10 +169,8 @@ static BOOL didShowMain = false;
     return size;
 }
 
-
 + (BOOL)isIpad {
-    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
-    {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         return YES;
     }
     return NO;
@@ -185,13 +183,12 @@ static BOOL didShowMain = false;
     return NO;
 }
 
-+ (BOOL) isValidEmail:(NSString *)checkString
-{
++ (BOOL)isValidEmail:(NSString *)checkString {
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
 
     if (![emailTest evaluateWithObject:checkString]) {
-        [Utilities alertWithError:@"E-mail inválido!"];
+        return NO;
     }
 
     return [emailTest evaluateWithObject:checkString];

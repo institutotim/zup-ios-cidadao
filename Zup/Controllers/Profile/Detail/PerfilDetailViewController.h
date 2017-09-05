@@ -43,7 +43,7 @@
 @property (weak, nonatomic) IBOutlet CustomButton *btResolvido;
 @property (weak, nonatomic) IBOutlet CustomButton *btNaoResolvido;
 
-@property (strong, nonatomic) UIButton* btReportar;
-@property (strong, nonatomic) UIAlertView* reportLoading;
+@property (strong, nonatomic) UIButton *btReportar;
+@property (strong, nonatomic) UIAlertController *reportLoading;
 
 @end

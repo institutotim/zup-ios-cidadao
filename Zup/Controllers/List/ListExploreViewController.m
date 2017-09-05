@@ -18,8 +18,7 @@
 
 @implementation ListExploreViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.imageZooms = [[NSMutableDictionary alloc] init];
@@ -28,9 +27,9 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
-    
+#pragma mark - View Lifecycle
+
+- (void)viewDidLoad {
     [self.lblNoSolicits setHidden:YES];
 
     [self.table registerNib:[UINib nibWithNibName:@"CellMinhaConta" bundle:nil] forCellReuseIdentifier:@"CellConta"];
@@ -104,8 +103,23 @@
     self.navigationItem.leftBarButtonItems = @[spacer, filterBarButton];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.screenName = @"Item de inventário";
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Auxiliar Methods
+
 - (void)removeLabelSolcitations {
-    
     CGRect frameBt = self.btInfo.frame;
     frameBt.origin.x = 110;
     [self.btInfo setFrame:frameBt];
@@ -113,24 +127,50 @@
     [self.btSolicit setHidden:YES];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.screenName = @"Item de inventário";
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
+- (void)buildMap {
+    NSString *latStr = [self.dictMain valueForKeyPath:@"position.latitude"];
+    
+    NSString *lngStr = [self.dictMain valueForKeyPath:@"position.longitude"];
+    
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latStr.floatValue, lngStr.floatValue);
+    
+    CustomMap *map = [[CustomMap alloc]init];
+    CGRect frame = self.table.frame;
+    frame.size.height = frame.size.width;
+    frame.origin.x = self.table.frame.size.width + self.table.frame.origin.x + 30;
+    [map setFrame:frame];
+    
+    if ([Utilities isIpad]) {
+        [self.view addSubview:map];
+    }
+    
+    
+    NSString *catStr = nil;
+    BOOL isReport = YES;
+    
+    if ([self.dictMain valueForKey:@"inventory_category_id"]) {
+        catStr = [self.dictMain valueForKeyPath:@"inventory_category_id"];
+        isReport = NO;
+    } else if ([self.dictMain valueForKeyPath:@"category.id"]) {
+        catStr = [self.dictMain valueForKeyPath:@"category.id"];
+    } else if ([self.dictMain valueForKey:@"category_id"]) {
+        catStr = [self.dictMain valueForKey:@"category_id"];
+    }
+    
+    
+    [map setPositionWithLocation:coord andCategory:[catStr intValue] isReport:isReport];
+    [map setUserInteractionEnabled:NO];
     
 }
 
+#pragma mark - Actions
+
 - (void)btBack {
-    if(self->showingImage)
-    {
+    if (self->showingImage) {
         [self->currentZoom hide];
         self->showingImage = NO;
         self->currentZoom = nil;
-    }
-    else
-    {
+    } else {
         [btCancel removeFromSuperview];
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -202,7 +242,6 @@
 #pragma mark - Request Info
 
 - (void)getDetails {
-    
     [self.lblNoSolicits setHidden:YES];
     [self.table setHidden:YES];
     [self.spin startAnimating];
@@ -214,52 +253,54 @@
 }
 
 - (void)didReceiveData:(NSData*)data {
-    
-    [self.spin stopAnimating];
-    [self.table setHidden:NO];
-
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    NSArray *arrData = [dict valueForKeyPath:@"item.data"];
-    
-    NSMutableArray *arrTempForTable = [[NSMutableArray alloc]init];
-    for (NSDictionary *dict in arrData) {
-        if([[dict valueForKey:@"field"] isKindOfClass:[NSNull class]])
-            continue;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.spin stopAnimating];
+        [self.table setHidden:NO];
         
-        NSString *titleStr = [UserDefaults getTitleForFieldId:[[dict valueForKeyPath:@"field.id"]intValue] idCat:[[self.dictMain valueForKey:@"inventory_category_id"]intValue]];
-        NSString *content = [dict valueForKey:@"content"];
-        if(titleStr == nil)
-        {
-            NSLog(@"Invalid field: %i", [[dict valueForKeyPath:@"field.id"]intValue]);
-            titleStr = @"NONAME!";
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        NSArray *arrData = [dict valueForKeyPath:@"item.data"];
+        
+        NSMutableArray *arrTempForTable = [[NSMutableArray alloc]init];
+        for (NSDictionary *dict in arrData) {
+            if([[dict valueForKey:@"field"] isKindOfClass:[NSNull class]])
+                continue;
+            
+            NSString *titleStr = [UserDefaults getTitleForFieldId:[[dict valueForKeyPath:@"field.id"]intValue] idCat:[[self.dictMain valueForKey:@"inventory_category_id"]intValue]];
+            NSString *content = [dict valueForKey:@"content"];
+            if(titleStr == nil)
+            {
+                NSLog(@"Invalid field: %i", [[dict valueForKeyPath:@"field.id"]intValue]);
+                titleStr = @"NONAME!";
+            }
+            
+            NSDictionary *dictTemp = @{@"title": titleStr,
+                                       @"content" : content,
+                                       @"kind": [dict valueForKeyPath:@"field.kind"]};
+            
+            [arrTempForTable addObject:dictTemp];
+            
         }
+        self.arrMain = [[NSArray alloc]initWithArray:arrTempForTable];
+        [self.table reloadData];
         
-        NSDictionary *dictTemp = @{@"title": titleStr,
-                                   @"content" : content,
-                                   @"kind": [dict valueForKeyPath:@"field.kind"]};
-        
-        [arrTempForTable addObject:dictTemp];
-        
-    }
-    self.arrMain = [[NSArray alloc]initWithArray:arrTempForTable];
-    [self.table reloadData];
-    
-    if ([Utilities isIpad]) {
-        [self buildMap];
-    }
+        if ([Utilities isIpad]) {
+            [self buildMap];
+        }
+    });
 }
 
 - (void)didReceiveError:(NSError*)error {
-    [Utilities alertWithServerError];
-    [self.spin stopAnimating];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [Utilities alertWithServerErrorInViewController:self];
+        [self.spin stopAnimating];
+    });
 }
 
 
 #pragma mark - Request Requests
 
 - (void)getRequests {
-    
     [self.lblNoSolicits setHidden:YES];
 
     [self.spin startAnimating];
@@ -271,61 +312,24 @@
 }
 
 - (void)didReceiveRequestData:(NSData*)data {
-    
-    [self.spin stopAnimating];
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    [self.table setHidden:NO];
-
-    self.arrMain = [[NSArray alloc]initWithArray:[dict valueForKey:@"reports"]];
-    [self.table reloadData];
-    
-    if (self.arrMain.count == 0) {
-        [self.lblNoSolicits setHidden:NO];
-    }
-    
-    if ([Utilities isIpad]) {
-        [self buildMap];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.spin stopAnimating];
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        [self.table setHidden:NO];
+        
+        self.arrMain = [[NSArray alloc]initWithArray:[dict valueForKey:@"reports"]];
+        [self.table reloadData];
+        
+        if (self.arrMain.count == 0) {
+            [self.lblNoSolicits setHidden:NO];
+        }
+        
+        if ([Utilities isIpad]) {
+            [self buildMap];
+        }
+    });
 }
-
-- (void)buildMap {
-    
-    NSString *latStr = [self.dictMain valueForKeyPath:@"position.latitude"];
-    
-    NSString *lngStr = [self.dictMain valueForKeyPath:@"position.longitude"];
-    
-    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latStr.floatValue, lngStr.floatValue);
-    
-    CustomMap *map = [[CustomMap alloc]init];
-    CGRect frame = self.table.frame;
-    frame.size.height = frame.size.width;
-    frame.origin.x = self.table.frame.size.width + self.table.frame.origin.x + 30;
-    [map setFrame:frame];
-    
-    if ([Utilities isIpad]) {
-        [self.view addSubview:map];
-    }
-    
-    
-    NSString *catStr = nil;
-    BOOL isReport = YES;
-    
-    if ([self.dictMain valueForKey:@"inventory_category_id"]) {
-        catStr = [self.dictMain valueForKeyPath:@"inventory_category_id"];
-        isReport = NO;
-    } else if ([self.dictMain valueForKeyPath:@"category.id"]) {
-        catStr = [self.dictMain valueForKeyPath:@"category.id"];
-    } else if ([self.dictMain valueForKey:@"category_id"]) {
-        catStr = [self.dictMain valueForKey:@"category_id"];
-    }
-
-    
-    [map setPositionWithLocation:coord andCategory:[catStr intValue] isReport:isReport];
-    [map setUserInteractionEnabled:NO];
-    
-}
-
 
 #pragma mark - Table View Delegates
 
@@ -502,8 +506,7 @@
     return nil;
 }
 
-- (void)openURL:(UITapGestureRecognizer*)sender
-{
+- (void)openURL:(UITapGestureRecognizer *)sender {
     UITableViewCell* cell = (UITableViewCell*) sender.view;
     UILabel* label = cell.detailTextLabel;
     NSString* url = label.text;
@@ -511,8 +514,7 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 }
 
-- (void)galleryImageTap:(UITapGestureRecognizer*)sender
-{
+- (void)galleryImageTap:(UITapGestureRecognizer*)sender {
     __weak UIImageView* view = (UIImageView*) sender.view;
     NSNumber* _id = [NSNumber numberWithInteger:view.tag];
     NSString* url = [self.imageZooms objectForKey:_id];
@@ -539,8 +541,6 @@
 //}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    
     if (isSolicit) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         
@@ -567,13 +567,6 @@
     //    [self.navigationController pushViewController:perfilDetailVC animated:YES];
     //
     //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

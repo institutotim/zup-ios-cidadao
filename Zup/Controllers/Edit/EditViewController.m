@@ -634,8 +634,7 @@ UITextField *activeField;
             msg = @"Preencha todos os campos!";
         }
         
-        [Utilities alertWithMessage:msg];
-        
+        [Utilities alertWithMessage:msg inViewController:self];
     }
     
     return isEmpty;
@@ -643,41 +642,40 @@ UITextField *activeField;
 
 #pragma mark - Networking
 
-- (void)didReceiveData:(NSData*)data response:(NSURLResponse*)response{
-    for (UITextField* tf in self.arrTf)
-    {
-        tf.enabled = YES;
-    }
-    [self hideOverlay];
-    
-    if (![data isKindOfClass:[NSNull class]]) {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        
-        if ([Utilities isIpad]) {
-            [self dismissViewControllerAnimated:YES completion:nil];
-        } else {
-            [self.navigationController popViewControllerAnimated:YES];
+- (void)didReceiveData:(NSData *)data response:(NSURLResponse *)response {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (UITextField *tf in self.arrTf) {
+            tf.enabled = YES;
         }
-        if ([dict valueForKeyPath:@"errors.email"]) {
-            [Utilities alertWithError:[[dict valueForKeyPath:@"errors.email"]objectAtIndex:0]];
-        } else if ([dict valueForKey:@"message"]) {
-            [Utilities alertWithMessage:[dict valueForKey:@"message"]];
+        [self hideOverlay];
+        
+        if (![data isKindOfClass:[NSNull class]]) {
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            
+            if ([Utilities isIpad]) {
+                [self dismissViewControllerAnimated:YES completion:nil];
+            } else {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            if ([dict valueForKeyPath:@"errors.email"]) {
+                [Utilities alertWithError:[[dict valueForKeyPath:@"errors.email"]objectAtIndex:0] inViewController:self];
+            } else if ([dict valueForKey:@"message"]) {
+                [Utilities alertWithMessage:[dict valueForKey:@"message"] inViewController:self];
+            }
+            
+            [self.perfilView getUserDetails];
         }
-        
-        [self.perfilView getUserDetails];
-        
-    }
+    });
 }
 
 - (void)updateUser {
-    if(self.tfPass.text.length > 0 && self.tfCurrentPassword.text.length == 0)
-    {
-        [Utilities alertWithError:@"Para criar uma nova senha é necessário digitar a senha atual."];
+    if (self.tfPass.text.length > 0 && self.tfCurrentPassword.text.length == 0) {
+        [Utilities alertWithError:@"Para criar uma nova senha é necessário digitar a senha atual." inViewController:self];
         return;
     }
     
     if (![self.tfConfirmPass.text isEqualToString:self.tfPass.text]) {
-        [Utilities alertWithError:@"Confirmação de senha não coincide!"];
+        [Utilities alertWithError:@"Confirmação de senha não coincide!" inViewController:self];
         return;
     }
     
@@ -686,8 +684,7 @@ UITextField *activeField;
     }
     
     if ([Utilities isInternetActive]) {
-        for (UITextField* tf in self.arrTf)
-        {
+        for (UITextField *tf in self.arrTf) {
             tf.enabled = NO;
         }
         [self showOverlay];
@@ -697,97 +694,98 @@ UITextField *activeField;
         [serverOp setAction:@selector(didReceiveData:response:)];
         [serverOp setActionErro:@selector(didReceiveError:operation:data:)];
         [serverOp updateUser:self.tfEmail.text currentPassword:self.tfCurrentPassword.text pass:self.tfPass.text name:self.tfName.text phone:self.tfPhone.text document:self.tfCpf.text address:self.tfAddress.text addressAdditional:self.tfComplement.text postalCode:self.tfCep.text district:self.tfBairro.text city:self.tfCidade.text];
+    } else {
+        [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
     }
 }
 
-- (void)didReceiveError:(NSError*)error operation:(ServerOperations*)operation data:(NSData*)data {
-    for (UITextField* tf in self.arrTf)
-    {
-        tf.enabled = YES;
-    }
-    [self hideOverlay];
-    
-    NSString* message;
-    if(data != nil)
-    {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        
-        message = @"";
-        
-        NSDictionary* fields = @{
-                                 @"name": self.tfName,
-                                 @"email": self.tfEmail,
-                                 @"password": self.tfPass,
-                                 @"password_confirmation": self.tfConfirmPass,
-                                 @"phone": self.tfPhone,
-                                 @"document": self.tfCpf,
-                                 @"address": self.tfAddress,
-                                 @"address_additional": self.tfComplement,
-                                 @"postal_code": self.tfCep,
-                                 @"district": self.tfBairro,
-                                 @"city": self.tfCidade,
-                                 @"current_password": self.tfCurrentPassword
-                                 };
-        
-        for(NSString* key in [fields keyEnumerator])
-        {
-            UITextField* field = [fields valueForKey:key];
-            field.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
+- (void)didReceiveError:(NSError *)error operation:(ServerOperations *)operation data:(NSData *)data {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (UITextField *tf in self.arrTf) {
+            tf.enabled = YES;
         }
+        [self hideOverlay];
         
-        NSDictionary* errorDict = [dict valueForKey:@"error"];
-        for(NSString* key in [errorDict keyEnumerator])
-        {
-            NSArray* messageArray = [errorDict valueForKey:key];
-            NSString* keymessages = @"";
+        NSString *message;
+        if (data != nil) {
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
             
-            for(NSString* msg in messageArray)
-            {
-                keymessages = [keymessages stringByAppendingFormat:@"%@\r", msg];
+            message = @"";
+            
+            NSDictionary* fields = @{
+                                     @"name": self.tfName,
+                                     @"email": self.tfEmail,
+                                     @"password": self.tfPass,
+                                     @"password_confirmation": self.tfConfirmPass,
+                                     @"phone": self.tfPhone,
+                                     @"document": self.tfCpf,
+                                     @"address": self.tfAddress,
+                                     @"address_additional": self.tfComplement,
+                                     @"postal_code": self.tfCep,
+                                     @"district": self.tfBairro,
+                                     @"city": self.tfCidade,
+                                     @"current_password": self.tfCurrentPassword
+                                     };
+            
+            for(NSString *key in [fields keyEnumerator]) {
+                UITextField *field = [fields valueForKey:key];
+                field.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
             }
             
-            message = [message stringByAppendingFormat:@"%@: %@\r", key, keymessages];
-            
-            UITextField* field = [fields valueForKey:key];
-            field.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
-            field.background = [Utilities changeColorForImage:self.tfEmail.background toColor:[UIColor redColor]];
-            
-            [self.scroll scrollsToTop];
+            NSDictionary *errorDict = [dict valueForKey:@"error"];
+            for (NSString *key in [errorDict keyEnumerator]) {
+                NSArray *messageArray = [errorDict valueForKey:key];
+                NSString *keymessages = @"";
+                
+                for (NSString *msg in messageArray) {
+                    keymessages = [keymessages stringByAppendingFormat:@"%@\r", msg];
+                }
+                
+                message = [message stringByAppendingFormat:@"%@: %@\r", key, keymessages];
+                
+                UITextField* field = [fields valueForKey:key];
+                field.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
+                field.background = [Utilities changeColorForImage:self.tfEmail.background toColor:[UIColor redColor]];
+                
+                [self.scroll scrollsToTop];
+            }
+        } else {
+            message = [NSString stringWithFormat:@"Erro ao editar perfil.\r%@", error.localizedDescription];
+            [Utilities alertWithMessage:message inViewController:self];
         }
-    }
-    else
-    {
-        message = [NSString stringWithFormat:@"Erro ao editar perfil.\r%@", error.localizedDescription];
-        [Utilities alertWithMessage:message];
-    }
-   // [Utilities alertWithMessage:error.localizedDescription];
-//    [Utilities alertWithMessage:@"Preencha os campos obrigatórios."];
+        // [Utilities alertWithMessage:error.localizedDescription];
+        //    [Utilities alertWithMessage:@"Preencha os campos obrigatórios."];
+    });
 }
 
 - (void)getUserDetails {
-    
     if ([Utilities isInternetActive]) {
         ServerOperations *serverOp = [[ServerOperations alloc]init];
         [serverOp setTarget:self];
         [serverOp setAction:@selector(didReceiveDetailsData:)];
         [serverOp setActionErro:@selector(didReceiveDetailsError:data:)];
         [serverOp getDetails];
+    } else {
+        [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
     }
 }
 
-- (void)didReceiveDetailsData:(NSData*)data {
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    if (![Utilities checkIfError:dict]) {
-        
-        self.dictUser = [[NSDictionary alloc]initWithDictionary:[dict valueForKey:@"user"]];
-        [self setValues];
-        
-    }
+- (void)didReceiveDetailsData:(NSData *)data {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        if (![Utilities checkIfError:dict]) {
+            self.dictUser = [[NSDictionary alloc]initWithDictionary:[dict valueForKey:@"user"]];
+            [self setValues];
+        } else {
+            [Utilities alertWithError:[dict valueForKey:@"error"] inViewController:self];
+        }
+    });
 }
 
-- (void)didReceiveDetailsError:(NSError*)error data:(NSData*)data {
-    [Utilities alertWithServerError];
+- (void)didReceiveDetailsError:(NSError *)error data:(NSData *)data {
+    dispatch_async(dispatch_get_main_queue(), ^{
+       [Utilities alertWithServerErrorInViewController:self];
+    });
 }
 
 #pragma mark - Actions
@@ -838,19 +836,23 @@ UITextField *activeField;
                             NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
                             [parameters setValue:@"id, name, email, friends{id,name,picture}" forKey:@"fields"];
                             [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:parameters] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                                if (!error) {
-                                    [UserDefaults setFbToken:[FBSDKAccessToken currentAccessToken].tokenString];
-                                    [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworFacebook];
-                                    [weakSelf reloadButtons];
-                                } else {
-                                    [weakSelf showErrorWithMessage:@"Não foi possível logar com o Facebook. Verifique sua conexão com a internet."];
-                                }
-                                [weakSelf.spin stopAnimating];
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    if (!error) {
+                                        [UserDefaults setFbToken:[FBSDKAccessToken currentAccessToken].tokenString];
+                                        [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworFacebook];
+                                        [weakSelf reloadButtons];
+                                    } else {
+                                        [weakSelf showErrorWithMessage:@"Não foi possível logar com o Facebook. Verifique sua conexão com a internet."];
+                                    }
+                                    [weakSelf.spin stopAnimating];
+                                });
                             }];
                         }
                     }
                 }
             }];
+        } else {
+            [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
         }
     }
 }
@@ -880,13 +882,16 @@ UITextField *activeField;
     } else {
         // need access first
         [accountStore requestAccessToAccountsWithType:accountType options:nil completion:^(BOOL granted, NSError *error) {
-            if (granted) {
-                [self _showListOfTwitterAccountsFromStore:accountStore];
-            } else {
-                [Utilities alertWithMessage:[NSString stringWithFormat:@"O %@ não tem permissão para acessar sua conta do Twitter", [UIApplication displayName]]];
-                
-                [self.spin stopAnimating];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (granted) {
+                    [self _showListOfTwitterAccountsFromStore:accountStore];
+                } else {
+                    [Utilities alertWithMessage:[NSString stringWithFormat:@"O %@ não tem permissão para acessar sua conta do Twitter", [UIApplication displayName]]
+                               inViewController:self];
+                    
+                    [self.spin stopAnimating];
+                }
+            });
         }];
     }
 }
@@ -911,34 +916,35 @@ UITextField *activeField;
         _apiManager = [[TWAPIManager alloc]init];
         
         [_apiManager performReverseAuthForAccount:account withHandler:^(NSData *responseData, NSError *error) {
-            if (responseData) {
-                NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-                
-                NSLog(@"Reverse Auth process returned: %@", responseStr);
-                [self.spin stopAnimating];
-                
-                NSArray *parts = [responseStr componentsSeparatedByString:@"&"];
-                NSString *lined = [parts componentsJoinedByString:@"\n"];
-                NSLog(@"%@", lined);
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    //                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:lined delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    //                    [alert show];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (responseData) {
+                    NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
                     
-                    [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworTwitter];
-                    [self reloadButtons];
+                    NSLog(@"Reverse Auth process returned: %@", responseStr);
+                    [self.spin stopAnimating];
                     
-                });
-            }
-            else {
-                NSLog(@"Reverse Auth process failed. Error returned was: %@\n", [error localizedDescription]);
-            }
+                    NSArray *parts = [responseStr componentsSeparatedByString:@"&"];
+                    NSString *lined = [parts componentsJoinedByString:@"\n"];
+                    NSLog(@"%@", lined);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        //                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:lined delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        //                    [alert show];
+                        
+                        [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworTwitter];
+                        [self reloadButtons];
+                        
+                    });
+                }
+                else {
+                    NSLog(@"Reverse Auth process failed. Error returned was: %@\n", [error localizedDescription]);
+                }
+            });
         }];
         
     } else {
-        [Utilities alertWithMessage:@"Você não tem nenhuma conta do Twitter configurada. Por favor, vá até Ajustes e adicione."];
+        [Utilities alertWithMessage:@"Você não tem nenhuma conta do Twitter configurada. Por favor, vá até Ajustes e adicione." inViewController:self];
         [self.spin stopAnimating];
     }
-    
 }
 
 @end

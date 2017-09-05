@@ -233,15 +233,15 @@
     NSNumber *private_resolution_time = [dict valueForKey:@"private_resolution_time"];
     
     NSMutableDictionary *tempDict = [NSMutableDictionary dictionaryWithDictionary:@{@"arbitrary" : [dict valueForKey:@"allows_arbitrary_position"],
-                                                                                    @"iconData": dataImgIcon,
-                                                                                    @"markerData" : dataImgMarker,
-                                                                                    @"iconDataDisabled" : dataImgIconDisabled,
+                                                                                    @"iconData": dataImgIcon != nil ? dataImgIcon : @"",
+                                                                                    @"markerData" : dataImgMarker != nil ? dataImgMarker : @"",
+                                                                                    @"iconDataDisabled" : dataImgIconDisabled != nil ? dataImgIconDisabled : @"",
                                                                                     @"id" : @([[dict valueForKey:@"id"] intValue]),
-                                                                                    @"title" : [dict valueForKey:@"title"],
+                                                                                    @"title" : [Utilities checkIfNull:[dict valueForKey:@"title"]],
                                                                                     @"resolution_time" : [Utilities checkIfNull:[dict valueForKey:@"resolution_time"]],
                                                                                     @"statuses" : arrStatus,
                                                                                     @"user_response_time" : [Utilities checkIfNull:[dict valueForKey:@"user_response_time"]],
-                                                                                    @"color" : [dict valueForKey:@"color"],
+                                                                                    @"color" : [Utilities checkIfNull:[dict valueForKey:@"color"]],
                                                                                     @"inventory_categories": arrCategories,
                                                                                     @"resolution_time_enabled": resolution_time_enabled,
                                                                                     @"private_resolution_time": private_resolution_time
@@ -404,10 +404,12 @@
 }
 
 - (void)didReceiveError:(NSError*)error {
-    NSString* errorString = [NSString stringWithFormat:@"%@", error];
-    [[RavenClient sharedClient] captureMessage:errorString];
-    
-    [Utilities alertWithServerError];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *errorString = [NSString stringWithFormat:@"%@", error];
+        [[RavenClient sharedClient] captureMessage:errorString];
+        
+        [Utilities alertWithServerErrorInViewController:self];
+    });
 }
 
 - (void)getInventoryCategories {
@@ -544,16 +546,20 @@
 }
 
 - (void)didReceiveFeatureFlagsError:(NSError*)error {
-    NSString *errorString = [NSString stringWithFormat:@"%@", error];
-    [[RavenClient sharedClient] captureMessage:errorString];
-    
-    [Utilities alertWithServerError];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *errorString = [NSString stringWithFormat:@"%@", error];
+        [[RavenClient sharedClient] captureMessage:errorString];
+        
+        [Utilities alertWithServerErrorInViewController:self];
+    });
 }
 
 - (void)didReceiveInventoryError:(NSString *)errorString {
-    [[RavenClient sharedClient] captureMessage:errorString];
-    
-    [Utilities alertWithServerError];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[RavenClient sharedClient] captureMessage:errorString];
+
+        [Utilities alertWithServerErrorInViewController:self];
+    });
 }
 
 - (void)buildScroll {

@@ -78,7 +78,7 @@
 - (void)didSendButton {
     
     if (![Utilities isValidEmail:self.tfemail.text]) {
-        //[Utilities alertWithError:@"Insira um e-mail válido!"];
+        [Utilities alertWithError:@"E-mail inválido!" inViewController:self];
         return;
     }
     
@@ -90,36 +90,36 @@
 }
 
 - (void)didReceiveSendResponse:(NSData*)data {
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
-                                                         options:NSJSONReadingAllowFragments
-                                                           error:nil];
-    if ([dict valueForKey:@"message"]) {
-        [Utilities alertWithMessage:[dict valueForKey:@"message"]];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    } else {
-        [Utilities alertWithServerError];
-    }
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
+                                                             options:NSJSONReadingAllowFragments
+                                                               error:nil];
+        if ([dict valueForKey:@"message"]) {
+            [Utilities alertWithMessage:[dict valueForKey:@"message"] inViewController:self];
+            [self dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            [Utilities alertWithServerErrorInViewController:self];
+        }
+    });
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     self.screenName = @"Esqueci minha senha";
 }
 
 - (void)didReceiveError:(NSError*)error {
-    [Utilities alertWithServerError];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [Utilities alertWithServerErrorInViewController:self];
+    });
 }
 
 - (void)didCancelButton {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }

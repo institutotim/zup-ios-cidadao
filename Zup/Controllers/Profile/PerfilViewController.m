@@ -28,8 +28,9 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+#pragma mark - View Lifecycle
+
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [self.spin setHidesWhenStopped:YES];
@@ -66,6 +67,36 @@
     [self.navigationItem setHidesBackButton:YES];
     [self createNavButtons];
 }
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    //[btCancel removeFromSuperview];
+    //[btEdit removeFromSuperview];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.screenName = @"Minha Conta";
+    
+    tokenStr = [UserDefaults getToken];
+    
+    if (tokenStr.length == 0) {
+        [self callLoginView];
+    }
+    
+    [self.spin setCenter:self.table.center];
+    [self.table scrollRectToVisible:CGRectMake(1, 1, 1, 1) animated:NO];
+    
+    [self getData];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Auxiliar Methods
 
 - (void)createNavButtons {
     btEdit = [[CustomButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 65, 5, 60, 35)];
@@ -114,27 +145,6 @@
     
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    //[btCancel removeFromSuperview];
-    //[btEdit removeFromSuperview];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.screenName = @"Minha Conta";
-    
-    tokenStr = [UserDefaults getToken];
-    
-    if (tokenStr.length == 0) {
-        [self callLoginView];
-    }
-    
-    [self.spin setCenter:self.table.center];
-    [self.table scrollRectToVisible:CGRectMake(1, 1, 1, 1) animated:NO];
-    
-    [self getData];
-}
-
 - (void)getData {
     
     [self.table setHidden:YES];
@@ -153,36 +163,38 @@
 #pragma mark - Get Details
 
 - (void)getUserDetails {
-    
     if ([Utilities isInternetActive]) {
-        
         ServerOperations *serverOp = [[ServerOperations alloc]init];
         [serverOp setTarget:self];
         [serverOp setAction:@selector(didReceiveData:)];
         [serverOp setActionErro:@selector(didReceiveError:)];
         [serverOp getDetails];
+    } else {
+        [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
     }
 }
 
 - (void)didReceiveData:(NSData*)data {
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    [self setValuesWithDict:[dict valueForKey:@"user"]];
-    
-    self.dictUser = [[NSDictionary alloc]initWithDictionary:[dict valueForKey:@"user"]];
-    [self.table reloadData];
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        [self setValuesWithDict:[dict valueForKey:@"user"]];
+        
+        self.dictUser = [[NSDictionary alloc]initWithDictionary:[dict valueForKey:@"user"]];
+        [self.table reloadData];
+
+    });
 }
 
-
 - (void)didReceiveError:(NSError*)error {
-    [Utilities alertWithServerError];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [Utilities alertWithServerErrorInViewController:self];
+    });
 }
 
 #pragma mark - Get Posts
 
 - (void)getPosts {
-    
     if (isLoading) {
         return;
     }
@@ -197,84 +209,89 @@
         [serverOp setAction:@selector(didReceivePostsData:)];
         [serverOp setActionErro:@selector(didReceivePostsError:)];
         [serverOp getUserPostsWithPage:page];
+    } else {
+        [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
     }
 }
 
 - (void)didReceivePostsData:(NSData*)data {
-    isLoading = NO;
-    [self.table setHidden:NO];
-    [self.spin stopAnimating];
-    
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
-    [UIView setAnimationDelegate:self];
-    if ([Utilities isIpad]) {
-        [self.table setContentInset:UIEdgeInsetsMake(50, 0, 0, 0)];
-    } else {
-        [self.table setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-    }
-    [UIView commitAnimations];
-    
-    if (page == 1) {
-#warning Faltando numero de paginas
-        pageCountMax = [[dict valueForKey:@"pageCount"]intValue];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        isLoading = NO;
+        [self.table setHidden:NO];
+        [self.spin stopAnimating];
         
-        self.arrMain = [[NSMutableArray alloc]initWithArray:[dict valueForKey:@"reports"]];
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         
-        CGRect spinFrame = self.spin.frame;
         
-        spinFrame.origin.y = self.table.frame.size.height + self.table.frame.origin.y - 34;
-        
-        //        if ([Utilities isIphone4inch]) {
-        //            spinFrame.origin.y = 474;
-        //        } else {
-        //            spinFrame.origin.y = 346;
-        //        }
-        
-        [self.spin setFrame:spinFrame];
-        
-    } else {
-        for (NSDictionary *newDict in [dict valueForKey:@"reports"]) {
-            NSNumber* rid = [newDict valueForKey:@"id"];
-            
-            BOOL contains = NO;
-            for(NSDictionary* rdict in self.arrMain)
-            {
-                NSNumber* rrid = [rdict valueForKey:@"id"];
-                
-                if([rid intValue] == [rrid intValue])
-                {
-                    contains = YES;
-                    break;
-                }
-            }
-            
-            if(!contains)
-                [self.arrMain addObject:newDict];
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDelegate:self];
+        if ([Utilities isIpad]) {
+            [self.table setContentInset:UIEdgeInsetsMake(50, 0, 0, 0)];
+        } else {
+            [self.table setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
         }
-    }
-    
-    totalCountSolicits = [[dict valueForKey:@"total_reports_by_user"]intValue];
-    
-    if (totalCountSolicits == 1) {
-        [self.lblSoliciations setText:@"1 SOLICITAÇÃO"];
-    } else {
-        [self.lblSoliciations setText:[NSString stringWithFormat:@"%i SOLICITAÇÕES", totalCountSolicits]];
-    }
-    
-    [self.table reloadData];
-    [self.table setHidden:NO];
-    
+        [UIView commitAnimations];
+        
+        if (page == 1) {
+    #warning Faltando numero de paginas
+            pageCountMax = [[dict valueForKey:@"pageCount"]intValue];
+            
+            self.arrMain = [[NSMutableArray alloc]initWithArray:[dict valueForKey:@"reports"]];
+            
+            CGRect spinFrame = self.spin.frame;
+            
+            spinFrame.origin.y = self.table.frame.size.height + self.table.frame.origin.y - 34;
+            
+            //        if ([Utilities isIphone4inch]) {
+            //            spinFrame.origin.y = 474;
+            //        } else {
+            //            spinFrame.origin.y = 346;
+            //        }
+            
+            [self.spin setFrame:spinFrame];
+            
+        } else {
+            for (NSDictionary *newDict in [dict valueForKey:@"reports"]) {
+                NSNumber* rid = [newDict valueForKey:@"id"];
+                
+                BOOL contains = NO;
+                for(NSDictionary* rdict in self.arrMain)
+                {
+                    NSNumber* rrid = [rdict valueForKey:@"id"];
+                    
+                    if([rid intValue] == [rrid intValue])
+                    {
+                        contains = YES;
+                        break;
+                    }
+                }
+                
+                if(!contains)
+                    [self.arrMain addObject:newDict];
+            }
+        }
+        
+        totalCountSolicits = [[dict valueForKey:@"total_reports_by_user"]intValue];
+        
+        if (totalCountSolicits == 1) {
+            [self.lblSoliciations setText:@"1 SOLICITAÇÃO"];
+        } else {
+            [self.lblSoliciations setText:[NSString stringWithFormat:@"%i SOLICITAÇÕES", totalCountSolicits]];
+        }
+        
+        [self.table reloadData];
+        [self.table setHidden:NO];
+    });
 }
 
 - (void)didReceivePostsError:(NSError*)error {
-    [Utilities alertWithServerError];
-    [self.spin stopAnimating];
-    isLoading = NO;
-    page --;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [Utilities alertWithServerErrorInViewController:self];
+        [self.spin stopAnimating];
+        isLoading = NO;
+        page --;
+    });
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -302,28 +319,25 @@
 }
 
 - (void)logout {
-    
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:[UIApplication displayName] message:@"Tem certeza de que deseja sair de sua conta?" delegate:self cancelButtonTitle:@"Não" otherButtonTitles:@"Sim", nil];
-    [alert show];
-    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[UIApplication displayName]
+                                                                   message:@"Tem certeza de que deseja sair de sua conta?"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Não" style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Sim" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"pushToMainView" object:nil];
+            [UserDefaults setToken:@""];
+            [UserDefaults setUserId:@""];
+            [UserDefaults setIsUserLogged:NO];
+            [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworkAnyone];
+        });
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
-#pragma mark - Alert View Delegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
-        
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"pushToMainView" object:nil];
-        [UserDefaults setToken:@""];
-        [UserDefaults setUserId:@""];
-        [UserDefaults setIsUserLogged:NO];
-        [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworkAnyone];
-    }
-}
+#pragma mark - Navigation
 
 - (void)didEditButton {
-    
-    
     EditViewController *editVC = [[EditViewController alloc]initWithNibName:@"EditViewController" bundle:nil];
     editVC.dictUser = self.dictUser;
     editVC.perfilView = self;
@@ -434,15 +448,8 @@
     
 }
 
-- (void)setIsFromOtherTab:(BOOL)isFromOtherTab
-{
+- (void)setIsFromOtherTab:(BOOL)isFromOtherTab {
     
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

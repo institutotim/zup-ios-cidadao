@@ -243,8 +243,7 @@ ServerOperations *serverOperations;
     currentMarker = marker;
 }
 
-- (void)getLocationWithLoction:(CLLocationCoordinate2D)location
-{
+- (void)getLocationWithLoction:(CLLocationCoordinate2D)location {
     [self.searchBar setText:@""];
     [self.searchBar setPlaceholder:@"Carregando endereço..."];
     
@@ -260,50 +259,50 @@ ServerOperations *serverOperations;
     //[self performSelector:@selector(didFailLoadAddress) withObject:nil afterDelay:5];
 }
 
-- (void) didReceiveAddress:(NSData*)data withOperation:(TIRequestOperation*)operation
-{
-    if(operation.jobId != self->locationJobId)
-        return;
-    
-    NSDictionary* dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    NSArray* results = [dictionary valueForKey:@"results"];
-    
-    if([results count] > 0)
-    {
-        NSDictionary* mainResult = [results objectAtIndex:0];
-    
-        NSString* streetNumber = [self component:@"street_number" forAddress:mainResult];
-        NSString* route = [self longNameOfComponent:@"route" forAddress:mainResult];
-    
-        if(self.tfNumber.text.length == 0 || !self->isCustomNumber)
-            self.tfNumber.text = streetNumber;
-        self.searchBar.text = route;
-        self.searchBar.placeholder = @"Endereço";
-    
-        NSMutableString *str = [[NSMutableString alloc]init];
-    
-        [str appendString:[self longNameOfComponent:@"route" forAddress:mainResult]];
-        //[str appendString:@", "];
-        //[str appendString:[self component:@"street_number" forAddress:mainResult]];
-    
-        userMarker.title = @"Posição atual";
-        userMarker.snippet = str;
-    
-        currentAddress = str;
-        self.currentAddressDesc = mainResult;
-    }
-    else
-    {
-        self.tfNumber.text = @"";
-        self.searchBar.text = @"";
-        self.searchBar.placeholder = @"Endereço";
-        currentAddress = nil;
-        self.currentAddressDesc = nil;
-    }
+- (void) didReceiveAddress:(NSData*)data withOperation:(TIRequestOperation *)operation {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(operation.jobId != self->locationJobId)
+            return;
+        
+        NSDictionary* dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        NSArray* results = [dictionary valueForKey:@"results"];
+        
+        if([results count] > 0)
+        {
+            NSDictionary* mainResult = [results objectAtIndex:0];
+            
+            NSString* streetNumber = [self component:@"street_number" forAddress:mainResult];
+            NSString* route = [self longNameOfComponent:@"route" forAddress:mainResult];
+            
+            if(self.tfNumber.text.length == 0 || !self->isCustomNumber)
+                self.tfNumber.text = streetNumber;
+            self.searchBar.text = route;
+            self.searchBar.placeholder = @"Endereço";
+            
+            NSMutableString *str = [[NSMutableString alloc]init];
+            
+            [str appendString:[self longNameOfComponent:@"route" forAddress:mainResult]];
+            //[str appendString:@", "];
+            //[str appendString:[self component:@"street_number" forAddress:mainResult]];
+            
+            userMarker.title = @"Posição atual";
+            userMarker.snippet = str;
+            
+            currentAddress = str;
+            self.currentAddressDesc = mainResult;
+        }
+        else
+        {
+            self.tfNumber.text = @"";
+            self.searchBar.text = @"";
+            self.searchBar.placeholder = @"Endereço";
+            currentAddress = nil;
+            self.currentAddressDesc = nil;
+        }
+    });
 }
 
-- (NSString*) component:(NSString*)componentType forAddress:(NSDictionary*)address
-{
+- (NSString *)component:(NSString *)componentType forAddress:(NSDictionary*)address {
     NSArray* components = [address objectForKey:@"address_components"];
     for(NSDictionary* _component in components)
     {
@@ -359,8 +358,7 @@ ServerOperations *serverOperations;
     self->freeJobId++;
 }
 
-- (void)mapView:(GMSMapView *)mapView
-didChangeCameraPosition:(GMSCameraPosition *)position {
+- (void)mapView:(GMSMapView *)mapView didChangeCameraPosition:(GMSCameraPosition *)position {
     
     CGPoint point = self.mapView.center;
     point.y -= 60;
@@ -862,33 +860,34 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
             //[serverOp getItemsForPosition:currentCoord.latitude longitude:currentCoord.longitude radius:radius zoom:self.mapView.camera.zoom categoryId:[self.dictMain valueForKey:@"id"]];
         }
     
+    } else {
+        [Utilities alertWithError:@"Verifique sua conexão com a internet e tente novamente." inViewController:self];
     }
 }
 
 - (void)didReceiveInventoryData:(NSData*)data {
-    
-    
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    
-    NSArray *arr = [dict valueForKey:@"items"];
-    
-    for (NSDictionary *dict in arr) {
-        if (![self.arrMainInventory containsObject:dict]) {
-            [self.arrMainInventory addObject:dict];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        NSArray *arr = [dict valueForKey:@"items"];
+        
+        for (NSDictionary *dict in arr) {
+            if (![self.arrMainInventory containsObject:dict]) {
+                [self.arrMainInventory addObject:dict];
+            }
         }
-    }
-    
-    for (NSDictionary *dict in self.arrMainInventory) {
-        [self setLocationWithCoordinate:dict];
-    }
-    
+        
+        for (NSDictionary *dict in self.arrMainInventory) {
+            [self setLocationWithCoordinate:dict];
+        }
+    });
 }
 
 - (void)didReceiveIventoryError:(NSError*)error data:(NSData*)data {
-    [Utilities alertWithServerError];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [Utilities alertWithServerErrorInViewController:self];
+    });
 }
-
 
 - (GMSMarker*)setMarkerInventoryWithCoordinate:(CLLocationCoordinate2D)coordinate
                                  snippet:(NSString*)snippet
@@ -925,7 +924,7 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
         }
     }
     
-    marker.Map = self.mapView;
+    marker.map = self.mapView;
     [self.arrMarkers addObject:marker];
     
     return marker;
@@ -942,7 +941,6 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(lat, lng);
     
     [self setMarkerInventoryWithCoordinate:coord snippet:nil draggable:NO type:[[dict valueForKey:@"inventory_category_id"]intValue] userData:dict];
-    
 }
 
 - (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker {
@@ -984,18 +982,12 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
         textView.text = @"";
     }
     return YES;
-    
 }
-
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    
     [btFilter setHidden:NO];
     [self.tvReferencia setHidden:NO];
-    
-    
 }
-
 
 - (void)btConfirm {
     if(self.tfNumber.text.length > 0)
@@ -1016,7 +1008,6 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
 }
 
 - (void)getLocationWithString:(NSString*)strKey andLocation:(GMSCoordinateBounds*)coord{
-    
     [serverOperations CancelRequest];
     serverOperations = nil;
     
@@ -1026,45 +1017,47 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     [serverOperations getAddressWithString:strKey andGeo:coord.northEast.latitude lng:coord.northEast.longitude southLat:coord.southWest.latitude southLng:coord.southWest.longitude];
 }
 
-- (void)didReceiveAddressLocal:(NSData*)data {
-    [activityIndicator stopAnimating];
-    
-    NSDictionary *dict = [[NSDictionary alloc]init];
-    dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    if ([dict valueForKey:@"results"] && [[dict valueForKey:@"results"] count] > 0) {
+- (void)didReceiveAddressLocal:(NSData *)data {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [activityIndicator stopAnimating];
         
-        NSDictionary *newDict = [[dict valueForKey:@"results"]objectAtIndex:0];
+        NSDictionary *dict = [[NSDictionary alloc]init];
+        dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         
-        if (![newDict valueForKeyPath:@"geometry.location.lat"]) {
-            return;
+        if ([dict valueForKey:@"results"] && [[dict valueForKey:@"results"] count] > 0) {
+            
+            NSDictionary *newDict = [[dict valueForKey:@"results"]objectAtIndex:0];
+            
+            if (![newDict valueForKeyPath:@"geometry.location.lat"]) {
+                return;
+            }
+            
+            NSString* route = [self longNameOfComponent:@"route" forAddress:newDict];
+            
+            if (![route isEqualToString:self.searchBar.text]) {
+                return;
+            }
+            double lat = [[newDict valueForKeyPath:@"geometry.location.lat"]doubleValue];
+            
+            double lng = [[newDict valueForKeyPath:@"geometry.location.lng"]doubleValue];
+            
+            CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(lat, lng);
+            
+            
+            
+            currentCoord = coord;
+            GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:coord.latitude
+                                                                    longitude:coord.longitude
+                                                                         zoom:self.mapView.camera.zoom];
+            
+            BOOL cn = self->isCustomNumber;
+            self.mapView.camera = camera;
+            self->isCustomNumber = cn;
+            
+            boundsCurrent = [[GMSCoordinateBounds alloc]
+                             initWithRegion: self.mapView.projection.visibleRegion];
         }
-        
-        NSString* route = [self longNameOfComponent:@"route" forAddress:newDict];
-      
-        if (![route isEqualToString:self.searchBar.text]) {
-            return;
-        }
-        double lat = [[newDict valueForKeyPath:@"geometry.location.lat"]doubleValue];
-        
-        double lng = [[newDict valueForKeyPath:@"geometry.location.lng"]doubleValue];
-        
-        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(lat, lng);
-        
-       
-        
-        currentCoord = coord;
-        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:coord.latitude
-                                                                longitude:coord.longitude
-                                                                     zoom:self.mapView.camera.zoom];
-        
-        BOOL cn = self->isCustomNumber;
-        self.mapView.camera = camera;
-        self->isCustomNumber = cn;
-        
-        boundsCurrent = [[GMSCoordinateBounds alloc]
-                         initWithRegion: self.mapView.projection.visibleRegion];
-    }
+    });
 }
 
 @end

@@ -140,6 +140,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Networking
+
+- (void)didReceiveError:(NSError*)error {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [Utilities alertWithServerErrorInViewController:self];
+    });
+}
+
 #pragma mark - TabbarController Methods
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
@@ -152,6 +160,19 @@
 }
 
 #pragma mark - Auxiliar Methods
+
+- (BOOL)isFeatureEnabled:(NSString *)feature flags:(NSArray *)flags {
+    for (NSDictionary *flag in flags) {
+        NSString *name = [flag valueForKey:@"name"];
+        NSString *status = [flag valueForKey:@"status"];
+        
+        if ([name isEqualToString:feature]) {
+            return ![status isEqualToString:@"disabled"];
+        }
+    }
+    
+    return YES;
+}
 
 - (void)sessionExpired {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sessão expirada"
@@ -186,6 +207,16 @@
         }
     }
     [UIView commitAnimations];
+}
+
+#pragma mark - Navigation
+
+- (void)backToMap {
+    [self setSelectedIndex:0];
+}
+
+- (void)pushToMainView {
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)showTabBar {
@@ -223,38 +254,13 @@
     CLLocationCoordinate2D location = CLLocationCoordinate2DMake([lat floatValue], [lng floatValue]);
     
     NSArray *arrayVC = [self viewControllers];
-
+    
     UINavigationController *nav = (UINavigationController*)[arrayVC objectAtIndex:0];
     ExploreViewController *exploreVC = [nav.viewControllers objectAtIndex:0];
     [exploreVC buildDetail:[dict valueForKey:@"report"]];
     [exploreVC setLocationWithClLocation:location zoom:0];
     exploreVC.isGoToReportDetail = YES;
     exploreVC.idCreatedReport = [[dict valueForKey:@"idReport"]intValue];
-}
-
-- (BOOL)isFeatureEnabled:(NSString *)feature flags:(NSArray *)flags {
-    for (NSDictionary *flag in flags) {
-        NSString *name = [flag valueForKey:@"name"];
-        NSString *status = [flag valueForKey:@"status"];
-        
-        if ([name isEqualToString:feature]) {
-            return ![status isEqualToString:@"disabled"];
-        }
-    }
-    
-    return YES;
-}
-
-- (void)didReceiveError:(NSError*)error {
-    [Utilities alertWithServerError];
-}
-
-- (void)backToMap {
-    [self setSelectedIndex:0];
-}
-
-- (void)pushToMainView {
-    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

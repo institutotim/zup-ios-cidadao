@@ -32,9 +32,9 @@
 + (BOOL)isIphone4inch;
 + (NSString*)setUrl:(NSString*)str Width:(int)width height:(int)height;
 
-+ (void)alertWithMessage:(NSString*)message;
-+ (void)alertWithError:(NSString*)message;
-+ (void)alertWithServerError;
++ (void)alertWithMessage:(NSString *)message inViewController:(UIViewController *)viewController;
++ (void)alertWithError:(NSString *)message inViewController:(UIViewController *)viewController;
++ (void)alertWithServerErrorInViewController:(UIViewController *)viewController;
 + (BOOL)checkIfError:(NSDictionary*)dict;
 
 + (NSString*)checkIfNull:(NSString*)textToCheck;
