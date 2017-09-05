@@ -15,17 +15,16 @@
 
 @implementation AppDelegate
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    UITextField* textField = [alertView textFieldAtIndex:0];
-    if ([textField.text isEqualToString:@"zup_piloto2014"]) {
-        return;
-    } else {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Senha" message:@"Senha incorreta. Tente novamente." delegate:self cancelButtonTitle:@"Validar" otherButtonTitles: nil];
-        alert.alertViewStyle = UIAlertViewStyleSecureTextInput;
-        [alert show];
-    }
-}
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+//    UITextField* textField = [alertView textFieldAtIndex:0];
+//    if ([textField.text isEqualToString:@"zup_piloto2014"]) {
+//        return;
+//    } else {
+//        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Senha" message:@"Senha incorreta. Tente novamente." delegate:self cancelButtonTitle:@"Validar" otherButtonTitles: nil];
+//        alert.alertViewStyle = UIAlertViewStyleSecureTextInput;
+//        [alert show];
+//    }
+//}
 
 /*- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
@@ -40,9 +39,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     //NSLog(@"Token: %@", [UserDefaults getToken]);
     // Override point for customization after application launch.
-    
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Senha" message:@"Este aplicativo está em projeto piloto e tem acesso restrito. Para continuar digite a senha que você recebeu para participar desta fase." delegate:self cancelButtonTitle:@"Validar" otherButtonTitles: nil];
-    alert.alertViewStyle = UIAlertViewStyleSecureTextInput;
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Senha" message:@"Este aplicativo está em projeto piloto e tem acesso restrito. Para continuar digite a senha que você recebeu para participar desta fase." delegate:self cancelButtonTitle:@"Validar" otherButtonTitles: nil];
+//    alert.alertViewStyle = UIAlertViewStyleSecureTextInput;
     //[alert show];
     
     NSLog(@"%@", kAPIkey);

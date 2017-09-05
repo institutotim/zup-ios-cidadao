@@ -353,7 +353,7 @@
                     [self callReportDetail];
                 }
             } else {
-                [self dismissViewControllerAnimated:YES completion:nil];
+//                [self dismissViewControllerAnimated:YES completion:nil];
                 [self callReportDetail];
                 
                 //            if (social == kSocialNetworFacebook || social == kSocialNetworGooglePlus) {

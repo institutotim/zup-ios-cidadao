@@ -15,9 +15,8 @@
     return escapedURL;
 }
 
--(NSString *)encodeURL
-{
-    return [self stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+-(NSString *)encodeURL {
+    return [self stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 }
 
 -(NSString*)asCurrency {

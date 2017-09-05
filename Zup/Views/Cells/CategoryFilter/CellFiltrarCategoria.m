@@ -7,8 +7,7 @@
 
 @implementation CellFiltrarCategoria
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
@@ -16,25 +15,22 @@
     return self;
 }
 
-- (void)awakeFromNib
-{
+- (void)awakeFromNib {
+    [super awakeFromNib];
     // Initialization code
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
 }
 
-- (void) setvalues:(NSDictionary*) dict selected:(BOOL)selected iconColored:(BOOL)iconColored
-{
+- (void)setvalues:(NSDictionary *)dict selected:(BOOL)selected iconColored:(BOOL)iconColored {
     BOOL isSub = NO;
     
     UIImage* icon;
-    if([dict objectForKey:@"parent_id"] != nil)
-    {
+    if ([dict objectForKey:@"parent_id"] != nil) {
         isSub = YES;
         icon = nil;
     }
@@ -59,7 +55,12 @@
     self.selectIndicator.hidden = !selected;
     
     CGRect frame = self.lblTitle.frame;
-    CGSize sz = [self.lblTitle.text sizeWithFont:self.lblTitle.font constrainedToSize:CGSizeMake(frame.size.width, 999)];
+    CGRect rect = [self.lblTitle.text boundingRectWithSize:CGSizeMake(frame.size.width, MAXFLOAT)
+                                                   options:NSStringDrawingUsesFontLeading 
+                                                attributes:@{NSFontAttributeName : self.lblTitle.font}
+                                                   context:nil];
+//    CGSize sz = [self.lblTitle.text sizeWithFont:self.lblTitle.font constrainedToSize:CGSizeMake(frame.size.width, 999)];
+    CGSize sz = rect.size;
     
     frame.size.height = sz.height;
     self.lblTitle.frame = frame;
@@ -74,8 +75,7 @@
     self.height = self.separator.frame.origin.y + self.separator.frame.size.height + 5;
 }
 
-- (void) setShowMoreExpanded:(BOOL) expanded
-{
+- (void)setShowMoreExpanded:(BOOL)expanded {
     self.iconView.hidden = YES;
     self.separator.hidden = YES;
     self.lblLink.font = [Utilities fontOpensSansLightWithSize:11];
@@ -89,18 +89,14 @@
         self.lblLink.text = @"Ocultar subcategorias";
 }
 
-- (void) setActivateDeactivate:(BOOL) activated
-{
-    BOOL isSub = NO;
+- (void)setActivateDeactivate:(BOOL)activated {
+//    BOOL isSub = NO;
     
     UIImage* icon;
-    if(activated)
-    {
+    if (activated) {
         icon = [UIImage imageNamed:@"filtros_check_todascategorias_desativar.png"];
         self.lblTitle.text = @"Desativar todas as categorias";
-    }
-    else
-    {
+    } else {
         icon = [UIImage imageNamed:@"filtros_check_todascategorias_ativar.png"];
         self.lblTitle.text = @"Ativar todas as categorias";
     }
@@ -117,7 +113,12 @@
     self.selectIndicator.hidden = YES;
     
     CGRect frame = self.lblTitle.frame;
-    CGSize sz = [self.lblTitle.text sizeWithFont:self.lblTitle.font constrainedToSize:CGSizeMake(frame.size.width, 9999)];
+    CGRect rect = [self.lblTitle.text boundingRectWithSize:CGSizeMake(frame.size.width, MAXFLOAT)
+                                                   options:NSStringDrawingUsesFontLeading
+                                                attributes:@{NSFontAttributeName : self.lblTitle.font}
+                                                   context:nil];
+    CGSize sz = rect.size;
+//    CGSize sz = [self.lblTitle.text sizeWithFont:self.lblTitle.font constrainedToSize:CGSizeMake(frame.size.width, 9999)];
     
     frame.size.height = sz.height;
     self.lblTitle.frame = frame;
@@ -125,10 +126,14 @@
     self.separator.frame = CGRectMake(self.separator.frame.origin.x, self.lblTitle.frame.origin.y + self.lblTitle.frame.size.height + 8, self.separator.frame.size.width, 1);
 }
 
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     CGRect frame = self.lblTitle.frame;
-    CGSize sz = [self.lblTitle.text sizeWithFont:self.lblTitle.font constrainedToSize:CGSizeMake(frame.size.width, 9999)];
+    CGRect rect = [self.lblTitle.text boundingRectWithSize:CGSizeMake(frame.size.width, MAXFLOAT)
+                                                   options:NSStringDrawingUsesFontLeading
+                                                attributes:@{NSFontAttributeName : self.lblTitle.font}
+                                                   context:nil];
+//    CGSize sz = [self.lblTitle.text sizeWithFont:self.lblTitle.font constrainedToSize:CGSizeMake(frame.size.width, 9999)];
+    CGSize sz = rect.size;
     
     frame.size.height = sz.height;
     self.lblTitle.frame = frame;
@@ -144,8 +149,7 @@
     self.height = self.separator.frame.origin.y + self.separator.frame.size.height + 5;
 }
 
-- (void) setPlaceholder
-{
+- (void)setPlaceholder {
     self.lblLink.hidden = YES;
     self.lblTitle.hidden = YES;
     self.iconView.hidden = YES;
@@ -153,8 +157,7 @@
     self.selectIndicator.hidden = YES;
 }
 
-- (void) setViewBackgroundColor:(UIColor *)backgroundColor
-{
+- (void)setViewBackgroundColor:(UIColor *)backgroundColor {
     self.qbackgroundView.backgroundColor = backgroundColor;
 }
 

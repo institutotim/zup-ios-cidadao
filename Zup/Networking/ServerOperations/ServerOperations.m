@@ -64,7 +64,7 @@ NSString * const URLvalidateBounds = APIURL(@"utils/city-boundary/validate");
 -(BOOL)getAddressWithString:(NSString*)keyString{
     
     keyString = [keyString stringByReplacingOccurrencesOfString:@" " withString:@","];
-    NSString *encodedSearchString = [keyString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *encodedSearchString = [keyString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
     
     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", URLgetAddressStreey, encodedSearchString]];
     
@@ -80,7 +80,7 @@ NSString * const URLvalidateBounds = APIURL(@"utils/city-boundary/validate");
     
     NSString *urlStr = [NSString stringWithFormat:@"http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=%@&bounds=%f,%f|%f,%f", keyString, latSouth, lngSouth, lat, lng];
 
-    NSString *encodedSearchString = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *encodedSearchString = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 
     NSURL *url = [NSURL URLWithString:encodedSearchString];
     
