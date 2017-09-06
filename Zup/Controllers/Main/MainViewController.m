@@ -184,7 +184,7 @@
 
 - (int)totalCategoryCount:(NSArray *)arr {
     int count = 0;
-    for (NSDictionary* dict in arr) {
+    for (NSDictionary *dict in arr) {
         count++;
         
         NSArray *subcategories = [dict valueForKey:@"subcategories"];
@@ -274,23 +274,25 @@
         
         NSLog(@"Loaded %lu report categories", (unsigned long)mutArr.count);
         //if(!self->onlyReload)
-        [self getInventoryCategories];
+//        [self getInventoryCategories];
     }
 }
 
 - (void)didReceiveData:(NSData *)data {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        
-        NSMutableArray *mutArr = [[NSMutableArray alloc] init];
-        
-        NSArray *arr = [dict valueForKey:@"categories"];
-        for (NSDictionary *dict in arr) {
-            [self parseCategory:dict mutArr:mutArr arr:arr];
-        }
+        dispatch_async(dispatch_queue_create(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            
+            NSMutableArray *mutArr = [[NSMutableArray alloc] init];
+            
+            NSArray *arr = [dict valueForKey:@"categories"];
+            for (NSDictionary *dict in arr) {
+                [self parseCategory:dict mutArr:mutArr arr:arr];
+            }
+        });
         
         //    if (arr.count == 0) {
-        [UserDefaults setReportCategories:mutArr];
+//        [UserDefaults setReportCategories:mutArr];
         [self getInventoryCategories];
         //    } else {
         //        [self.view setUserInteractionEnabled:YES];
