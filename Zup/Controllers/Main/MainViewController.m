@@ -276,131 +276,26 @@
         //if(!self->onlyReload)
         [self getInventoryCategories];
     }
-//    NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.default.mobile.active"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
-//
-//    UIImageView *imgV = [[UIImageView alloc] init];
-//    
-//    [imgV sd_setImageWithURL:urlIcon placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//        if (image == nil) {
-//            image = [UIImage imageNamed:@"mapMarker"];
-//        }
-//        
-//        NSData *dataImgIcon = UIImagePNGRepresentation(image);
-//        
-//        NSURL *urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
-//        UIImageView *imgV = [[UIImageView alloc] init];
-//        [imgV sd_setImageWithURL:urlMarker completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-//            
-//            if (image == nil) {
-//                image = [UIImage imageNamed:@"mapMarker"];
-//            }
-//            
-//            NSData *dataImgMarker = UIImagePNGRepresentation(image);
-//            
-//            NSURL *urlIconDisabled = [NSURL URLWithString:[dict valueForKeyPath:@"icon.default.mobile.disabled"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
-//            
-//            UIImageView *imgV = [[UIImageView alloc]init];
-//            
-//            [imgV sd_setImageWithURL:urlIconDisabled completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-//                
-//                if (image == nil) {
-//                    image = [UIImage imageNamed:@"mapMarker"];
-//                }
-//                
-//                NSData *dataImgIconDisabled = UIImagePNGRepresentation(image);
-//                
-//                NSMutableArray *arrStatus = [[NSMutableArray alloc] init];
-//                
-//                for (NSDictionary *dictTemp in [dict valueForKey:@"statuses"]) {
-//                    NSArray *keys = [dictTemp allKeys];
-//                    NSArray *values = [dictTemp allValues];
-//                    
-//                    NSMutableDictionary *dictStatus = [[NSMutableDictionary alloc]init];
-//                    int i = 0;
-//                    for (NSString *key in keys) {
-//                        NSString *newValue = [Utilities checkIfNull:[values objectAtIndex:i]];
-//                        [dictStatus setValue:newValue forKey:[keys objectAtIndex:i]];
-//                        i ++;
-//                    }
-//                    [arrStatus addObject:dictStatus];
-//                }
-//                
-//                NSMutableArray *arrCategories = [[NSMutableArray alloc] init];
-//                if ([dict valueForKey:@"inventory_categories"]) {
-//                    for (NSDictionary *dictTemp in [dict valueForKey:@"inventory_categories"]) {
-//                        NSNumber *cid = [dictTemp valueForKey:@"id"];
-//                        [arrCategories addObject:cid];
-//                    }
-//                }
-//                
-//                NSNumber *resolution_time_enabled = [dict valueForKey:@"resolution_time_enabled"];
-//                NSNumber *private_resolution_time = [dict valueForKey:@"private_resolution_time"];
-//                
-//                NSMutableDictionary *tempDict = [NSMutableDictionary dictionaryWithDictionary:@{@"arbitrary" : [dict valueForKey:@"allows_arbitrary_position"],
-//                    @"iconData": dataImgIcon,
-//                    @"markerData" : dataImgMarker,
-//                    @"iconDataDisabled" : dataImgIconDisabled,
-//                    @"id" : [dict valueForKey:@"id"],
-//                    @"title" : [dict valueForKey:@"title"],
-//                    @"resolution_time" : [Utilities checkIfNull:[dict valueForKey:@"resolution_time"]],
-//                    @"statuses" : arrStatus,
-//                    @"user_response_time" : [Utilities checkIfNull:[dict valueForKey:@"user_response_time"]],
-//                    @"color" :[dict valueForKey:@"color"],
-//                    @"inventory_categories": arrCategories,
-//                    @"resolution_time_enabled": resolution_time_enabled,
-//                    @"private_resolution_time": private_resolution_time
-//                }];
-//                
-//                if (![[dict valueForKey:@"parent_id"] isKindOfClass:[NSNull class]]) {
-//                    [tempDict setValue:[dict valueForKey:@"parent_id"] forKeyPath:@"parent_id"];
-//                }
-//                if (![[dict valueForKey:@"private"] isKindOfClass:[NSNull class]]) {
-//                    [tempDict setValue:[dict valueForKey:@"private"] forKeyPath:@"private"];
-//                }
-//                if (![[dict valueForKey:@"confidential"] isKindOfClass:[NSNull class]]) {
-//                    [tempDict setValue:[dict valueForKey:@"confidential"] forKeyPath:@"confidential"];
-//                } else {
-//                    NSNumber *val = [NSNumber numberWithBool:NO];
-//                    [tempDict setValue:val forKeyPath:@"confidential"];
-//                }
-//                
-//                NSArray *subCategories = [dict valueForKey:@"subcategories"];
-//                if (subCategories != nil){
-//                    for(NSDictionary *subdict in subCategories) {
-//                        [self parseCategory:subdict mutArr:mutArr arr:arr];
-//                    }
-//                }
-//                
-//                [mutArr addObject:tempDict];
-//                
-//                if (mutArr.count == [self totalCategoryCount:arr]) {
-//                    [UserDefaults setReportCategories:mutArr];
-//                    
-//                    NSLog(@"Loaded %lu report categories", (unsigned long)mutArr.count);
-//                    //if(!self->onlyReload)
-//                        [self getInventoryCategories];
-//                }
-//            }];
-//        }];
-//    }];
 }
 
 - (void)didReceiveData:(NSData *)data {
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    NSMutableArray *mutArr = [[NSMutableArray alloc] init];
-    
-    NSArray *arr = [dict valueForKey:@"categories"];
-    for (NSDictionary *dict in arr) {
-        [self parseCategory:dict mutArr:mutArr arr:arr];
-    }
-    
-//    if (arr.count == 0) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        NSMutableArray *mutArr = [[NSMutableArray alloc] init];
+        
+        NSArray *arr = [dict valueForKey:@"categories"];
+        for (NSDictionary *dict in arr) {
+            [self parseCategory:dict mutArr:mutArr arr:arr];
+        }
+        
+        //    if (arr.count == 0) {
         [UserDefaults setReportCategories:mutArr];
         [self getInventoryCategories];
-//    } else {
-//        [self.view setUserInteractionEnabled:YES];
-//    }
+        //    } else {
+        //        [self.view setUserInteractionEnabled:YES];
+        //    }
+    });
 }
 
 - (void)didReceiveError:(NSError*)error {
@@ -423,90 +318,92 @@
 }
 
 - (void)didReceiveInventoryData:(NSDictionary *)dict {
-    NSArray *arr = [dict valueForKey:@"categories"];
-    NSMutableArray *mutArr = [[NSMutableArray alloc] init];
-    
-    for (NSDictionary *dict in arr) {
-        NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.active"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray *arr = [dict valueForKey:@"categories"];
+        NSMutableArray *mutArr = [[NSMutableArray alloc] init];
         
-        UIImageView *imgV = [[UIImageView alloc]init];
-        [imgV sd_setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        for (NSDictionary *dict in arr) {
+            NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.active"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
             
-            if (image == nil) {
-                image = [UIImage imageNamed:@"mapMarker"];
-            }
-            
-            NSData *dataImgIcon = UIImagePNGRepresentation(image);
-            
-            
-            NSURL *urlIconDisabled = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.disabled"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
-            
-            [imgV sd_setImageWithURL:urlIconDisabled completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            UIImageView *imgV = [[UIImageView alloc]init];
+            [imgV sd_setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 
                 if (image == nil) {
                     image = [UIImage imageNamed:@"mapMarker"];
                 }
                 
-                NSData *dataImgIconDisabled = UIImagePNGRepresentation(image);
+                NSData *dataImgIcon = UIImagePNGRepresentation(image);
                 
-                NSURL *urlPin = [NSURL URLWithString:[dict valueForKeyPath:@"pin.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
-                UIImageView *imgV = [[UIImageView alloc]init];
-                [imgV sd_setImageWithURL:urlPin completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                
+                NSURL *urlIconDisabled = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.disabled"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
+                
+                [imgV sd_setImageWithURL:urlIconDisabled completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     
                     if (image == nil) {
                         image = [UIImage imageNamed:@"mapMarker"];
                     }
                     
-                    NSData *dataImgPin = UIImagePNGRepresentation(image);
+                    NSData *dataImgIconDisabled = UIImagePNGRepresentation(image);
                     
-                    NSURL *urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
-                    UIImageView *imgV = [[UIImageView alloc] init];
-                    [imgV sd_setImageWithURL:urlMarker completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    NSURL *urlPin = [NSURL URLWithString:[dict valueForKeyPath:@"pin.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
+                    UIImageView *imgV = [[UIImageView alloc]init];
+                    [imgV sd_setImageWithURL:urlPin completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                         
                         if (image == nil) {
                             image = [UIImage imageNamed:@"mapMarker"];
                         }
                         
-                        NSData *dataImgMarker = UIImagePNGRepresentation(image);
+                        NSData *dataImgPin = UIImagePNGRepresentation(image);
                         
-                        NSData *sectionsData = [NSKeyedArchiver archivedDataWithRootObject:[dict valueForKey:@"sections"]];
-                        
-                        NSDictionary *tempDict = @{@"iconData": dataImgIcon,
-                                                   @"iconDataDisabled" : dataImgIconDisabled,
-                                                   @"markerData" : dataImgMarker,
-                                                   @"pinData" : dataImgPin,
-                                                   @"id" : [dict valueForKey:@"id"],
-                                                   @"title" : [dict valueForKey:@"title"],
-                                                   @"description" : [Utilities checkIfNull:[dict valueForKey:@"description"]],
-                                                   @"sectionsData" : sectionsData,
-                                                   @"plot_format" : [dict valueForKey:@"plot_format"],
-                                                   @"color": [dict valueForKey:@"color"]
-                                                   };
-                        
-                        [mutArr addObject:tempDict];
-                        
-                        if (mutArr.count == arr.count) {
-                            [UserDefaults setInventoryCategories:mutArr];
-                            if (!self.onlyReload) {
-                                [self getFeatureFlags];
-                            } else {
-                                [self goToMap];
+                        NSURL *urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
+                        UIImageView *imgV = [[UIImageView alloc] init];
+                        [imgV sd_setImageWithURL:urlMarker completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                            
+                            if (image == nil) {
+                                image = [UIImage imageNamed:@"mapMarker"];
                             }
-                        }
+                            
+                            NSData *dataImgMarker = UIImagePNGRepresentation(image);
+                            
+                            NSData *sectionsData = [NSKeyedArchiver archivedDataWithRootObject:[dict valueForKey:@"sections"]];
+                            
+                            NSDictionary *tempDict = @{@"iconData": dataImgIcon,
+                                                       @"iconDataDisabled" : dataImgIconDisabled,
+                                                       @"markerData" : dataImgMarker,
+                                                       @"pinData" : dataImgPin,
+                                                       @"id" : [dict valueForKey:@"id"],
+                                                       @"title" : [dict valueForKey:@"title"],
+                                                       @"description" : [Utilities checkIfNull:[dict valueForKey:@"description"]],
+                                                       @"sectionsData" : sectionsData,
+                                                       @"plot_format" : [dict valueForKey:@"plot_format"],
+                                                       @"color": [dict valueForKey:@"color"]
+                                                       };
+                            
+                            [mutArr addObject:tempDict];
+                            
+                            if (mutArr.count == arr.count) {
+                                [UserDefaults setInventoryCategories:mutArr];
+                                if (!self.onlyReload) {
+                                    [self getFeatureFlags];
+                                } else {
+                                    [self goToMap];
+                                }
+                            }
+                        }];
                     }];
                 }];
             }];
-        }];
-    }
-    
-    if (arr.count == 0) {
-        [UserDefaults setInventoryCategories:mutArr];
-        if (!self.onlyReload) {
-            [self getFeatureFlags];
-        } else {
-            [self goToMap];
         }
-    }
+        
+        if (arr.count == 0) {
+            [UserDefaults setInventoryCategories:mutArr];
+            if (!self.onlyReload) {
+                [self getFeatureFlags];
+            } else {
+                [self goToMap];
+            }
+        }
+    });
 }
 
 - (void)getFeatureFlags {
@@ -518,22 +415,22 @@
 }
 
 - (void)didReceiveFeatureFlags:(NSData *)data {
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    NSArray *flags = [dict valueForKey:@"flags"];
-    [UserDefaults setFeatureFlags:flags];
-    
-    if (![UserDefaults isFeatureEnabled:@"explore"]) {
-        [self.btJump removeFromSuperview];
-    }
-    
-    if ([UserDefaults isUserLogged] && !self.onlyReload) {
-        [self goToMap];
-        //[self btJump:nil];
-    }
-    self.onlyReload = YES;
-    
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        NSArray *flags = [dict valueForKey:@"flags"];
+        [UserDefaults setFeatureFlags:flags];
+        
+        if (![UserDefaults isFeatureEnabled:@"explore"]) {
+            [self.btJump removeFromSuperview];
+        }
+        
+        if ([UserDefaults isUserLogged] && !self.onlyReload) {
+            [self goToMap];
+            //[self btJump:nil];
+        }
+        self.onlyReload = YES;
+        
         [UIView animateWithDuration:0.5 animations:^{
             [self.imgViewLoad setAlpha:0];
             [self.spin setAlpha:0];
