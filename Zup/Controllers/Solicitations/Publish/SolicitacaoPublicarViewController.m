@@ -314,10 +314,6 @@
                 sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@", [dict valueForKeyPath:@"report.protocol"]];
             }
             
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Solicitação Enviada" message:sentence preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
-            
             SocialNetworkType social = [UserDefaults getSocialNetworkType];
             
             BOOL facebookEnabled = [UserDefaults isFeatureEnabled:@"social_networks_facebook"];
@@ -335,13 +331,13 @@
                 
                 NSArray *arrImages = [dict valueForKeyPath:@"report.images"];
                 if (arrImages != nil && [arrImages count] > 0) {
-                    NSDictionary* firstImage = [arrImages objectAtIndex:0];
+                    NSDictionary *firstImage = [arrImages objectAtIndex:0];
                     image = [firstImage valueForKey:@"high"];
                 }
                 
                 if (social == kSocialNetworFacebook && facebookEnabled) {
                     [PostController postMessageWithFacebook:message link:link linkTitle:cat linkDesc:desc image:image];
-                    [self dismissViewControllerAnimated:YES completion:nil];
+//                    [self dismissViewControllerAnimated:YES completion:nil];
                     [self callReportDetail];
                 } else if (social == kSocialNetworTwitter && twitterEnabled) {
                     self.messageTemp = message;
@@ -349,7 +345,7 @@
                     [self postMessageWithTwitter];
                     //[self dismissViewControllerAnimated:YES completion:nil];
                 } else {
-                    [self dismissViewControllerAnimated:YES completion:nil];
+//                    [self dismissViewControllerAnimated:YES completion:nil];
                     [self callReportDetail];
                 }
             } else {
@@ -363,6 +359,13 @@
                 //                [self postMessageWithTwitter];
                 //            }
             }
+            __weak __typeof(self)weakSelf = self;
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Solicitação Enviada" message:sentence preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+
         } else {
             [Utilities alertWithError:@"Erro ao publicar." inViewController:self];
         }

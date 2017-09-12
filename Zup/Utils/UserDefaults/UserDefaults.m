@@ -296,7 +296,7 @@
     NSArray *arr = [prefs valueForKey:@"categoriesArray"];
     
     for (NSDictionary *dict in arr) {
-        if ([[dict valueForKey:@"id"]intValue] == idCat) {
+        if ([[dict valueForKey:@"id"] intValue] == idCat) {
             return dict;
         }
     }

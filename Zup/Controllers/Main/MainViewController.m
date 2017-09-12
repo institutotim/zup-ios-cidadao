@@ -111,6 +111,10 @@
     if ([Utilities didShowTabBarView])
         return;
     
+    if ([[Utilities getCurrentTenant] isEqualToString:@"cascavel"]) {
+        return;
+    }
+    
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sessão expirada"
                                                                    message:@"Sua sessão expirou. É necessário fazer login novamente."
                                                             preferredStyle:UIAlertControllerStyleAlert];
@@ -122,15 +126,17 @@
     [UserDefaults setIsUserLogged:NO];
     [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworkAnyone];
     
-    [self startLoadingData];
+//    [self startLoadingData];
 }
 
 - (void)requestLocation {
-    CLLocationManager *locationManager = [[CLLocationManager alloc] init];
-    locationManager.distanceFilter = kCLDistanceFilterNone; // whenever we move
-    locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters; // 100 m
-    [locationManager startUpdatingLocation];
-    [locationManager stopUpdatingLocation];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+        locationManager.distanceFilter = kCLDistanceFilterNone; // whenever we move
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters; // 100 m
+        [locationManager startUpdatingLocation];
+        [locationManager stopUpdatingLocation];
+    });
 }
 
 - (void)buildLoadPage {
@@ -196,15 +202,6 @@
 }
 
 - (void)parseCategory:(NSDictionary *)dict mutArr:(NSMutableArray *)mutArr arr:(NSArray *)arr {
-    NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.default.mobile.active"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
-    NSData *dataImgIcon = [NSData dataWithContentsOfURL:urlIcon];
-    
-    NSURL *urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
-    NSData *dataImgMarker = [NSData dataWithContentsOfURL:urlMarker];
-    
-    NSURL *urlIconDisabled = [NSURL URLWithString:[dict valueForKeyPath:@"icon.default.mobile.disabled"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
-    NSData *dataImgIconDisabled = [NSData dataWithContentsOfURL:urlIconDisabled];
-    
     NSMutableArray *arrStatus = [[NSMutableArray alloc] init];
     
     for (NSDictionary *dictTemp in [dict valueForKey:@"statuses"]) {
@@ -232,10 +229,13 @@
     NSNumber *resolution_time_enabled = [dict valueForKey:@"resolution_time_enabled"];
     NSNumber *private_resolution_time = [dict valueForKey:@"private_resolution_time"];
     
+    UIImage *img = [UIImage imageNamed:@"mapMarker"];
+    NSData *sampleData = UIImagePNGRepresentation(img);
+    
     NSMutableDictionary *tempDict = [NSMutableDictionary dictionaryWithDictionary:@{@"arbitrary" : [dict valueForKey:@"allows_arbitrary_position"],
-                                                                                    @"iconData": dataImgIcon != nil ? dataImgIcon : @"",
-                                                                                    @"markerData" : dataImgMarker != nil ? dataImgMarker : @"",
-                                                                                    @"iconDataDisabled" : dataImgIconDisabled != nil ? dataImgIconDisabled : @"",
+                                                                                    @"iconData": sampleData, //dataImgIcon != nil ? dataImgIcon : @"",
+                                                                                    @"markerData" : sampleData, //dataImgMarker != nil ? dataImgMarker : @"",
+                                                                                    @"iconDataDisabled" : sampleData, //dataImgIconDisabled != nil ? dataImgIconDisabled : @"",
                                                                                     @"id" : @([[dict valueForKey:@"id"] intValue]),
                                                                                     @"title" : [Utilities checkIfNull:[dict valueForKey:@"title"]],
                                                                                     @"resolution_time" : [Utilities checkIfNull:[dict valueForKey:@"resolution_time"]],
@@ -268,6 +268,11 @@
     }
     
     [mutArr addObject:tempDict];
+    
+    [self downloadImagesForID:@([[dict valueForKey:@"id"] intValue])
+                  defaultIcon:[dict valueForKeyPath:@"icon.default.mobile.active"]
+                       marker:[dict valueForKeyPath:@"marker.retina.mobile"]
+                     disabled:[dict valueForKeyPath:@"icon.default.mobile.disabled"]];
     
     if (mutArr.count == [self totalCategoryCount:arr]) {
         [UserDefaults setReportCategories:mutArr];
@@ -327,7 +332,7 @@
         for (NSDictionary *dict in arr) {
             NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.active"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
             
-            UIImageView *imgV = [[UIImageView alloc]init];
+            UIImageView *imgV = [[UIImageView alloc] init];
             [imgV sd_setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 
                 if (image == nil) {
@@ -508,6 +513,42 @@
     [lbl setTextColor:[Utilities colorGray]];
     [lbl setText:@"Você precisa estar logado para acessar esta área."];
     [self.view addSubview:lbl];
+}
+
+- (void)downloadImagesForID:(NSNumber *)categoryID defaultIcon:(NSString *)defaultIcon marker:(NSString *)marker disabled:(NSString *)disabled {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSURL *urlIcon = [NSURL URLWithString:defaultIcon relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
+        NSData *dataIcon = [NSData dataWithContentsOfURL:urlIcon];
+        
+        NSURL *urlMarker = [NSURL URLWithString:marker relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
+        NSData *dataMarker = [NSData dataWithContentsOfURL:urlMarker];
+        
+        NSURL *urlIconDisabled = [NSURL URLWithString:disabled relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
+        NSData *dataDisabled = [NSData dataWithContentsOfURL:urlIconDisabled];
+        
+        [self downloadedImagesForCategory:categoryID dataImgIcon:dataIcon dataImgMarker:dataMarker dataImgDisabled:dataDisabled];
+    });
+}
+
+- (void)downloadedImagesForCategory:(NSNumber *)categoryID dataImgIcon:(NSData *)dataImgIcon dataImgMarker:(NSData *)dataImgMarker dataImgDisabled:(NSData *)dataImgDisabled {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (dataImgIcon != nil && dataImgMarker != nil && dataImgDisabled != nil) {
+            NSMutableArray *categories = [[UserDefaults getReportCategories] mutableCopy];
+            NSUInteger idx = [categories indexOfObjectPassingTest:^BOOL(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                return ([[obj valueForKey:@"id"] intValue] == [categoryID intValue]);
+            }];
+            if (idx != NSNotFound) {
+                NSMutableDictionary *dict = [[categories objectAtIndex:idx] mutableCopy];
+                [dict setObject:dataImgIcon forKey:@"iconData"];
+                [dict setObject:dataImgMarker forKey:@"markerData"];
+                [dict setObject:dataImgDisabled forKey:@"iconDataDisabled"];
+                
+                [categories replaceObjectAtIndex:idx withObject:[dict copy]];
+                
+                [UserDefaults setReportCategories:[categories copy]];
+            }
+        }
+    });
 }
 
 #pragma mark - UIScrollView Delegate

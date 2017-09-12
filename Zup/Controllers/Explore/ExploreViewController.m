@@ -273,37 +273,39 @@ static int ZOOMLEVELDEFAULT = 16;
 #pragma mark - Core Location
 
 - (void)getCurrentLocation {
-    self.locationManager = [[CLLocationManager alloc] init];
-    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.locationManager requestWhenInUseAuthorization];
-    }
-    
-    self.locationManager.delegate = self;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    self.locationManager.distanceFilter = kCLDistanceFilterNone;
-    [self.locationManager startUpdatingLocation];
-    
-    CLLocation *location = [self.locationManager location];
-    self.currentCoordinate = [location coordinate];
-    
-//    #warning TESTE
-//    currentCoordinate = CLLocationCoordinate2DMake(-23.557040, -46.638610);
-    
-    int zoom;
-    if ([Utilities isIpad])
-        zoom = ZOOMLEVELDEFAULT;
-    else
-        zoom = ZOOMLEVELDEFAULT;
-    
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.currentCoordinate.latitude
-                                                            longitude:self.currentCoordinate.longitude
-                                                                 zoom:zoom];
-    
-    
-    self.mapView.camera = camera;
-    [self.mapView clear];
-    
-    [self requestWithNewPosition];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.locationManager = [[CLLocationManager alloc] init];
+        if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            [self.locationManager requestWhenInUseAuthorization];
+        }
+        
+        self.locationManager.delegate = self;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        self.locationManager.distanceFilter = kCLDistanceFilterNone;
+        [self.locationManager startUpdatingLocation];
+        
+        CLLocation *location = [self.locationManager location];
+        self.currentCoordinate = [location coordinate];
+        
+        //    #warning TESTE
+        //    currentCoordinate = CLLocationCoordinate2DMake(-23.557040, -46.638610);
+        
+        int zoom;
+        if ([Utilities isIpad])
+            zoom = ZOOMLEVELDEFAULT;
+        else
+            zoom = ZOOMLEVELDEFAULT;
+        
+        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.currentCoordinate.latitude
+                                                                longitude:self.currentCoordinate.longitude
+                                                                     zoom:zoom];
+        
+        
+        self.mapView.camera = camera;
+        [self.mapView clear];
+        
+        [self requestWithNewPosition];
+    });
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
@@ -853,7 +855,7 @@ static int ZOOMLEVELDEFAULT = 16;
 - (void)createInventoryPoints {
     for (NSDictionary *dict in self.arrMainInventory) {
         if (self.arrFilterInventoryIDs.count > 0) {
-            int intId = [[dict valueForKey:@"inventory_category_id"]intValue];
+            int intId = [[dict valueForKey:@"inventory_category_id"] intValue];
             NSNumber *numberId = [NSNumber numberWithInt:intId];
             if ([self.arrFilterInventoryIDs containsObject:numberId]) {
                 [self setLocationWithCoordinate:dict];
@@ -874,11 +876,11 @@ static int ZOOMLEVELDEFAULT = 16;
 }
 
 - (GMSMarker*)setMarkerInventoryWithCoordinate:(CLLocationCoordinate2D)coordinate
-                                 snippet:(NSString*)snippet
+                                 snippet:(NSString *)snippet
                                draggable:(BOOL)draggable
                                     type:(int)type
                                 userData:(NSDictionary *)dict {
-    NSDictionary *catDict = [UserDefaults getInventoryCategory:[[dict valueForKey:@"inventory_category_id"]intValue]];
+    NSDictionary *catDict = [UserDefaults getInventoryCategory:[[dict valueForKey:@"inventory_category_id"] intValue]];
     
     GMSMarker *marker = [[GMSMarker alloc] init];
     marker.position = coordinate;
@@ -890,7 +892,7 @@ static int ZOOMLEVELDEFAULT = 16;
     [marker setAppearAnimation:kGMSMarkerAnimationNone];
     
     UIImage *img;
-    if([[catDict valueForKey:@"plot_format"] isEqualToString:@"marker"])
+    if ([[catDict valueForKey:@"plot_format"] isEqualToString:@"marker"])
         img = [UIImage imageWithData:[catDict valueForKey:@"markerData"]];
     else
         img = [UIImage imageWithData:[catDict valueForKey:@"pinData"]];
@@ -901,7 +903,7 @@ static int ZOOMLEVELDEFAULT = 16;
     int markerId = [[marker.userData valueForKey:@"id"]intValue];
     
     for (GMSMarker *tempMarker in self.arrMarkers) {
-        int tempMarkerId = [[tempMarker.userData valueForKey:@"id"]intValue];
+        int tempMarkerId = [[tempMarker.userData valueForKey:@"id"] intValue];
         if (tempMarkerId == markerId) {
             return tempMarker;
         }
@@ -955,10 +957,17 @@ static int ZOOMLEVELDEFAULT = 16;
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latStr.floatValue, lngStr.floatValue);
     
     if ([dict valueForKey:@"inventory_category_id"]) {
-        return [self setMarkerInventoryWithCoordinate:coord snippet:nil draggable:NO type:[[dict valueForKey:@"inventory_category_id"]intValue] userData:dict];
+        return [self setMarkerInventoryWithCoordinate:coord
+                                              snippet:nil
+                                            draggable:NO
+                                                 type:[[dict valueForKey:@"inventory_category_id"] intValue]
+                                             userData:dict];
     } else {
-        return [self setMarkerWithCoordinate:coord snippet:nil draggable:NO type:[[dict valueForKey:@"category_id"]intValue] userData:dict];
-        
+        return [self setMarkerWithCoordinate:coord
+                                     snippet:nil
+                                   draggable:NO
+                                        type:[[dict valueForKey:@"category_id"] intValue]
+                                    userData:dict];
     }
 }
 

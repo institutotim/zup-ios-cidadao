@@ -13,8 +13,7 @@
 
 @implementation EstatisticasViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -22,24 +21,16 @@
     return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    self.screenName = @"Estatísticas";
-    
-    //[self getValues];
-}
+#pragma mark - View Lifecycle
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.daysFilter = 0;
-    NSMutableArray* arr = [[NSMutableArray alloc] init];
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
     
-    for(NSDictionary* dict in [UserDefaults getReportRootCategories])
-    {
-        NSNumber* catid = [dict valueForKey:@"id"];
+    for (NSDictionary *dict in [UserDefaults getReportRootCategories]) {
+        NSNumber *catid = [dict valueForKey:@"id"];
         [arr addObject:catid];
     }
     
@@ -56,7 +47,6 @@
     
     [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
     
     [self.collectionView setDelegate:self];
     [self.collectionView setDataSource:self];
@@ -76,6 +66,19 @@
     [self getValues];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.screenName = @"Estatísticas";
+    
+    //[self getValues];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Actions
 
 - (IBAction)btFilter:(id)sender {
     FilterEstatisticasViewController *filterVC = [[FilterEstatisticasViewController alloc]initWithNibName:@"FilterEstatisticasViewController" bundle:nil];
@@ -93,6 +96,8 @@
     [filterVC viewWillAppear:YES];
 }
 
+#pragma mark - Networking
+
 - (void)refreshWithFilter:(int)days categoryId:(int)categoryId {
     
     [self.collectionView setHidden:YES];
@@ -103,7 +108,6 @@
     [serverOP setAction:@selector(didReceiveSendResponse:)];
     [serverOP setActionErro:@selector(didReceiveError:)];
     [serverOP getStatsWithFilter:days categoryId:categoryId];
-    
 }
 
 - (void)refreshWithFilter:(int)days categoryIds:(NSArray*)categoryIds {
@@ -116,11 +120,9 @@
     [serverOP setAction:@selector(didReceiveSendResponse:)];
     [serverOP setActionErro:@selector(didReceiveError:)];
     [serverOP getStatsWithFilter:days categoryIds:categoryIds];
-    
 }
 
 - (void)getValues {
-    
     [self.spin startAnimating];
     [self.collectionView setHidden:YES];
     
@@ -129,113 +131,111 @@
     [serverOP setAction:@selector(didReceiveSendResponse:)];
     [serverOP setActionErro:@selector(didReceiveError:)];
     [serverOP getStats];
-    
 }
 
 - (void)didReceiveSendResponse:(NSData*)data {
-    
-    [self.collectionView setHidden:NO];
-    [self.spin stopAnimating];
-    
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
-                                                         options:NSJSONReadingAllowFragments
-                                                           error:nil];
-    
-    
-    NSArray *arrStatuses = [dict valueForKey:@"stats"];
-    NSMutableArray *arrTemp = [[NSMutableArray alloc]init];
-    
-    int totalCount = 0;
-    for (NSArray *arr in [arrStatuses valueForKey:@"statuses"]) {
-        for (NSMutableDictionary *dict in arr) {
-            [arrTemp addObject:dict];
-            totalCount += [[dict valueForKey:@"count"]intValue];
-        }
-    }
-    
-    NSMutableArray *arrMerge = [[NSMutableArray alloc]init];
-    NSMutableArray *arrMerge2 = [[NSMutableArray alloc]init];
-    
-    for (NSMutableDictionary *dict1 in arrTemp) {
-        BOOL contains = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionView setHidden:NO];
+        [self.spin stopAnimating];
         
-        int i = 0;
-        for (NSMutableDictionary *dict2 in arrMerge) {
-            //if ([[dict1 valueForKey:@"status_id"]intValue] == [[dict2 valueForKey:@"status_id"]intValue]) {
-            if ([[[dict1 valueForKey:@"title"] lowercaseString] isEqualToString:[[dict2 valueForKey:@"title"] lowercaseString]]) {
-                contains = YES;
-            }
-            if (!contains) {
-                i ++;
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
+                                                             options:NSJSONReadingAllowFragments
+                                                               error:nil];
+        
+        
+        NSArray *arrStatuses = [dict valueForKey:@"stats"];
+        NSMutableArray *arrTemp = [[NSMutableArray alloc]init];
+        
+        int totalCount = 0;
+        for (NSArray *arr in [arrStatuses valueForKey:@"statuses"]) {
+            for (NSMutableDictionary *dict in arr) {
+                [arrTemp addObject:dict];
+                totalCount += [[dict valueForKey:@"count"]intValue];
             }
         }
-       
-        if (contains) {
+        
+        NSMutableArray *arrMerge = [[NSMutableArray alloc]init];
+        NSMutableArray *arrMerge2 = [[NSMutableArray alloc]init];
+        
+        for (NSMutableDictionary *dict1 in arrTemp) {
+            BOOL contains = NO;
             
-            NSMutableDictionary *newDict = [NSMutableDictionary dictionaryWithDictionary:[arrMerge2 objectAtIndex:i]];
-            int count = [[newDict valueForKey:@"count"]intValue];
-            count += [[dict1 valueForKey:@"count"]intValue];
-            [newDict setObject:[NSString stringWithFormat:@"%i", count] forKey:@"count"];
-            [arrMerge2 setObject:newDict atIndexedSubscript:i];
-        } else {
-            [arrMerge addObject:dict1];
-            [arrMerge2 addObject:dict1];
+            int i = 0;
+            for (NSMutableDictionary *dict2 in arrMerge) {
+                //if ([[dict1 valueForKey:@"status_id"]intValue] == [[dict2 valueForKey:@"status_id"]intValue]) {
+                if ([[[dict1 valueForKey:@"title"] lowercaseString] isEqualToString:[[dict2 valueForKey:@"title"] lowercaseString]]) {
+                    contains = YES;
+                }
+                if (!contains) {
+                    i ++;
+                }
+            }
+            
+            if (contains) {
+                
+                NSMutableDictionary *newDict = [NSMutableDictionary dictionaryWithDictionary:[arrMerge2 objectAtIndex:i]];
+                int count = [[newDict valueForKey:@"count"]intValue];
+                count += [[dict1 valueForKey:@"count"]intValue];
+                [newDict setObject:[NSString stringWithFormat:@"%i", count] forKey:@"count"];
+                [arrMerge2 setObject:newDict atIndexedSubscript:i];
+            } else {
+                [arrMerge addObject:dict1];
+                [arrMerge2 addObject:dict1];
+            }
+            
         }
         
-    }
-    
-    NSMutableArray *arrMerge3 = [[NSMutableArray alloc]init];
-    
-    for (NSMutableDictionary *dict in arrMerge2) {
-        NSMutableDictionary *newDict = [NSMutableDictionary dictionaryWithDictionary:dict];
-        [newDict setObject:[NSString stringWithFormat:@"%i", totalCount] forKey:@"totalCount"];
-        [arrMerge3 addObject:newDict];
-    }
-    
-    self.arrMain = [[NSArray alloc]initWithArray:arrMerge3];
-    
-    if ([Utilities isIpad]) {
-        if (self.arrMain.count == 4) {
-            [self.collectionView setContentInset:UIEdgeInsetsMake(160 * 2, 20, 0, 20)];
-            
-            
-        } else if (self.arrMain.count == 3) {
-            [self.collectionView setContentInset:UIEdgeInsetsMake(160 * 2, 80, 0, 80)];
+        NSMutableArray *arrMerge3 = [[NSMutableArray alloc]init];
+        
+        for (NSMutableDictionary *dict in arrMerge2) {
+            NSMutableDictionary *newDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+            [newDict setObject:[NSString stringWithFormat:@"%i", totalCount] forKey:@"totalCount"];
+            [arrMerge3 addObject:newDict];
         }
-        else if (self.arrMain.count <= 8) {
-            [self.collectionView setContentInset:UIEdgeInsetsMake(170, 20, 0, 20)];
+        
+        self.arrMain = [[NSArray alloc]initWithArray:arrMerge3];
+        
+        if ([Utilities isIpad]) {
+            if (self.arrMain.count == 4) {
+                [self.collectionView setContentInset:UIEdgeInsetsMake(160 * 2, 20, 0, 20)];
+                
+                
+            } else if (self.arrMain.count == 3) {
+                [self.collectionView setContentInset:UIEdgeInsetsMake(160 * 2, 80, 0, 80)];
+            }
+            else if (self.arrMain.count <= 8) {
+                [self.collectionView setContentInset:UIEdgeInsetsMake(170, 20, 0, 20)];
+            }
         }
-    }
-    
-    [self.collectionView reloadData];
+        
+        [self.collectionView reloadData];
+    });
 }
 
 - (void)didReceiveError:(NSError *)error {
-    [Utilities alertWithServerErrorInViewController:self];
-    [self.spin stopAnimating];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [Utilities alertWithServerErrorInViewController:self];
+        [self.spin stopAnimating];
+    });
 }
+
+#pragma mark - CollectionView DataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return [self.arrMain count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
     GraphicCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
     [cell setValues:[self.arrMain objectAtIndex:indexPath.row]];
     
     return cell;
 }
 
-- (void)setIsFromOtherTab:(BOOL)isFromOtherTab
-{
-    
-}
+#pragma mark - Auxiliar Methods
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)setIsFromOtherTab:(BOOL)isFromOtherTab {
+    
 }
 
 @end

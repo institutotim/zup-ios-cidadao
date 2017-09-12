@@ -64,10 +64,10 @@
 + (NSString*) socialShareTextForReportId:(int)reportId;
 + (NSString*) linkForReportId:(int)reportId;
 
-+ (NSString*) getCurrentTenant;
++ (NSString *)getCurrentTenant;
 + (CLLocationCoordinate2D) getTenantInitialLocation;
-+ (UIImage*) getTenantLaunchImage;
-+ (NSString*) getTenantName;
++ (UIImage *)getTenantLaunchImage;
++ (NSString *)getTenantName;
 + (UIImage*) getTenantLoginImage;
 + (UIImage*) getTenantHeaderImage;
 

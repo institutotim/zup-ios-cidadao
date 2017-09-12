@@ -87,12 +87,12 @@
     
     //[[UITabBar appearance] setShadowImage:[[UIImage alloc]init]];
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showTabBar) name:@"showTabBar" object:Nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(hideTabBar) name:@"hideTabBar" object:Nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushToMainView) name:@"pushToMainView" object:Nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(backToMap:) name:@"backToMap" object:Nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(backToMap) name:@"backToMapFromPerfil" object:Nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionExpired) name:@"APISessionExpired" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showTabBar) name:@"showTabBar" object:Nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideTabBar) name:@"hideTabBar" object:Nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToMainView) name:@"pushToMainView" object:Nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backToMap:) name:@"backToMap" object:Nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backToMap) name:@"backToMapFromPerfil" object:Nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionExpired) name:@"APISessionExpired" object:nil];
     
     float fontSize;
     if ([Utilities isIpad]) {
@@ -116,17 +116,17 @@
     if (!self.removedUnusedTabs) {
         //UITabBar *tabBar = self.tabBar;
         
-        NSMutableIndexSet* itemsToRemove = [NSMutableIndexSet indexSet];
+        NSMutableIndexSet *itemsToRemove = [NSMutableIndexSet indexSet];
         
-        if(![UserDefaults isFeatureEnabled:@"explore"])
+        if (![UserDefaults isFeatureEnabled:@"explore"]) {
             [itemsToRemove addIndex:0];
-        
-        if(![UserDefaults isFeatureEnabled:@"create_report_clients"])
+        }
+        if (![UserDefaults isFeatureEnabled:@"create_report_clients"]) {
             [itemsToRemove addIndex:1];
-        
-        if(![UserDefaults isFeatureEnabled:@"stats"])
+        }
+        if (![UserDefaults isFeatureEnabled:@"stats"]) {
             [itemsToRemove addIndex:3];
-        
+        }
         NSMutableArray *tbViewControllers = [NSMutableArray arrayWithArray:[self viewControllers]];
         [tbViewControllers removeObjectsAtIndexes:itemsToRemove];
         [self setViewControllers:tbViewControllers];
@@ -175,13 +175,17 @@
 }
 
 - (void)sessionExpired {
+    if ([[Utilities getCurrentTenant] isEqualToString:@"cascavel"]) {
+        return;
+    }
+    
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sessão expirada"
                                                                    message:@"Sua sessão expirou. É necessário fazer login novamente."
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
     
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"pushToMainView" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"pushToMainView" object:nil];
     [UserDefaults setToken:@""];
     [UserDefaults setUserId:@""];
     [UserDefaults setIsUserLogged:NO];
