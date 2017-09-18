@@ -15,7 +15,7 @@
         <scene sceneID="2EH-3F-J80">
             <objects>
                 <navigationController definesPresentationContext="YES" id="CqR-zL-wSf" customClass="NavigationControllerViewController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="j4b-Oo-wuH">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="j4b-Oo-wuH">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -55,13 +55,13 @@
                                 <color key="textColor" red="0.50025969743728638" green="0.50024467706680298" blue="0.50025320053100586" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Não possui conta?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GbP-v6-oyW">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" text="Não possui conta?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GbP-v6-oyW">
                                 <rect key="frame" x="194.5" y="365" width="165" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.50025969743728638" green="0.50024467706680298" blue="0.50025320053100586" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GBy-kf-nVw" customClass="CustomButton">
+                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GBy-kf-nVw" customClass="CustomButton">
                                 <rect key="frame" x="16" y="385" width="165" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="psC-d4-dc3"/>
@@ -89,10 +89,13 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_login_sbc" translatesAutoresizingMaskIntoConstraints="NO" id="alX-Yh-cDy">
-                                <rect key="frame" x="64" y="449.5" width="247" height="166"/>
+                                <rect key="frame" x="64" y="438" width="247" height="166"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kEP-MY-qbi" customClass="CustomButton">
-                                <rect key="frame" x="64" y="631" width="246.5" height="28"/>
+                                <rect key="frame" x="64" y="615" width="246.5" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="nju-gW-KZ5"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.08811727911233902" green="0.65240490436553955" blue="0.81054502725601196" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -105,11 +108,10 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="alX-Yh-cDy" secondAttribute="trailing" constant="64" id="0cT-CZ-Z8a"/>
-                            <constraint firstItem="alX-Yh-cDy" firstAttribute="top" secondItem="GBy-kf-nVw" secondAttribute="bottom" constant="19.5" id="3Jy-IM-hKG"/>
+                            <constraint firstItem="alX-Yh-cDy" firstAttribute="top" secondItem="GBy-kf-nVw" secondAttribute="bottom" constant="8" id="3Jy-IM-hKG"/>
                             <constraint firstItem="alX-Yh-cDy" firstAttribute="leading" secondItem="BS6-g3-Emm" secondAttribute="leading" constant="64" id="7oH-BE-P1y"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ek9-Z2-lSi" secondAttribute="trailing" id="9TB-lj-U81"/>
                             <constraint firstItem="GBy-kf-nVw" firstAttribute="width" secondItem="BS6-g3-Emm" secondAttribute="width" multiplier="0.44" id="AQU-Ff-u8Z"/>
-                            <constraint firstItem="kEP-MY-qbi" firstAttribute="top" secondItem="alX-Yh-cDy" secondAttribute="bottom" constant="16" id="EUD-F4-s9X"/>
                             <constraint firstItem="GbP-v6-oyW" firstAttribute="leading" secondItem="ek9-Z2-lSi" secondAttribute="leading" id="H8C-ML-c6w"/>
                             <constraint firstItem="e3U-Fv-O9b" firstAttribute="top" secondItem="yvN-dr-VJx" secondAttribute="bottom" id="JW2-jK-Nxn"/>
                             <constraint firstItem="GBy-kf-nVw" firstAttribute="top" secondItem="e3U-Fv-O9b" secondAttribute="bottom" constant="3" id="JbC-4y-vge"/>
@@ -127,6 +129,7 @@
                             <constraint firstItem="yvN-dr-VJx" firstAttribute="top" secondItem="r4t-hB-1Qx" secondAttribute="bottom" constant="8" id="hpT-di-EWl"/>
                             <constraint firstItem="ek9-Z2-lSi" firstAttribute="top" secondItem="GbP-v6-oyW" secondAttribute="bottom" constant="3" id="lgE-Zx-7KR"/>
                             <constraint firstItem="ek9-Z2-lSi" firstAttribute="leading" secondItem="GBy-kf-nVw" secondAttribute="trailing" constant="13" id="oG6-p2-DpV"/>
+                            <constraint firstItem="kEP-MY-qbi" firstAttribute="top" secondItem="alX-Yh-cDy" secondAttribute="bottom" constant="11" id="pG0-Gh-4vS"/>
                             <constraint firstItem="e3U-Fv-O9b" firstAttribute="leading" secondItem="GBy-kf-nVw" secondAttribute="leading" id="uub-TE-nFb"/>
                             <constraint firstItem="ek9-Z2-lSi" firstAttribute="width" secondItem="BS6-g3-Emm" secondAttribute="width" multiplier="0.44" id="wKH-BC-CWQ"/>
                         </constraints>
@@ -232,7 +235,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="EjV-ZB-44x" customClass="NavigationControllerViewController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="AxI-iW-TNa"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="ca5-YV-e2w">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ca5-YV-e2w">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -249,7 +252,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="hKj-hK-Zns" customClass="NavigationControllerViewController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="W38-hf-Es7"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="nQC-TQ-Amr">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="nQC-TQ-Amr">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -469,7 +472,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="HNk-rO-TF4" customClass="NavigationControllerViewController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="HMY-6P-SHm"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="pGa-pT-AXL">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="pGa-pT-AXL">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -486,7 +489,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="w8Q-Bh-yr2" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="kw8-ty-ADR"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="VXO-Ag-6t9">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="VXO-Ag-6t9">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

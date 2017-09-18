@@ -612,19 +612,16 @@
 
 - (IBAction)btJump:(id)sender {
     if (self.isFromPerfil) {
-        
         [self dismissViewControllerAnimated:YES completion:nil];
         [self.exploreVC viewWillAppear:YES];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"backToMapFromPerfil" object:nil];
         
         return;
-    }
-    else if(self.isFromSolicit) {
+    } else if (self.isFromSolicit) {
         [self.relateVC viewWillAppear:YES];
         [self dismissViewControllerAnimated:YES completion:nil];
         return;
-    }
-    else if(self.isFromReport) {
+    } else if(self.isFromReport) {
         [self dismissViewControllerAnimated:YES completion:nil];
         return;
     }
