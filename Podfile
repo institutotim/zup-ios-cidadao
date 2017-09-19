@@ -29,7 +29,7 @@ target 'zup_sbc' do
     config_pods
 end
 
-target 'cascavel' do
+target 'particity' do
     config_pods
 end
 
