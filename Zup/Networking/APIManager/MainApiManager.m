@@ -30,7 +30,7 @@
 - (void)getInventoryCategories:(GetMainSuccessBlock)success
                        failure:(GetMainFailureBlock)fail {
     
-    NSString *finalUrl = [NSString stringWithFormat:@"%@%@", [self baseAPIUrl], URLgetInventoryCategories];
+    NSString *finalUrl = [NSString stringWithFormat:@"%@%@", @"http://www.zeladoriaurbana.com.br:8282/", URLgetInventoryCategories];
     
     [super GET:finalUrl params:nil success:^(NSURLSessionTask *task, id responseObject) {
            success(responseObject);

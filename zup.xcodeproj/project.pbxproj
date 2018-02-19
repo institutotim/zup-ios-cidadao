@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		060F3903F28ACA4FAF4086F4 /* libPods-cascavel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07812EF2910C6FA71B5870E4 /* libPods-cascavel.a */; };
 		1BA4DED39D9EDE74EB887592 /* libPods-zup_sbc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E74CA144EFCE087E331C0D /* libPods-zup_sbc.a */; };
 		552206A21F58B05F00C06775 /* Zup.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 552206A11F58B05F00C06775 /* Zup.xcassets */; };
 		552206A61F58B10200C06775 /* XLVideoZoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF831F536B9400FA73D3 /* XLVideoZoom.m */; };
@@ -371,7 +370,6 @@
 		55EDF1251F53724100FA73D3 /* ComentarioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0B01F53700400FA73D3 /* ComentarioViewController.m */; };
 		55EDF1281F53778000FA73D3 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF1271F53778000FA73D3 /* Utilities.m */; };
 		55F03E201F5B8EE600CCAB2A /* Cascavel.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 55F03E1F1F5B8EE600CCAB2A /* Cascavel.gpx */; };
-		672B3A17B01F6A9DAB63D8F9 /* libPods-particity.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A661081053E25DCF0F283FC1 /* libPods-particity.a */; };
 		88387C8A184045DC0059C826 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C89184045DC0059C826 /* Foundation.framework */; };
 		88387C8C184045DC0059C826 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C8B184045DC0059C826 /* CoreGraphics.framework */; };
 		88387C8E184045DC0059C826 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C8D184045DC0059C826 /* UIKit.framework */; };
@@ -712,8 +710,6 @@
 				552206FC1F58B10200C06775 /* CoreGraphics.framework in Frameworks */,
 				552206FD1F58B10200C06775 /* UIKit.framework in Frameworks */,
 				552206FE1F58B10200C06775 /* Foundation.framework in Frameworks */,
-				060F3903F28ACA4FAF4086F4 /* libPods-cascavel.a in Frameworks */,
-				672B3A17B01F6A9DAB63D8F9 /* libPods-particity.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1730,14 +1726,14 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0830;
-				ORGANIZATIONNAME = ntxdev;
+				ORGANIZATIONNAME = lfdb;
 				TargetAttributes = {
 					552206A31F58B10200C06775 = {
 						DevelopmentTeam = R39TZL7LG7;
 						ProvisioningStyle = Automatic;
 					};
 					88387C85184045DC0059C826 = {
-						DevelopmentTeam = K2Q453W5U7;
+						DevelopmentTeam = 8U89B7P2NY;
 						ProvisioningStyle = Automatic;
 					};
 					88387CAC184045DC0059C826 = {
@@ -2012,7 +2008,9 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2096,7 +2094,9 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2116,7 +2116,9 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2192,7 +2194,9 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2630,7 +2634,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = K2Q453W5U7;
+				DEVELOPMENT_TEAM = 8U89B7P2NY;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2645,7 +2649,7 @@
 					"$(PROJECT_DIR)/build/Release-iphoneos",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = "br.com.lfdb.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.lfdb.vcsbc;
 				PRODUCT_NAME = zup;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2663,7 +2667,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = K2Q453W5U7;
+				DEVELOPMENT_TEAM = 8U89B7P2NY;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2678,7 +2682,7 @@
 					"$(PROJECT_DIR)/build/Release-iphoneos",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = "br.com.lfdb.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.lfdb.vcsbc;
 				PRODUCT_NAME = zup;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
