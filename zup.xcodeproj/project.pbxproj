@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03F301C4203CA78F0060678B /* SBC.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFEF1F536CA600FA73D3 /* SBC.xcassets */; };
+		03F301C5203CA7A10060678B /* SBC.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFEF1F536CA600FA73D3 /* SBC.xcassets */; };
+		03F301C6203CA7BA0060678B /* Zup.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 552206A11F58B05F00C06775 /* Zup.xcassets */; };
 		1BA4DED39D9EDE74EB887592 /* libPods-zup_sbc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E74CA144EFCE087E331C0D /* libPods-zup_sbc.a */; };
-		552206A21F58B05F00C06775 /* Zup.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 552206A11F58B05F00C06775 /* Zup.xcassets */; };
 		552206A61F58B10200C06775 /* XLVideoZoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF831F536B9400FA73D3 /* XLVideoZoom.m */; };
 		552206A71F58B10200C06775 /* HeaderProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF6D1F536B5500FA73D3 /* HeaderProfileCell.m */; };
 		552206A81F58B10200C06775 /* ComentarioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDF0B01F53700400FA73D3 /* ComentarioViewController.m */; };
@@ -135,7 +137,6 @@
 		552207251F58B10200C06775 /* FiltrarViewControllerNovo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0851F536F7F00FA73D3 /* FiltrarViewControllerNovo.xib */; };
 		552207261F58B10200C06775 /* CellFiltrarCategoria.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEF7C1F536B7900FA73D3 /* CellFiltrarCategoria.xib */; };
 		552207271F58B10200C06775 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFE61F536C9700FA73D3 /* OpenSans-Light.ttf */; };
-		552207281F58B10200C06775 /* Zup.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 552206A11F58B05F00C06775 /* Zup.xcassets */; };
 		552207291F58B10200C06775 /* entulho2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFD01F536C8C00FA73D3 /* entulho2.jpg */; };
 		5522072A1F58B10200C06775 /* SolicitacaoMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDF0451F536EAB00FA73D3 /* SolicitacaoMapViewController.xib */; };
 		5522072B1F58B10200C06775 /* GraphicCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEF751F536B6500FA73D3 /* GraphicCell.xib */; };
@@ -291,7 +292,6 @@
 		55EDF0D51F5370FE00FA73D3 /* NSData+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEF991F536BEA00FA73D3 /* NSData+MD5.m */; };
 		55EDF0D61F53710200FA73D3 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EDEFAC1F536C0800FA73D3 /* NSData+Base64.m */; };
 		55EDF0D71F53712300FA73D3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFEE1F536CA600FA73D3 /* Images.xcassets */; };
-		55EDF0D81F53712500FA73D3 /* SBC.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFEF1F536CA600FA73D3 /* SBC.xcassets */; };
 		55EDF0D91F53712B00FA73D3 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFE41F536C9700FA73D3 /* OpenSans-Bold.ttf */; };
 		55EDF0DA1F53712D00FA73D3 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFE51F536C9700FA73D3 /* OpenSans-ExtraBold.ttf */; };
 		55EDF0DB1F53712F00FA73D3 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55EDEFE61F536C9700FA73D3 /* OpenSans-Light.ttf */; };
@@ -1799,6 +1799,7 @@
 				5522071A1F58B10200C06775 /* InfoWindow.xib in Resources */,
 				5522071B1F58B10200C06775 /* bocalobo4.jpg in Resources */,
 				5522071C1F58B10200C06775 /* Launch Screen.xib in Resources */,
+				03F301C6203CA7BA0060678B /* Zup.xcassets in Resources */,
 				5522071D1F58B10200C06775 /* SolicitacaoPhotoViewController.xib in Resources */,
 				5522071E1F58B10200C06775 /* GraphicCell_iPad.xib in Resources */,
 				55F03E201F5B8EE600CCAB2A /* Cascavel.gpx in Resources */,
@@ -1811,7 +1812,6 @@
 				552207251F58B10200C06775 /* FiltrarViewControllerNovo.xib in Resources */,
 				552207261F58B10200C06775 /* CellFiltrarCategoria.xib in Resources */,
 				552207271F58B10200C06775 /* OpenSans-Light.ttf in Resources */,
-				552207281F58B10200C06775 /* Zup.xcassets in Resources */,
 				552207291F58B10200C06775 /* entulho2.jpg in Resources */,
 				5522072A1F58B10200C06775 /* SolicitacaoMapViewController.xib in Resources */,
 				5522072B1F58B10200C06775 /* GraphicCell.xib in Resources */,
@@ -1867,7 +1867,6 @@
 				55EDF0871F536F7F00FA73D3 /* FiltrarViewControllerNovo.xib in Resources */,
 				55EDEF7E1F536B7900FA73D3 /* CellFiltrarCategoria.xib in Resources */,
 				55EDEFEA1F536C9700FA73D3 /* OpenSans-Light.ttf in Resources */,
-				552206A21F58B05F00C06775 /* Zup.xcassets in Resources */,
 				55EDEFDD1F536C8C00FA73D3 /* entulho2.jpg in Resources */,
 				55EDF0471F536EAB00FA73D3 /* SolicitacaoMapViewController.xib in Resources */,
 				55EDEF781F536B6500FA73D3 /* GraphicCell.xib in Resources */,
@@ -1875,6 +1874,7 @@
 				55EDF0611F536F0900FA73D3 /* PerfilDetailViewController_iPad.xib in Resources */,
 				55EDEF6A1F536B4400FA73D3 /* CellFiltrarInventarioHeader.xib in Resources */,
 				55EDF02C1F536E3700FA73D3 /* TermosViewController.xib in Resources */,
+				03F301C4203CA78F0060678B /* SBC.xcassets in Resources */,
 				55EDF0631F536F0900FA73D3 /* PerfilDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1908,7 +1908,6 @@
 				55EDF0E81F53715000FA73D3 /* praca-wifi1.jpg in Resources */,
 				55EDF10D1F5371EA00FA73D3 /* PerfilDetailViewController_iPad.xib in Resources */,
 				55EDF1191F53721300FA73D3 /* FilterEstatisticasViewController.xib in Resources */,
-				55EDF0D81F53712500FA73D3 /* SBC.xcassets in Resources */,
 				55EDF0EB1F53716200FA73D3 /* Main_iPad.storyboard in Resources */,
 				55EDF0DC1F53713100FA73D3 /* OpenSans-Regular.ttf in Resources */,
 				55EDF0E01F53713E00FA73D3 /* bocalobo3.jpg in Resources */,
@@ -1920,6 +1919,7 @@
 				55EDF0FC1F5371AD00FA73D3 /* TermosViewController.xib in Resources */,
 				55EDF11F1F53722C00FA73D3 /* EditViewController.xib in Resources */,
 				55EDF0C51F5370BB00FA73D3 /* CellMinhaConta.xib in Resources */,
+				03F301C5203CA7A10060678B /* SBC.xcassets in Resources */,
 				55EDF1241F53723F00FA73D3 /* ComentarioViewController.xib in Resources */,
 				55EDF0EC1F53716900FA73D3 /* Main_iPhone.storyboard in Resources */,
 				55EDF1151F53720700FA73D3 /* ForgotViewController.xib in Resources */,
@@ -2642,8 +2642,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5F75DCB35DF6417AF835050A /* Pods-zup.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_sbc;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_SBC;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8U89B7P2NY;
@@ -2675,8 +2675,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CB8B61247D25E11A531CFD38 /* Pods-zup.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_sbc;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_SBC;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8U89B7P2NY;
