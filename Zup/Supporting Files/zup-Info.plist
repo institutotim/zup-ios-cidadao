@@ -53,10 +53,14 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>ZUP deseja utilizar sua camera</string>
 	<key>NSHumanReadableCopyright</key>
 	<string></string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>O aplicativo requer a sua localização para criar relatos e exibir itens próximos de você</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>ZUP deseja utilizar sua biblioteca</string>
 	<key>TWITTER_CONSUMER_KEY</key>
 	<string>uQdvg6nwrHrgSow67ikEo8hLo</string>
 	<key>TWITTER_CONSUMER_SECRET</key>

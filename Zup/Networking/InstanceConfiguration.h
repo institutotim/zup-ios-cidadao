@@ -21,8 +21,8 @@
         #define BASE_WEB_URL @"http://particity.cascavel.pr.gov.br:8282/"
         #define TENANT @"cascavel";
     #else
-        #define BASE_API_URL @"http://zuphmg.saobernardo.sp.gov.br:8282/"
-        #define BASE_WEB_URL @"http://zuphmg.saobernardo.sp.gov.br:8282/"
+        #define BASE_API_URL @"http://vcsbc.saobernardo.sp.gov.br:8081/"
+        #define BASE_WEB_URL @"http://vcsbc.saobernardo.sp.gov.br:8081/"
         #define TENANT @"zup";
     #endif
 

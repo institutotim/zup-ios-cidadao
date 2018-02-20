@@ -114,7 +114,9 @@
     if ([[Utilities getCurrentTenant] isEqualToString:@"cascavel"]) {
         return;
     }
-    
+    if ([[Utilities getCurrentTenant] isEqualToString:@"zup"]) {
+        return;
+    }
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sessão expirada"
                                                                    message:@"Sua sessão expirou. É necessário fazer login novamente."
                                                             preferredStyle:UIAlertControllerStyleAlert];

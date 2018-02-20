@@ -529,7 +529,7 @@ typedef enum {
 
 + (CLLocationCoordinate2D) getTenantInitialLocation
 {
-    if ([[Utilities getCurrentTenant] isEqualToString:@"sbc"])
+    if ([[Utilities getCurrentTenant] isEqualToString:@"zup"])
     {
         return CLLocationCoordinate2DMake(-23.689919, -46.564872);
     }
