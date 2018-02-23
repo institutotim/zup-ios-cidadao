@@ -9,8 +9,8 @@ def config_pods
     pod 'AFNetworking', '~> 3.1'
     pod 'AFNetworkActivityLogger', :git => 'https://github.com/AFNetworking/AFNetworkActivityLogger.git', :branch => '3_0_0'
 
-    pod 'GoogleMaps', '~> 2.4'
-    pod 'GooglePlaces', '~> 2.4'
+    pod 'GoogleMaps', '~> 2.6'
+    pod 'GooglePlaces', '~> 2.6'
     pod 'GoogleAnalytics', '~> 3.17'
 
     pod 'Fabric', '~> 1.6'

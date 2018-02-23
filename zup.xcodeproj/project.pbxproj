@@ -423,6 +423,7 @@
 		9C93052C1B0E210A006E4087 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052B1B0E210A006E4087 /* libsqlite3.dylib */; };
 		9C93052F1B0E2151006E4087 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052B1B0E210A006E4087 /* libsqlite3.dylib */; };
 		DDBE075A1C1776C010F960B2 /* libPods-zup.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA2CC9C3ABF9B0E595D1716D /* libPods-zup.a */; };
+		E88D1BBAB3848376ECBCE39D /* libPods-particity.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A661081053E25DCF0F283FC1 /* libPods-particity.a */; };
 		EA6DD73E68C45AF85DA70ABE /* libPods-zupTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E1ABCF43713FEEF641872443 /* libPods-zupTests.a */; };
 /* End PBXBuildFile section */
 
@@ -710,6 +711,7 @@
 				552206FC1F58B10200C06775 /* CoreGraphics.framework in Frameworks */,
 				552206FD1F58B10200C06775 /* UIKit.framework in Frameworks */,
 				552206FE1F58B10200C06775 /* Foundation.framework in Frameworks */,
+				E88D1BBAB3848376ECBCE39D /* libPods-particity.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
