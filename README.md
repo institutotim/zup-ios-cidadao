@@ -4,8 +4,8 @@
 
 Para a instalação do projeto, você necessita:
 
-* xcode
-* cocoapods
+*   xcode
+*   cocoapods
 
 ### ETAPA 1 - Cocoapods
 
@@ -32,6 +32,12 @@ Para instalar as dependências do projeto do Cocoa, rodar o seguinte comando no 
 ```
     pod install
 ```
+> Observação: Pode ser que seu repositório do Cocoa esteja desatualizado, nesse caso você poderá simplesmente rodar o comando: `pod install --repo-update` Havendo problemas com a atualização mesmo assim, pode ser que há um problema de segurança entre você e o Github
+><https://blog.github.com/2018-02-23-weak-cryptographic-standards-removed/> Um dos meios de contornar isso temporariamente é executar os seguntes passos:
+> -   Deletar o repositório localizado em ~/.cocoapods/repos/master
+> -   Clonar novamente diretamente do [Github](https://github.com/CocoaPods/Specs)
+> -   Leia mais em: <http://bit.ly/2oZIUVq>
+
 
 ## ETAPA 3 - Abrindo o projeto no xcode
 
@@ -46,11 +52,11 @@ Para selecionar o scheme correto para a geração da build, utilize o seguinte m
 
 > **OBS:** É necessária acesso e permissão à conta do Instituto TIM para executar estas etapas corretamente
 
-1. Para configurar a conta, adicionar nas preferências a conta de desenvolvedor da Apple, conforme imagem:
+1.  Para configurar a conta, adicionar nas preferências a conta de desenvolvedor da Apple, conforme imagem:
 
 <img width="792" alt="screen shot 2017-06-03 at 20 32 34" src="https://cloud.githubusercontent.com/assets/641411/26788541/e6b6f934-49e3-11e7-8dc2-8dd3f93052de.png">
 
-2. Após adição da conta, configurar a conta para assinar a build, conforme imagem:
+2.  Após adição da conta, configurar a conta para assinar a build, conforme imagem:
 <img width="1438" alt="screen shot 2017-06-03 at 20 35 52" src="https://cloud.githubusercontent.com/assets/641411/26788566/f8806ff6-49e3-11e7-9038-eb963473e803.png">
 
 ## ETAPA 6 - Enviando para App Store
